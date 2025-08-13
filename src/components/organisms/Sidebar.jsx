@@ -87,7 +87,8 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications }
             transition={isFirstMount ? { duration: 0.6, ease: "easeOut" } : {}}
             className="w-80 h-screen fixed left-0 top-0 z-20"
         >
-            <div className="h-full backdrop-blur-xl dark:bg-gray-800/80 border-r border-white/20 dark:border-gray-700/20 flex flex-col">
+            {/*  bg-gradient-to-br  dark:from-gray-900 dark:via-gray-800 dark:to-gray-900*/}
+            <div className="h-full backdrop-blur-xl dark:bg-gray-900  flex flex-col">
                 <div className="p-6 flex-shrink-0">
                     <motion.div
                         initial={isFirstMount ? { scale: 0.8, opacity: 0 } : false}

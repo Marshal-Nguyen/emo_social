@@ -144,7 +144,7 @@ const Feed = ({ onNavigateToChat }) => {
               duration: 0.3,
               delay: index * 0.1,
             }}>
-            <PostCard post={post} onNavigateToChat={onNavigateToChat} />
+            <PostCard post={post} onNavigateToChat={onNavigateToChat} index={index} />
           </motion.div>
         ))}
       </AnimatePresence>

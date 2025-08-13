@@ -3,7 +3,7 @@ import React from "react";
 const SearchInput = ({ value, onChange, onClick, onEnter, onSearch }) => (
     <div className="relative w-full ">
         <div
-            className="w-full px-2 pl-4 pr-10 border border-gray-900 rounded-lg  transition-all duration-300"
+            className="w-full px-2 pl-4 pr-10 border border-gray-900 dark:border-white dark:bg-gray-100 rounded-lg  transition-all duration-300"
             onClick={onClick}
         >
             <input

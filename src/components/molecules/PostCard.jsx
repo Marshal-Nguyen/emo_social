@@ -11,7 +11,7 @@ import Divider from "../atoms/Divider";
 import { likePost, addComment } from "../../store/postsSlice";
 import { addConversation } from "../../store/chatSlice";
 
-const PostCard = ({ post, onNavigateToChat }) => {
+const PostCard = ({ post, onNavigateToChat, index }) => {
   const dispatch = useDispatch();
   const { isSafeMode } = useSelector((state) => state.theme);
   const { user } = useSelector((state) => state.auth);
@@ -90,13 +90,27 @@ const PostCard = ({ post, onNavigateToChat }) => {
     setShowComments(!showComments);
   };
 
+  // Determine background color based on index
+  // const bgColor = index % 2 === 0 ? "bg-[#E0EDFF]" : "bg-[#FFF5DF]";
+  const bgColors = [
+    "#FFF5DF", // Original warm beige
+    "#E0EDFF", // Original light blue
+    "#FFE6CC", // Soft lavender
+    "#E6FFE6", // Pale green
+    "#FFE8F0", // Light pink
+  ];
+
+  // Cycle through colors based on index
+  const bgColor = bgColors[index % bgColors.length];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -2 }}
       transition={{ duration: 0.3 }}
-      className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow">
+      className={`bg-[${bgColor}] dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow`}
+    >
       {/* Post Header */}
       <div className="p-4 sm:p-6">
         <PostHeader

@@ -28,7 +28,7 @@ const SearchBar = ({ onSearch, tags, search, setSearch, selectedFilter, setSelec
         onSearch={() => onSearch(search, selectedFilter)}
       />
       {isExpanded && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-gray-500  bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-50 flex items-center justify-center z-50 ">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -93,7 +93,7 @@ const HomePage = () => {
   return (
     <div className="grid grid-cols-9 gap-4 h-screen">
       {/* 6-column region (spans 9 columns on mobile) */}
-      <div className={`col-span-6 ${isMobile ? 'col-span-9' : ''} space-y-4 overflow-y-auto scrollbar-none z-20`}>
+      <div className={`col-span-6 ${isMobile ? 'col-span-9' : ''} space-y-4 overflow-y-auto no-scrollbar z-20`}>
         {/* Search bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

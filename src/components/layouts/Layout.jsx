@@ -48,7 +48,7 @@ const Layout = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pb-16 md:pb-0 relative overflow-hidden z-10">
+        <div className="min-h-screen dark:bg-gray-900  pb-16 md:pb-0 relative overflow-hidden z-10">
             <div className="fixed inset-0 pointer-events-none">
                 <motion.div
                     className="absolute -top-32 -left-32 w-96 h-96  dark:from-purple-900/20 dark:to-pink-900/20 rounded-full filter blur-3xl opacity-30"
