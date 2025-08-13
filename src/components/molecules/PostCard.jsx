@@ -4,6 +4,9 @@ import { motion } from "framer-motion";
 import PostHeader from "./PostHeader";
 import PostContent from "./PostContent";
 import PostActions from "./PostActions";
+import Button from "../atoms/Button";
+import Avatar from "../atoms/Avatar";
+import { Repeat2, Share2, UserPlus, MessageCircle, Heart, MessageSquare } from "lucide-react";
 import PostComments from "./PostComments";
 import CommentForm from "./CommentForm";
 import JoinGroupButton from "./JoinGroupButton";
@@ -104,61 +107,78 @@ const PostCard = ({ post, onNavigateToChat, index }) => {
   const bgColor = bgColors[index % bgColors.length];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.3 }}
-      className={`bg-[${bgColor}] dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow`}
-    >
-      {/* Post Header */}
-      <div className="p-4 sm:p-6">
-        <PostHeader
-          post={post}
-          showJoinedBadge={post.joinStatus === "joined"}
-          className="mb-4"
+    <div className="relative flex">
+      {/* Main post card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -2 }}
+        transition={{ duration: 0.3 }}
+        className={`flex-1 bg-[${bgColor}] dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow`}
+      >
+        {/* Post Header */}
+        <div className="p-4 sm:p-6">
+          <PostHeader
+            post={post}
+            showJoinedBadge={post.joinStatus === "joined"}
+            className="mb-4"
+          />
+
+          {/* Post Content */}
+          <PostContent post={post} isSafeMode={isSafeMode} className="mb-4" />
+
+          {/* Group Join Button */}
+          {post.type === "group" && (
+            <div className="mb-4">
+              <JoinGroupButton
+                initialStatus={post.joinStatus}
+                groupName={post.groupName}
+              />
+            </div>
+          )}
+
+          {/* <Divider className="my-4" /> */}
+
+          {/* Direct Message button (Nhắn tin) placed right below Divider, inside card */}
+          <div className="flex justify-end">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="bg-[#FB88AA] hover:bg-[#E94B7D] text-white text-sm dark:text-white flex items-center space-x-2 p-1 rounded-full "
+              title="Nhắn tin"
+              onClick={handleDirectMessage}
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span className="hidden sm:inline">Nhóm chat</span>
+            </Button>
+
+          </div>
+        </div>
+
+        {/* Comments Section */}
+        <PostComments
+          comments={post.comments || []}
+          show={showComments}
+          maxVisible={3}
         />
 
-        {/* Post Content */}
-        <PostContent post={post} isSafeMode={isSafeMode} className="mb-4" />
-
-        {/* Group Join Button */}
-        {post.type === "group" && (
-          <div className="mb-4">
-            <JoinGroupButton
-              initialStatus={post.joinStatus}
-              groupName={post.groupName}
-            />
+        {/* Comment Form */}
+        {showComments && (
+          <div className="px-4 sm:px-6 pb-4">
+            <CommentForm onSubmit={handleComment} isSubmitting={isCommenting} />
           </div>
         )}
+      </motion.div>
 
-        <Divider className="my-4" />
-
-        {/* Post Actions */}
-        <PostActions
-          post={post}
-          onLike={handleLike}
-          onComment={toggleComments}
-          onDirectMessage={handleDirectMessage}
-          isLiking={isLiking}
-          showComments={showComments}
-        />
-      </div>
-
-      {/* Comments Section */}
-      <PostComments
-        comments={post.comments || []}
-        show={showComments}
-        maxVisible={3}
+      {/* Vertical actions bar (atomic actions only) now in PostActions */}
+      <PostActions
+        post={post}
+        onLike={handleLike}
+        onComment={toggleComments}
+        isLiking={isLiking}
+        showComments={showComments}
       />
-
-      {/* Comment Form */}
-      {showComments && (
-        <div className="px-4 sm:px-6 pb-4">
-          <CommentForm onSubmit={handleComment} isSubmitting={isCommenting} />
-        </div>
-      )}
-    </motion.div>
+    </div>
   );
 };
 

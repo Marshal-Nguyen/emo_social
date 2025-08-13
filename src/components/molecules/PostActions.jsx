@@ -1,76 +1,40 @@
-import React, { useState } from "react";
-import { Heart, MessageCircle, MessageSquare } from "lucide-react";
-import { motion } from "framer-motion";
-import IconButton from "../atoms/IconButton";
+import React from "react";
 import Button from "../atoms/Button";
+import Avatar from "../atoms/Avatar";
+import { Repeat2, Share2, MessageCircle, Heart } from "lucide-react";
 
-const PostActions = ({
-  post,
-  onLike,
-  onComment,
-  onDirectMessage,
-  isLiking = false,
-  showComments = false,
-  className = "",
-}) => {
+const PostActions = ({ post, onLike, onComment, isLiking = false, className = "" }) => {
   return (
-    <div className={`flex items-center justify-between ${className}`}>
-      <div className="flex items-center space-x-4">
-        {/* Like Button */}
-        <motion.div
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center space-x-1">
-          <IconButton
-            icon={Heart}
-            variant="ghost"
-            size="sm"
-            onClick={onLike}
-            disabled={isLiking}
-            className={`transition-colors ${
-              post.liked
-                ? "text-red-500 hover:text-red-600"
-                : "text-gray-500 hover:text-red-500"
-            }`}
-            title={post.liked ? "Bỏ thích" : "Thích"}
-          />
-          {post.likesCount > 0 && (
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              {post.likesCount}
-            </span>
-          )}
-        </motion.div>
+    <div className={`flex flex-col items-center justify-start ml-2 mt-4 gap-3 ${className}`}>
 
-        {/* Comment Button */}
-        <motion.div
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center space-x-1">
-          <IconButton
-            icon={MessageCircle}
-            variant="ghost"
-            size="sm"
-            onClick={onComment}
-            className="text-gray-500 hover:text-blue-500"
-            title="Bình luận"
-          />
-          {post.commentsCount > 0 && (
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              {post.commentsCount}
-            </span>
-          )}
-        </motion.div>
-      </div>
-
-      {/* Direct Message Button */}
-      {onDirectMessage && (
+      {/* Like */}
+      <div className="flex flex-col items-center gap-1">
         <Button
           variant="ghost"
-          size="sm"
-          onClick={onDirectMessage}
-          className="text-gray-500 hover:text-purple-500 flex items-center space-x-2">
-          <MessageSquare className="w-4 h-4" />
-          <span className="hidden sm:inline">Nhắn riêng</span>
+          size="icon"
+          className={`!rounded-full ${post.liked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}
+          title={post.liked ? "Bỏ thích" : "Thích"}
+          onClick={onLike}
+          disabled={isLiking}
+        >
+          <Heart className="w-5 h-5" />
         </Button>
-      )}
+        {post.likesCount > 0 && (
+          <span className="text-xs text-gray-600 dark:text-gray-400">{post.likesCount}</span>
+        )}
+      </div>
+      {/* Comment */}
+      <Button variant="ghost" size="icon" className="!rounded-full" title="Bình luận" onClick={onComment}>
+        <MessageCircle className="w-5 h-5" />
+      </Button>
+      {/* Đăng lại */}
+      <Button variant="ghost" size="icon" className="!rounded-full" title="Đăng lại">
+        <Repeat2 className="w-5 h-5" />
+      </Button>
+      {/* Chia sẻ */}
+      <Button variant="ghost" size="icon" className="!rounded-full" title="Chia sẻ">
+        <Share2 className="w-5 h-5" />
+      </Button>
     </div>
   );
 };

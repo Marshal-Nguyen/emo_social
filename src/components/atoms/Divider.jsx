@@ -8,7 +8,7 @@ const Divider = ({
   children,
 }) => {
   const variants = {
-    default: "border-gray-200 dark:border-gray-700",
+    default: "border-gray-500 dark:border-gray-500",
     light: "border-gray-100 dark:border-gray-800",
     strong: "border-gray-300 dark:border-gray-600",
     purple: "border-purple-200 dark:border-purple-800",
