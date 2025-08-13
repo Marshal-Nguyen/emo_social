@@ -51,17 +51,17 @@ const Layout = () => {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pb-16 md:pb-0 relative overflow-hidden z-10">
             <div className="fixed inset-0 pointer-events-none">
                 <motion.div
-                    className="absolute -top-32 -left-32 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-pink-400/20 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full filter blur-3xl opacity-30"
+                    className="absolute -top-32 -left-32 w-96 h-96  dark:from-purple-900/20 dark:to-pink-900/20 rounded-full filter blur-3xl opacity-30"
                     animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
                     transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
                 />
                 <motion.div
-                    className="absolute top-1/2 -right-32 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-full filter blur-3xl opacity-30"
+                    className="absolute top-1/2 -right-32 w-96 h-96  dark:from-blue-900/20 dark:to-cyan-900/20 rounded-full filter blur-3xl opacity-30"
                     animate={{ scale: [1.2, 1, 1.2], rotate: [90, 180, 90] }}
                     transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
                 />
                 <motion.div
-                    className="absolute -bottom-32 left-1/2 w-96 h-96 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-full filter blur-3xl opacity-30"
+                    className="absolute -bottom-32 left-1/2 w-96 h-96  dark:from-emerald-900/20 dark:to-teal-900/20 rounded-full filter blur-3xl opacity-30"
                     animate={{ scale: [1, 1.3, 1], rotate: [180, 270, 180] }}
                     transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
                 />

@@ -4,45 +4,29 @@ import CreatePost from "../components/organisms/CreatePost";
 import Feed from "../components/organisms/Feed";
 import Comment from "../components/organisms/Comment";
 import { useOutletContext } from "react-router-dom";
+import SearchInput from "../components/atoms/SearchInput";
+import FilterList from "../components/molecules/FilterList";
+import TagSuggestionList from "../components/molecules/TagSuggestionList";
 
 // Custom Search Component with expandable filter
 const SearchBar = ({ onSearch, tags, search, setSearch, selectedFilter, setSelectedFilter }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
   const filterOptions = [
     { value: "all", label: "Tất cả bài viết" },
     { value: "my", label: "Bài viết của tôi" },
     { value: "liked", label: "Bài viết đã thích" },
     { value: "group", label: "Bài viết trong nhóm" },
   ];
-
-  const handleSearchClick = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   return (
-    <div className="relative w-full mb-4">
-      <div
-        className="w-full p-2 pl-4 pr-10 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-purple-500 transition-all duration-300"
-        onClick={handleSearchClick}
-      >
-        <input
-          type="text"
-          className="w-full outline-none bg-transparent"
-          placeholder="Tìm kiếm"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && onSearch(search, selectedFilter)}
-        />
-        <button
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-purple-600 hover:text-purple-800"
-          onClick={() => onSearch(search, selectedFilter)}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
-      </div>
+    // <div className="fixed top-0  bg-white z-50 w-full py-2 px-16">
+    <div className="relative w-full mb-4 px-16 pt-4">
+      <SearchInput
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        onClick={() => setIsExpanded(true)}
+        onEnter={() => onSearch(search, selectedFilter)}
+        onSearch={() => onSearch(search, selectedFilter)}
+      />
       {isExpanded && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
           <motion.div
@@ -51,45 +35,15 @@ const SearchBar = ({ onSearch, tags, search, setSearch, selectedFilter, setSelec
             exit={{ opacity: 0, y: -20 }}
             className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl"
           >
-            <div className="mb-4">
-              <input
-                type="text"
-                className="w-full outline-none px-3 py-2 border border-gray-300 rounded"
-                placeholder="Nhập từ khóa tìm kiếm..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <h4 className="text-base font-semibold mb-2">Bộ lọc</h4>
-              <div className="space-y-2">
-                {filterOptions.map((filter) => (
-                  <button
-                    key={filter.value}
-                    className={`w-full text-left px-3 py-2 rounded transition border ${selectedFilter === filter.value ? 'bg-blue-100 border-blue-400' : 'bg-gray-50 border-gray-200'} hover:bg-blue-50`}
-                    onClick={() => setSelectedFilter(filter.value)}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="mb-4">
-              <h4 className="text-base font-semibold mb-2">Gợi ý tag phổ biến</h4>
-              <div className="flex flex-wrap gap-3">
-                {tags.map((tag) => (
-                  <button
-                    key={tag.value}
-                    className="flex items-center px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition shadow-sm min-w-[120px]"
-                    onClick={() => setSearch(tag.label)}
-                  >
-                    <span className="mr-2 text-xl">{tag.icon}</span>
-                    <span className="font-medium text-gray-700">{tag.label}</span>
-                    <span className="ml-auto text-xs text-gray-500 bg-gray-200 rounded px-2 py-0.5">{tag.count}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
+            <SearchInput
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              onClick={() => { }}
+              onEnter={() => onSearch(search, selectedFilter)}
+              onSearch={() => onSearch(search, selectedFilter)}
+            />
+            <FilterList options={filterOptions} selected={selectedFilter} onSelect={setSelectedFilter} />
+            <TagSuggestionList tags={tags} onSelect={setSearch} />
             <button
               className="w-full p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
               onClick={() => {
