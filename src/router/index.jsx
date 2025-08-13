@@ -3,6 +3,11 @@ import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "../pages/AuthPage";
 import HomePage from "../pages/HomePage";
+import ChatPage from "../pages/ChatPage";
+import NotificationsPage from "../pages/NotificationsPage";
+import ProfilePage from "../pages/ProfilePage";
+import SettingsPage from "../pages/SettingsPage";
+import Layout from "../components/layouts/Layout";
 import LoadingSpinner from "../components/atoms/LoadingSpinner";
 import NotificationSystem from "../components/organisms/NotificationSystem";
 import { useAutoTheme, useTheme } from "../hooks/useTheme";
@@ -22,23 +27,36 @@ function AppRouter() {
 
     return (
         <BrowserRouter>
-            <Routes>
-                {/* Auth route */}
-                <Route path="/auth" element={<AuthPage />} />
-                {/* Home route (protected) */}
-                <Route
-                    path="/home"
-                    element={isAuthenticated ? <HomePage /> : <Navigate to="/auth" />}
-                />
-                {/* Default route: luôn chuyển về đăng nhập nếu chưa đăng nhập */}
-                <Route
-                    path="/"
-                    element={
-                        isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/auth" />
-                    }
-                />
-            </Routes>
             <NotificationSystem />
+            <Routes>
+                <Route path="/auth" element={<AuthPage />} />
+                <Route element={<Layout />}>
+                    <Route
+                        path="/home"
+                        element={isAuthenticated ? <HomePage /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/chat"
+                        element={isAuthenticated ? <ChatPage /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/notifications"
+                        element={isAuthenticated ? <NotificationsPage /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/profile"
+                        element={isAuthenticated ? <ProfilePage /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/settings"
+                        element={isAuthenticated ? <SettingsPage /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/"
+                        element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/auth" />}
+                    />
+                </Route>
+            </Routes>
         </BrowserRouter>
     );
 }
