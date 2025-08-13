@@ -6,7 +6,7 @@ import { useIntroStatus } from "./hooks/useIntroStatus";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
-import IntroPage from "./pages/IntroPage";
+// import IntroPage from "./pages/IntroPage";
 import LoadingSpinner from "./components/atoms/LoadingSpinner";
 import NotificationSystem from "./components/organisms/NotificationSystem";
 
@@ -20,15 +20,11 @@ function App() {
 
 function AppRouter() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);
-  const {
-    hasSeenIntro,
-    isLoading: introLoading,
-    markIntroAsSeen,
-  } = useIntroStatus();
+  // Xóa logic intro
   useAutoTheme();
   useTheme();
 
-  if (loading || introLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <LoadingSpinner breathing={true} />
@@ -39,8 +35,6 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Intro route */}
-        <Route path="/intro" element={<IntroPage onSkip={markIntroAsSeen} />} />
         {/* Auth route */}
         <Route path="/auth" element={<AuthPage />} />
         {/* Home route (protected) */}
@@ -48,17 +42,11 @@ function AppRouter() {
           path="/home"
           element={isAuthenticated ? <HomePage /> : <Navigate to="/auth" />}
         />
-        {/* Default route logic */}
+        {/* Default route: luôn chuyển về đăng nhập nếu chưa đăng nhập */}
         <Route
           path="/"
           element={
-            !hasSeenIntro && !isAuthenticated ? (
-              <Navigate to="/intro" />
-            ) : isAuthenticated ? (
-              <Navigate to="/home" />
-            ) : (
-              <Navigate to="/auth" />
-            )
+            isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/auth" />
           }
         />
       </Routes>
