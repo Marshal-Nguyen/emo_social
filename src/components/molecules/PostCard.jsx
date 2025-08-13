@@ -14,7 +14,7 @@ import Divider from "../atoms/Divider";
 import { likePost, addComment } from "../../store/postsSlice";
 import { addConversation } from "../../store/chatSlice";
 
-const PostCard = ({ post, onNavigateToChat, index }) => {
+const PostCard = ({ post, onNavigateToChat, index, onShowComment }) => {
   const dispatch = useDispatch();
   const { isSafeMode } = useSelector((state) => state.theme);
   const { user } = useSelector((state) => state.auth);
@@ -156,25 +156,28 @@ const PostCard = ({ post, onNavigateToChat, index }) => {
         </div>
 
         {/* Comments Section */}
-        <PostComments
+        {/* <PostComments
           comments={post.comments || []}
           show={showComments}
           maxVisible={3}
-        />
+        /> */}
 
         {/* Comment Form */}
-        {showComments && (
+        {/* {showComments && (
           <div className="px-4 sm:px-6 pb-4">
             <CommentForm onSubmit={handleComment} isSubmitting={isCommenting} />
           </div>
-        )}
+        )} */}
       </motion.div>
 
       {/* Vertical actions bar (atomic actions only) now in PostActions */}
       <PostActions
         post={post}
         onLike={handleLike}
-        onComment={toggleComments}
+        onComment={() => {
+          toggleComments();
+          if (onShowComment) onShowComment(post);
+        }}
         isLiking={isLiking}
         showComments={showComments}
       />

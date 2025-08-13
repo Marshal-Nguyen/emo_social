@@ -85,7 +85,7 @@ const mockPosts = [
   },
 ];
 
-const Feed = ({ onNavigateToChat }) => {
+const Feed = ({ onNavigateToChat, onSelectPost }) => {
   const dispatch = useDispatch();
   const { posts, loading, error, hasMore } = useSelector(
     (state) => state.posts
@@ -144,7 +144,12 @@ const Feed = ({ onNavigateToChat }) => {
               duration: 0.3,
               delay: index * 0.1,
             }}>
-            <PostCard post={post} onNavigateToChat={onNavigateToChat} index={index} />
+            <PostCard
+              post={post}
+              onNavigateToChat={onNavigateToChat}
+              index={index}
+              onShowComment={() => onSelectPost && onSelectPost(post)}
+            />
           </motion.div>
         ))}
       </AnimatePresence>
