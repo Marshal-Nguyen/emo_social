@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -14,16 +15,22 @@ import {
   User,
   Eye,
   Smartphone,
+  Play,
+  Languages,
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
+import { useIntroStatus } from "../hooks/useIntroStatus";
 import Button from "../components/atoms/Button";
 import { toggleTheme, toggleSafeMode } from "../store/themeSlice";
 import { logout } from "../store/authSlice";
+import LanguageSwitcher from "../components/molecules/LanguageSwitcher";
 
 const MobileSettingsPage = ({ onBack }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { isDarkMode, isSafeMode } = useSelector((state) => state.theme);
   const { user } = useSelector((state) => state.auth);
+  const { resetIntroStatus } = useIntroStatus();
 
   const [notifications, setNotifications] = useState({
     likes: true,
@@ -36,6 +43,12 @@ const MobileSettingsPage = ({ onBack }) => {
     if (window.confirm("Bạn có chắc chắn muốn đăng xuất?")) {
       dispatch(logout());
     }
+  };
+
+  const handleViewIntro = () => {
+    resetIntroStatus();
+    // Optionally trigger a page reload to show intro
+    window.location.reload();
   };
 
   const SettingItem = ({
@@ -76,11 +89,9 @@ const MobileSettingsPage = ({ onBack }) => {
                 }`}></div>
             </div>
           )}
-
           {actionType === "navigate" && (
             <ChevronRight className="w-5 h-5 text-gray-400" />
           )}
-
           {actionType === "info" && value && (
             <span className="text-sm text-gray-500 dark:text-gray-400">
               {value}
@@ -115,7 +126,7 @@ const MobileSettingsPage = ({ onBack }) => {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Cài đặt
+            {t("settings.title")}
           </h1>
           <div className="w-9"></div> {/* Spacer */}
         </div>
@@ -124,89 +135,108 @@ const MobileSettingsPage = ({ onBack }) => {
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-4">
         {/* Account Section */}
-        <SettingSection title="Tài khoản">
+        <SettingSection title={t("settings.account")}>
           <SettingItem
             icon={User}
-            title="Thông tin cá nhân"
-            description="Quản lý thông tin tài khoản của bạn"
+            title={t("settings.accountProfile")}
+            description={t("settings.accountProfileDesc")}
             actionType="navigate"
             action={() => console.log("Navigate to profile edit")}
           />
           <SettingItem
             icon={Lock}
-            title="Bảo mật"
-            description="Đổi mật khẩu và cài đặt bảo mật"
+            title={t("settings.accountSecurity")}
+            description={t("settings.accountSecurityDesc")}
             actionType="navigate"
             action={() => console.log("Navigate to security")}
           />
         </SettingSection>
-
         {/* Appearance Section */}
-        <SettingSection title="Giao diện">
+        <SettingSection title={t("settings.appearance")}>
           <SettingItem
             icon={isDarkMode ? Sun : Moon}
-            title="Chế độ tối"
-            description="Bật/tắt chế độ tối cho ứng dụng"
+            title={t("settings.appearanceTheme")}
+            description={t("settings.appearanceThemeDesc")}
             actionType="toggle"
             value={isDarkMode}
             action={() => dispatch(toggleTheme())}
           />
           <SettingItem
             icon={Shield}
-            title="Safe Mode"
-            description="Ẩn nội dung có thể nhạy cảm"
+            title={t("settings.privacySafeMode")}
+            description={t("settings.privacySafeModeDesc")}
             actionType="toggle"
             value={isSafeMode}
             action={() => dispatch(toggleSafeMode())}
           />
+          <div className="flex items-center p-4 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-center w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full mr-3">
+              <Languages className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-medium text-gray-900 dark:text-white">
+                {t("settings.appearanceLanguage")}
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                {t("settings.appearanceLanguageDesc")}
+              </p>
+            </div>
+            <div className="flex items-center">
+              <LanguageSwitcher variant="compact" className="mr-2" />
+            </div>
+          </div>
           <SettingItem
             icon={Eye}
-            title="Hiển thị"
-            description="Tùy chỉnh cách hiển thị nội dung"
+            title={t("settings.display")}
+            description={t("settings.displayDesc")}
             actionType="navigate"
             action={() => console.log("Navigate to display settings")}
           />
         </SettingSection>
-
         {/* Privacy Section */}
-        <SettingSection title="Quyền riêng tư">
+        <SettingSection title={t("settings.privacy")}>
           <SettingItem
             icon={Globe}
-            title="Quyền riêng tư"
-            description="Quản lý ai có thể xem nội dung của bạn"
+            title={t("settings.privacy")}
+            description={t("settings.privacyDesc")}
             actionType="navigate"
             action={() => console.log("Navigate to privacy")}
           />
           <SettingItem
             icon={Bell}
-            title="Thông báo"
-            description="Quản lý thông báo và âm thanh"
+            title={t("settings.notifications")}
+            description={t("settings.notificationsDesc")}
             actionType="navigate"
             action={() => console.log("Navigate to notifications")}
           />
         </SettingSection>
-
         {/* App Section */}
-        <SettingSection title="Ứng dụng">
+        <SettingSection title={t("settings.application")}>
+          <SettingItem
+            icon={Play}
+            title={t("settings.viewIntro")}
+            description={t("settings.viewIntroDesc")}
+            actionType="navigate"
+            action={handleViewIntro}
+          />
           <SettingItem
             icon={Smartphone}
-            title="Phiên bản ứng dụng"
-            description="Kiểm tra cập nhật và thông tin phiên bản"
+            title={t("settings.applicationVersion")}
+            description={t("settings.applicationVersionDesc")}
             actionType="info"
             value="v1.0.0"
             action={() => console.log("Check for updates")}
           />
           <SettingItem
             icon={HelpCircle}
-            title="Trợ giúp & Hỗ trợ"
-            description="Tìm hiểu cách sử dụng và nhận trợ giúp"
+            title={t("settings.applicationSupport")}
+            description={t("settings.applicationSupportDesc")}
             actionType="navigate"
             action={() => console.log("Navigate to help")}
           />
         </SettingSection>
-
         {/* Account Actions */}
-        <SettingSection title="Hành động">
+        <SettingSection title={t("settings.actions")}>
           <motion.div
             whileTap={{ scale: 0.98 }}
             className="flex items-center p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg cursor-pointer"
@@ -217,22 +247,17 @@ const MobileSettingsPage = ({ onBack }) => {
 
             <div className="flex-1">
               <h3 className="font-medium text-red-600 dark:text-red-400">
-                Đăng xuất
+                {t("settings.actionsLogout")}
               </h3>
               <p className="text-sm text-red-500 dark:text-red-400 mt-1">
-                Đăng xuất khỏi tài khoản hiện tại
+                {t("settings.actionsLogoutDesc")}
               </p>
             </div>
 
             <ChevronRight className="w-5 h-5 text-red-400" />
           </motion.div>
         </SettingSection>
-
-        {/* Footer Info */}
-        <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400 pb-4">
-          <p>EmoSocial v1.0.0</p>
-          <p className="mt-1">Nền tảng chia sẻ cảm xúc ẩn danh</p>
-        </div>
+        <div className="h-16"></div> {/* Bottom spacing */}
       </div>
     </motion.div>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -18,6 +19,7 @@ import MobileNavBar from "../components/molecules/MobileNavBar";
 import ThemeToggle from "../components/molecules/ThemeToggle";
 import Avatar from "../components/atoms/Avatar";
 import { logout } from "../store/authSlice";
+import LanguageSwitcher from "../components/molecules/LanguageSwitcher";
 
 // Mobile Pages
 import MobileChatPage from "./MobileChatPage";
@@ -112,12 +114,14 @@ const HomePage = () => {
     dispatch(logout());
   };
 
+  // i18n
+  const { t } = useTranslation();
   // Navigation items configuration
   const navigationItems = [
     {
       key: "feed",
       icon: Home,
-      label: "Trang chủ",
+      label: t("nav.home"),
       gradient: "from-indigo-500 to-purple-600",
       bgColor: "bg-indigo-100 dark:bg-indigo-900/30",
       hoverBg: "group-hover:bg-indigo-200 dark:group-hover:bg-indigo-900/50",
@@ -125,7 +129,7 @@ const HomePage = () => {
     {
       key: "chat",
       icon: MessageCircle,
-      label: "Trò chuyện",
+      label: t("nav.chat"),
       gradient: "from-blue-500 to-cyan-600",
       bgColor: "bg-blue-100 dark:bg-blue-900/30",
       hoverBg: "group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50",
@@ -134,7 +138,7 @@ const HomePage = () => {
     {
       key: "notifications",
       icon: Bell,
-      label: "Thông báo",
+      label: t("nav.notifications"),
       gradient: "from-orange-500 to-red-600",
       bgColor: "bg-orange-100 dark:bg-orange-900/30",
       hoverBg: "group-hover:bg-orange-200 dark:group-hover:bg-orange-900/50",
@@ -143,7 +147,7 @@ const HomePage = () => {
     {
       key: "profile",
       icon: User,
-      label: "Hồ sơ",
+      label: t("nav.profile"),
       gradient: "from-green-500 to-emerald-600",
       bgColor: "bg-green-100 dark:bg-green-900/30",
       hoverBg: "group-hover:bg-green-200 dark:group-hover:bg-green-900/50",
@@ -151,7 +155,7 @@ const HomePage = () => {
     {
       key: "settings",
       icon: Settings,
-      label: "Cài đặt",
+      label: t("nav.settings"),
       gradient: "from-gray-500 to-slate-600",
       bgColor: "bg-gray-100 dark:bg-gray-700/30",
       hoverBg: "group-hover:bg-gray-200 dark:group-hover:bg-gray-700/50",
@@ -379,6 +383,10 @@ const HomePage = () => {
                       </motion.button>
                     );
                   })}
+                </div>
+                {/* Language Switcher Desktop */}
+                <div className="mt-8 flex justify-center">
+                  <LanguageSwitcher variant="default" />
                 </div>
               </div>
 

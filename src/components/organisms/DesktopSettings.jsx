@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import {
   Settings,
@@ -26,6 +27,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme, toggleSafeMode } from "../../store/themeSlice";
 
 const DesktopSettings = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.theme);
   const { user } = useSelector((state) => state.auth);
@@ -56,11 +58,11 @@ const DesktopSettings = () => {
   });
 
   const sections = [
-    { id: "account", label: "Account", icon: User },
-    { id: "privacy", label: "Privacy & Safety", icon: Shield },
-    { id: "notifications", label: "Notifications", icon: Bell },
-    { id: "display", label: "Display & Accessibility", icon: Monitor },
-    { id: "advanced", label: "Advanced", icon: Settings },
+    { id: "account", label: t("desktop.account"), icon: User },
+    { id: "privacy", label: t("desktop.privacy"), icon: Shield },
+    { id: "notifications", label: t("desktop.notifications"), icon: Bell },
+    { id: "display", label: t("desktop.display"), icon: Monitor },
+    { id: "advanced", label: t("desktop.advanced"), icon: Settings },
   ];
 
   const handleSettingChange = (section, key, value) => {
@@ -81,13 +83,13 @@ const DesktopSettings = () => {
   const renderAccountSection = () => (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        Account Information
+        {t("desktop.accountInfo")}
       </h3>
 
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Display Name
+            {t("desktop.displayName")}
           </label>
           <input
             type="text"
@@ -99,7 +101,7 @@ const DesktopSettings = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Email
+            {t("desktop.email")}
           </label>
           <input
             type="email"
@@ -111,7 +113,7 @@ const DesktopSettings = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Bio
+            {t("desktop.bio")}
           </label>
           <textarea
             rows={3}
@@ -123,16 +125,16 @@ const DesktopSettings = () => {
 
       <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
         <h4 className="text-md font-medium text-gray-900 dark:text-white mb-4">
-          Security
+          {t("desktop.security")}
         </h4>
         <div className="space-y-3">
           <Button variant="outline" className="w-full justify-start">
             <Lock className="w-4 h-4 mr-2" />
-            Change Password
+            {t("desktop.changePassword")}
           </Button>
           <Button variant="outline" className="w-full justify-start">
             <Shield className="w-4 h-4 mr-2" />
-            Two-Factor Authentication
+            {t("desktop.twoFactor")}
           </Button>
         </div>
       </div>
@@ -142,7 +144,7 @@ const DesktopSettings = () => {
   const renderPrivacySection = () => (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        Privacy & Safety
+        {t("desktop.privacy")}
       </h3>
 
       <div className="space-y-4">
@@ -155,10 +157,10 @@ const DesktopSettings = () => {
             />
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
-                Safe Mode
+                {t("desktop.safeMode")}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Filter sensitive content and enable additional protections
+                {t("desktop.safeModeDesc")}
               </div>
             </div>
           </div>
@@ -175,10 +177,10 @@ const DesktopSettings = () => {
             <Eye className="w-5 h-5 text-blue-500" />
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
-                Profile Visibility
+                {t("desktop.profileVisibility")}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Who can see your profile
+                {t("desktop.profileVisibilityDesc")}
               </div>
             </div>
           </div>
@@ -192,9 +194,9 @@ const DesktopSettings = () => {
               )
             }
             className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm">
-            <option value="public">Public</option>
-            <option value="followers">Followers Only</option>
-            <option value="private">Private</option>
+            <option value="public">{t("desktop.public")}</option>
+            <option value="followers">{t("desktop.followersOnly")}</option>
+            <option value="private">{t("desktop.private")}</option>
           </select>
         </div>
 
@@ -203,10 +205,10 @@ const DesktopSettings = () => {
             <MessageCircle className="w-5 h-5 text-purple-500" />
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
-                Allow Messages From
+                {t("desktop.allowMessages")}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Who can send you direct messages
+                {t("desktop.allowMessagesDesc")}
               </div>
             </div>
           </div>
@@ -216,9 +218,9 @@ const DesktopSettings = () => {
               handleSettingChange("privacy", "allowMessages", e.target.value)
             }
             className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm">
-            <option value="everyone">Everyone</option>
-            <option value="followers">Followers Only</option>
-            <option value="none">No One</option>
+            <option value="everyone">{t("desktop.everyone")}</option>
+            <option value="followers">{t("desktop.followersOnly")}</option>
+            <option value="none">{t("desktop.noOne")}</option>
           </select>
         </div>
 
@@ -227,10 +229,10 @@ const DesktopSettings = () => {
             <Globe className="w-5 h-5 text-green-500" />
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
-                Show Online Status
+                {t("desktop.showOnlineStatus")}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Let others know when you're active
+                {t("desktop.showOnlineStatusDesc")}
               </div>
             </div>
           </div>
@@ -254,7 +256,7 @@ const DesktopSettings = () => {
   const renderNotificationsSection = () => (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        Notification Preferences
+        {t("desktop.notificationPrefs")}
       </h3>
 
       <div className="space-y-4">
@@ -263,10 +265,10 @@ const DesktopSettings = () => {
             <Smartphone className="w-5 h-5 text-blue-500" />
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
-                Push Notifications
+                {t("desktop.pushNotifications")}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Receive notifications on your device
+                {t("desktop.pushNotificationsDesc")}
               </div>
             </div>
           </div>
@@ -293,10 +295,10 @@ const DesktopSettings = () => {
             )}
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
-                Notification Sounds
+                {t("desktop.notificationSounds")}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Play sounds for notifications
+                {t("desktop.notificationSoundsDesc")}
               </div>
             </div>
           </div>
@@ -316,20 +318,20 @@ const DesktopSettings = () => {
 
         <div className="pl-8 space-y-3 border-l-2 border-gray-200 dark:border-gray-700">
           <h4 className="font-medium text-gray-900 dark:text-white">
-            Notify me when someone:
+            {t("desktop.notifyMeWhen")}
           </h4>
 
           {[
-            { key: "likes", label: "Likes my posts", icon: Heart },
+            { key: "likes", label: t("desktop.likesMyPosts"), icon: Heart },
             {
               key: "comments",
-              label: "Comments on my posts",
+              label: t("desktop.commentsOnMyPosts"),
               icon: MessageCircle,
             },
-            { key: "follows", label: "Follows me", icon: User },
+            { key: "follows", label: t("desktop.followsMe"), icon: User },
             {
               key: "messages",
-              label: "Sends me a message",
+              label: t("desktop.sendsMeMessage"),
               icon: MessageCircle,
             },
           ].map((item) => (
@@ -354,7 +356,9 @@ const DesktopSettings = () => {
                   )
                 }
                 size="xs">
-                {settings.notifications[item.key] ? "ON" : "OFF"}
+                {settings.notifications[item.key]
+                  ? t("desktop.on")
+                  : t("desktop.off")}
               </Button>
             </div>
           ))}
@@ -366,7 +370,7 @@ const DesktopSettings = () => {
   const renderDisplaySection = () => (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        Display & Accessibility
+        {t("desktop.displayAccessibility")}
       </h3>
 
       <div className="space-y-4">
@@ -375,10 +379,10 @@ const DesktopSettings = () => {
             <Palette className="w-5 h-5 text-purple-500" />
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
-                Theme
+                {t("desktop.theme")}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Choose your preferred color scheme
+                {t("desktop.themeDesc")}
               </div>
             </div>
           </div>
@@ -389,7 +393,7 @@ const DesktopSettings = () => {
               size="sm"
               className="flex items-center space-x-2">
               <Sun className="w-4 h-4" />
-              <span>Light</span>
+              <span>{t("desktop.light")}</span>
             </Button>
             <Button
               variant={theme === "dark" ? "default" : "outline"}
@@ -397,7 +401,7 @@ const DesktopSettings = () => {
               size="sm"
               className="flex items-center space-x-2">
               <Moon className="w-4 h-4" />
-              <span>Dark</span>
+              <span>{t("desktop.dark")}</span>
             </Button>
             <Button
               variant={theme === "auto" ? "default" : "outline"}
@@ -405,7 +409,7 @@ const DesktopSettings = () => {
               size="sm"
               className="flex items-center space-x-2">
               <Monitor className="w-4 h-4" />
-              <span>Auto</span>
+              <span>{t("desktop.auto")}</span>
             </Button>
           </div>
         </div>
@@ -415,10 +419,10 @@ const DesktopSettings = () => {
             <span className="w-5 h-5 text-lg">Aa</span>
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
-                Font Size
+                {t("desktop.fontSize")}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Adjust text size for better readability
+                {t("desktop.fontSizeDesc")}
               </div>
             </div>
           </div>
@@ -428,10 +432,10 @@ const DesktopSettings = () => {
               handleSettingChange("display", "fontSize", e.target.value)
             }
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-            <option value="small">Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
-            <option value="extra-large">Extra Large</option>
+            <option value="small">{t("desktop.small")}</option>
+            <option value="medium">{t("desktop.medium")}</option>
+            <option value="large">{t("desktop.large")}</option>
+            <option value="extra-large">{t("desktop.extraLarge")}</option>
           </select>
         </div>
 
@@ -440,10 +444,10 @@ const DesktopSettings = () => {
             <RotateCcw className="w-5 h-5 text-orange-500" />
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
-                Reduced Motion
+                {t("desktop.reducedMotion")}
               </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Minimize animations and transitions
+                {t("desktop.reducedMotionDesc")}
               </div>
             </div>
           </div>
@@ -467,7 +471,7 @@ const DesktopSettings = () => {
   const renderAdvancedSection = () => (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        Advanced Settings
+        {t("desktop.advancedSettings")}
       </h3>
 
       <div className="space-y-4">
@@ -475,24 +479,24 @@ const DesktopSettings = () => {
           <div className="flex items-center space-x-2 mb-2">
             <Settings className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
             <h4 className="font-medium text-yellow-800 dark:text-yellow-200">
-              Data & Privacy
+              {t("desktop.dataPrivacy")}
             </h4>
           </div>
           <p className="text-sm text-yellow-700 dark:text-yellow-300 mb-3">
-            Manage your data, export your information, or delete your account.
+            {t("desktop.dataPrivacyDesc")}
           </p>
           <div className="space-y-2">
             <Button
               variant="outline"
               size="sm"
               className="w-full justify-start">
-              Download My Data
+              {t("desktop.downloadData")}
             </Button>
             <Button
               variant="outline"
               size="sm"
               className="w-full justify-start text-red-600 border-red-200 hover:bg-red-50 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-900/20">
-              Delete Account
+              {t("desktop.deleteAccount")}
             </Button>
           </div>
         </div>
@@ -501,24 +505,24 @@ const DesktopSettings = () => {
           <div className="flex items-center space-x-2 mb-2">
             <Monitor className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <h4 className="font-medium text-blue-800 dark:text-blue-200">
-              Developer Options
+              {t("desktop.developerOptions")}
             </h4>
           </div>
           <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
-            Advanced options for developers and power users.
+            {t("desktop.developerOptionsDesc")}
           </p>
           <div className="space-y-2">
             <Button
               variant="outline"
               size="sm"
               className="w-full justify-start">
-              API Access
+              {t("desktop.apiAccess")}
             </Button>
             <Button
               variant="outline"
               size="sm"
               className="w-full justify-start">
-              Debug Mode
+              {t("desktop.debugMode")}
             </Button>
           </div>
         </div>
@@ -589,11 +593,11 @@ const DesktopSettings = () => {
             <div className="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700 mt-8">
               <Button variant="outline">
                 <RotateCcw className="w-4 h-4 mr-2" />
-                Reset to Default
+                {t("desktop.resetDefault")}
               </Button>
               <Button>
                 <Save className="w-4 h-4 mr-2" />
-                Save Changes
+                {t("desktop.saveChanges")}
               </Button>
             </div>
           </div>

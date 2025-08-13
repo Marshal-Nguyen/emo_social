@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -19,7 +20,16 @@ import { validateEmail } from "../../utils/helpers";
 
 const LoginForm = ({ onSwitchToRegister }) => {
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated } = useSelector(
+    (state) => state.auth
+  );
+  const navigate = useNavigate();
+  // Chuyển hướng sang /home khi đăng nhập thành công
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, [isAuthenticated, navigate]);
 
   const [formData, setFormData] = useState({
     email: "",
