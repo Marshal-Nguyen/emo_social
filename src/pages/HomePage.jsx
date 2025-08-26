@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import CreatePost from "../components/organisms/CreatePost";
 import Feed from "../components/organisms/Feed";
 import Comment from "../components/organisms/Comment";
-import CoinButton from "../components/atoms/CoinButton";
+// import CoinButton from "../components/atoms/CoinButton";
 import AppButton from "../components/atoms/AppButton";
 import Avatar from "../components/atoms/Avatar";
 import { useOutletContext } from "react-router-dom";
