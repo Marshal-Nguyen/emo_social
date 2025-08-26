@@ -13,13 +13,13 @@ const PostActions = ({ post, onLike, onComment, isLiking = false, className = ""
         <Button
           variant="ghost"
           size="icon"
-          className={`!rounded-full ${post.liked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}
+          className={`!rounded-full ${post.liked ? 'text-red-500 dark:text-red-500' : 'text-gray-500 hover:text-red-500'} `}
           title={post.liked ? "Bỏ thích" : "Thích"}
           onClick={onLike}
-        // disabled={isLiking}
         >
-          <Heart className="w-5 h-5" />
+          <Heart className="w-5 h-5" fill={post.liked ? 'currentColor' : 'none'} />
         </Button>
+
       </div>
       {/* Comment */}
       <Button variant="ghost" size="icon" className="!rounded-full" title="Bình luận" onClick={onComment}>

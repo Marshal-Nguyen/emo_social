@@ -10,20 +10,21 @@ const Button = ({
   onClick,
   ...props
 }) => {
+  // base classes (không thêm focus:ring cố định ở đây)
   const baseClasses =
-    "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+    "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variants = {
     primary:
-      "bg-purple-500 hover:bg-purple-600 text-white focus:ring-purple-500 shadow-sm hover:shadow-md",
+      "bg-purple-500 hover:bg-purple-600 text-white focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 shadow-sm hover:shadow-md",
     secondary:
-      "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 focus:ring-gray-500",
+      "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2",
     ghost:
-      "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 focus:ring-gray-500",
+      "hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 focus:ring-0 focus:ring-offset-0", // 👈 không có viền
     danger:
-      "bg-red-500 hover:bg-red-600 text-white focus:ring-red-500 shadow-sm hover:shadow-md",
+      "bg-red-500 hover:bg-red-600 text-white focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shadow-sm hover:shadow-md",
     success:
-      "bg-green-500 hover:bg-green-600 text-white focus:ring-green-500 shadow-sm hover:shadow-md",
+      "bg-green-500 hover:bg-green-600 text-white focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm hover:shadow-md",
   };
 
   const sizes = {
@@ -40,12 +41,14 @@ const Button = ({
       className={classes}
       disabled={disabled || loading}
       onClick={onClick}
-      {...props}>
+      {...props}
+    >
       {loading && (
         <svg
           className="animate-spin -ml-1 mr-2 h-4 w-4"
           fill="none"
-          viewBox="0 0 24 24">
+          viewBox="0 0 24 24"
+        >
           <circle
             className="opacity-25"
             cx="12"
