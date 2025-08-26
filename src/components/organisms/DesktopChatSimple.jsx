@@ -82,12 +82,12 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
 
   // Auto-select conversation when selectedConversationId changes
   useEffect(() => {
-  // ...existing code...
+    // ...existing code...
     if (selectedConversationId) {
       const conversation = conversations.find(
         (conv) => conv.id === selectedConversationId
       );
-  // ...existing code...
+      // ...existing code...
       if (conversation) {
         setSelectedChat(conversation);
       }
@@ -96,25 +96,25 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
 
   const messages = selectedChat
     ? [
-        {
-          id: 1,
-          content: "Hey! How's your day going?",
-          isMine: false,
-          timestamp: "10:30 AM",
-        },
-        {
-          id: 2,
-          content: "It's been great! Working on some exciting projects.",
-          isMine: true,
-          timestamp: "10:32 AM",
-        },
-        {
-          id: 3,
-          content: "That sounds amazing! 🌟",
-          isMine: false,
-          timestamp: "10:35 AM",
-        },
-      ]
+      {
+        id: 1,
+        content: "Hey! How's your day going?",
+        isMine: false,
+        timestamp: "10:30 AM",
+      },
+      {
+        id: 2,
+        content: "It's been great! Working on some exciting projects.",
+        isMine: true,
+        timestamp: "10:32 AM",
+      },
+      {
+        id: 3,
+        content: "That sounds amazing! 🌟",
+        isMine: false,
+        timestamp: "10:35 AM",
+      },
+    ]
     : [];
 
   const handleSendMessage = () => {
@@ -194,11 +194,10 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
                   key={conversation.id}
                   whileHover={{ backgroundColor: "rgba(139, 92, 246, 0.05)" }}
                   onClick={() => setSelectedChat(conversation)}
-                  className={`p-4 cursor-pointer border-b border-gray-100 dark:border-gray-800 transition-colors ${
-                    selectedChat?.id === conversation.id
+                  className={`p-4 cursor-pointer border-b border-gray-100 dark:border-gray-800 transition-colors ${selectedChat?.id === conversation.id
                       ? "bg-purple-50 dark:bg-purple-900/20"
                       : "hover:bg-gray-50 dark:hover:bg-gray-800"
-                  }`}>
+                    }`}>
                   <div className="flex items-center space-x-3">
                     <div className="relative">
                       {conversation.type === "group" ? (
@@ -289,8 +288,8 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
                           {selectedChat.type === "group"
                             ? `${selectedChat.members} thành viên`
                             : selectedChat.participant?.isOnline
-                            ? "Đang hoạt động"
-                            : "Không trực tuyến"}
+                              ? "Đang hoạt động"
+                              : "Không trực tuyến"}
                         </p>
                       </div>
                     </div>
@@ -316,22 +315,19 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
                         key={msg.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className={`flex ${
-                          msg.isMine ? "justify-end" : "justify-start"
-                        }`}>
+                        className={`flex ${msg.isMine ? "justify-end" : "justify-start"
+                          }`}>
                         <div
-                          className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
-                            msg.isMine
+                          className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${msg.isMine
                               ? "bg-purple-500 text-white"
                               : "bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700"
-                          }`}>
+                            }`}>
                           <p className="text-sm">{msg.content}</p>
                           <p
-                            className={`text-xs mt-1 ${
-                              msg.isMine
+                            className={`text-xs mt-1 ${msg.isMine
                                 ? "text-purple-100"
                                 : "text-gray-500 dark:text-gray-400"
-                            }`}>
+                              }`}>
                             {msg.timestamp}
                           </p>
                         </div>

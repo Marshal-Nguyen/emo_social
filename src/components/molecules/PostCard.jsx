@@ -5,12 +5,10 @@ import PostHeader from "./PostHeader";
 import PostContent from "./PostContent";
 import PostActions from "./PostActions";
 import Button from "../atoms/Button";
-import Avatar from "../atoms/Avatar";
-import { Repeat2, Share2, UserPlus, MessageCircle, Heart, MessageSquare } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import PostComments from "./PostComments";
 import CommentForm from "./CommentForm";
 import JoinGroupButton from "./JoinGroupButton";
-import Divider from "../atoms/Divider";
 import { likePost, addComment } from "../../store/postsSlice";
 import { addConversation } from "../../store/chatSlice";
 
@@ -25,7 +23,6 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment }) => {
 
   const handleLike = async () => {
     if (isLiking) return;
-
     setIsLiking(true);
     try {
       dispatch(
@@ -44,7 +41,6 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment }) => {
 
   const handleComment = async (commentText) => {
     if (!commentText.trim() || isCommenting) return;
-
     setIsCommenting(true);
     try {
       const newComment = {
@@ -54,7 +50,6 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment }) => {
         createdAt: new Date().toISOString(),
         avatar: user.avatar,
       };
-
       dispatch(
         addComment({
           postId: post.id,
@@ -78,9 +73,7 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment }) => {
         lastMessage: null,
         updatedAt: new Date().toISOString(),
       };
-
       dispatch(addConversation(conversation));
-
       if (onNavigateToChat) {
         onNavigateToChat(conversationId);
       }
@@ -93,95 +86,74 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment }) => {
     setShowComments(!showComments);
   };
 
-  // Determine background color based on index
-  // const bgColor = index % 2 === 0 ? "bg-[#E0EDFF]" : "bg-[#FFF5DF]";
-  const bgColors = [
-    "#FFF5DF", // Original warm beige
-    "#E0EDFF", // Original light blue
-    "#FFE6CC", // Soft lavender
-    "#E6FFE6", // Pale green
-    "#FFE8F0", // Light pink
-  ];
-
-  // Cycle through colors based on index
+  const bgColors = ["#FFF5DF", "#E0EDFF", "#FFE6CC", "#E6FFE6", "#FFE8F0"];
   const bgColor = bgColors[index % bgColors.length];
 
   return (
-    <div className="relative flex">
-      {/* Main post card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -2 }}
-        transition={{ duration: 0.3 }}
-        className={`flex-1 bg-[${bgColor}] dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow`}
-      >
-        {/* Post Header */}
-        <div className="p-4 sm:p-6">
-          <PostHeader
-            post={post}
-            showJoinedBadge={post.joinStatus === "joined"}
-            className="mb-4"
-          />
-
-          {/* Post Content */}
-          <PostContent post={post} isSafeMode={isSafeMode} className="mb-4" />
-
-          {/* Group Join Button */}
-          {post.type === "group" && (
-            <div className="mb-4">
-              <JoinGroupButton
-                initialStatus={post.joinStatus}
-                groupName={post.groupName}
-              />
-            </div>
-          )}
-
-          {/* <Divider className="my-4" /> */}
-
-          {/* Direct Message button (Nhắn tin) placed right below Divider, inside card */}
-          <div className="flex justify-end">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="bg-[#FB88AA] hover:bg-[#E94B7D] text-white text-sm dark:text-white flex items-center space-x-2 p-1 rounded-full "
-              title="Nhắn tin"
-              onClick={handleDirectMessage}
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span className="hidden sm:inline">Nhóm chat</span>
-            </Button>
-
-          </div>
-        </div>
-
-        {/* Comments Section */}
-        {/* <PostComments
-          comments={post.comments || []}
-          show={showComments}
-          maxVisible={3}
-        /> */}
-
-        {/* Comment Form */}
-        {/* {showComments && (
-          <div className="px-4 sm:px-6 pb-4">
-            <CommentForm onSubmit={handleComment} isSubmitting={isCommenting} />
-          </div>
-        )} */}
-      </motion.div>
-
-      {/* Vertical actions bar (atomic actions only) now in PostActions */}
-      <PostActions
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.3 }}
+      className={`relative bg-[${bgColor}] dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow p-4 sm:p-6 flex flex-col`}
+    >
+      {/* Post Header */}
+      <PostHeader
         post={post}
-        onLike={handleLike}
-        onComment={() => {
-          toggleComments();
-          if (onShowComment) onShowComment(post);
-        }}
-        isLiking={isLiking}
-        showComments={showComments}
+        showJoinedBadge={post.joinStatus === "joined"}
+        className="mb-4"
       />
-    </div>
+
+      {/* Post Content */}
+      <PostContent post={post} isSafeMode={isSafeMode} className="mb-4" />
+
+      {/* Group Join Button */}
+      {post.type === "group" && (
+        <div className="mb-4">
+          <JoinGroupButton
+            initialStatus={post.joinStatus}
+            groupName={post.groupName}
+          />
+        </div>
+      )}
+
+
+
+      {/* Direct Message Button and Post Actions */}
+      <div className="flex justify-between items-center my-2">
+        <Button
+          variant="ghost"
+          className="bg-[#FB88AA] hover:bg-[#E94B7D] text-white text-sm dark:text-white flex items-center space-x-2 p-1 rounded-full"
+          title="Nhắn tin"
+          onClick={handleDirectMessage}
+        >
+          <MessageSquare className="w-4 h-4" />
+          <span className="hidden sm:inline">Nhóm chat</span>
+        </Button>
+        <PostActions
+          post={post}
+          onLike={handleLike}
+          onComment={() => {
+            toggleComments();
+            if (onShowComment) onShowComment(post);
+          }}
+          isLiking={isLiking}
+        />
+      </div>
+      {/* Comments Section */}
+      <PostComments
+        comments={post.comments || []}
+        show={showComments}
+        maxVisible={3}
+      />
+
+      {/* Comment Form */}
+      {showComments && (
+        <div className="mt-4">
+          <CommentForm onSubmit={handleComment} isSubmitting={isCommenting} />
+        </div>
+      )}
+    </motion.div>
   );
 };
 

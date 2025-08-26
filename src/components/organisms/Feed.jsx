@@ -106,7 +106,7 @@ const Feed = ({ onNavigateToChat, onSelectPost }) => {
   }, [dispatch, posts.length]);
 
   const handleLoadMore = () => {
-  // ...existing code...
+    // ...existing code...
   };
 
   if (loading && posts.length === 0) {
