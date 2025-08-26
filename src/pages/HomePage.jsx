@@ -3,76 +3,19 @@ import { motion } from "framer-motion";
 import CreatePost from "../components/organisms/CreatePost";
 import Feed from "../components/organisms/Feed";
 import Comment from "../components/organisms/Comment";
-// import CoinButton from "../components/atoms/CoinButton";
 import AppButton from "../components/atoms/AppButton";
 import Avatar from "../components/atoms/Avatar";
 import { useOutletContext } from "react-router-dom";
-import SearchInput from "../components/atoms/SearchInput";
-import FilterList from "../components/molecules/FilterList";
-import TagSuggestionList from "../components/molecules/TagSuggestionList";
+import SearchBar from "../components/molecules/SearchBar";
+import FeedNav from "../components/molecules/FeedNav";
 
-// Custom Search Component with expandable filter
-const SearchBar = ({ onSearch, tags, search, setSearch, selectedFilter, setSelectedFilter }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const filterOptions = [
-    { value: "all", label: "Tất cả bài viết" },
-    { value: "my", label: "Bài viết của tôi" },
-    { value: "liked", label: "Bài viết đã thích" },
-    { value: "group", label: "Bài viết trong nhóm" },
-  ];
-  return (
-    <div className="relative w-full mb-4 px-16 pt-4">
-      <SearchInput
-        value={search}
-        onChange={e => setSearch(e.target.value)}
-        onClick={() => setIsExpanded(true)}
-        onEnter={() => onSearch(search, selectedFilter)}
-        onSearch={() => onSearch(search, selectedFilter)}
-      />
-      {isExpanded && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 dark:bg-gray-900 dark:bg-opacity-50 flex items-center justify-center z-50">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl"
-          >
-            <SearchInput
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              onClick={() => { }}
-              onEnter={() => onSearch(search, selectedFilter)}
-              onSearch={() => onSearch(search, selectedFilter)}
-            />
-            <FilterList options={filterOptions} selected={selectedFilter} onSelect={setSelectedFilter} />
-            <TagSuggestionList tags={tags} onSelect={setSearch} />
-            <button
-              className="w-full p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-              onClick={() => {
-                onSearch(search, selectedFilter);
-                setIsExpanded(false);
-              }}
-            >
-              Áp dụng
-            </button>
-            <button
-              className="mt-4 w-full p-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
-              onClick={() => setIsExpanded(false)}
-            >
-              Đóng
-            </button>
-          </motion.div>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const HomePage = () => {
   const { handleNavigateToChat } = useOutletContext();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [search, setSearch] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [selectedTab, setSelectedTab] = useState("most_recent");
   const [showComment, setShowComment] = useState(true);
   const [selectedPost, setSelectedPost] = useState(null);
   const [localComments, setLocalComments] = useState({});
@@ -99,24 +42,26 @@ const HomePage = () => {
     <div className="grid grid-cols-9 gap-4 h-screen">
       {/* 6-column region (spans 9 columns on mobile) */}
       <div className={`col-span-6 ${isMobile ? 'col-span-9' : ''} space-y-4 overflow-y-auto no-scrollbar z-20`}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <SearchBar
-            onSearch={(searchValue, filterValue) => {
-              setSearch(searchValue);
-              setSelectedFilter(filterValue);
-              console.log("Search:", searchValue, "Filter:", filterValue);
-            }}
-            tags={tagSuggestions}
-            search={search}
-            setSearch={setSearch}
-            selectedFilter={selectedFilter}
-            setSelectedFilter={setSelectedFilter}
-          />
-        </motion.div>
+        {/* Sticky header with FeedNav and SearchBar side by side */}
+        <div className="sticky top-0 z-30 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md pb-2 pt-2 mb-2 flex items-center gap-4 shadow-sm px-2">
+          <FeedNav selected={selectedTab} onSelect={setSelectedTab} />
+          <div className="flex-1 flex justify-end">
+            <div className="w-full max-w-xs">
+              <SearchBar
+                onSearch={(searchValue, filterValue) => {
+                  setSearch(searchValue);
+                  setSelectedFilter(filterValue);
+                  console.log("Search:", searchValue, "Filter:", filterValue);
+                }}
+                tags={tagSuggestions}
+                search={search}
+                setSearch={setSearch}
+                selectedFilter={selectedFilter}
+                setSelectedFilter={setSelectedFilter}
+              />
+            </div>
+          </div>
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -142,7 +87,7 @@ const HomePage = () => {
       </div>
       {/* 3-column region (hidden on mobile) */}
       {!isMobile && (
-        <div className="col-span-3 overflow-hidden z-20 flex flex-col h-full">
+        <div className="col-span-3 overflow-hidden  flex flex-col h-full">
           {/* Atomic action buttons group at top */}
           <div className="flex items-center bg-gray-900 dark:bg-gray-500  text-white rounded-full p-1 gap-4 mt-4 mb-2 mr-10 shadow-lg">
             <button
