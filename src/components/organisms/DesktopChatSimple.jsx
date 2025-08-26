@@ -82,15 +82,12 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
 
   // Auto-select conversation when selectedConversationId changes
   useEffect(() => {
-    console.log("DesktopChatSimple useEffect:", {
-      selectedConversationId,
-      conversationsCount: conversations.length,
-    });
+  // ...existing code...
     if (selectedConversationId) {
       const conversation = conversations.find(
         (conv) => conv.id === selectedConversationId
       );
-      console.log("Found conversation:", conversation);
+  // ...existing code...
       if (conversation) {
         setSelectedChat(conversation);
       }

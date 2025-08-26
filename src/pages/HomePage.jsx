@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 import CreatePost from "../components/organisms/CreatePost";
 import Feed from "../components/organisms/Feed";
 import Comment from "../components/organisms/Comment";
-import AppButton from "../components/atoms/AppButton";
-import Avatar from "../components/atoms/Avatar";
+// ...existing code...
 import { useOutletContext } from "react-router-dom";
 import SearchBar from "../components/molecules/SearchBar";
 import FeedNav from "../components/molecules/FeedNav";
@@ -51,7 +50,7 @@ const HomePage = () => {
                 onSearch={(searchValue, filterValue) => {
                   setSearch(searchValue);
                   setSelectedFilter(filterValue);
-                  console.log("Search:", searchValue, "Filter:", filterValue);
+                  // ...existing code...
                 }}
                 tags={tagSuggestions}
                 search={search}
