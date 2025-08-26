@@ -5,11 +5,13 @@ import PostCard from "../molecules/PostCard";
 import LoadingSpinner from "../atoms/LoadingSpinner";
 import Button from "../atoms/Button";
 import { fetchPostsSuccess } from "../../store/postsSlice";
+import { image } from "framer-motion/client";
 
 // Mock data for demo
 const mockPosts = [
   {
     id: 1,
+    images: ["https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=800&q=80"],
     content:
       "Hôm nay cảm thấy khá buồn vì công việc. Ai cũng có những ngày khó khăn như vậy không? 😔",
     author: {
@@ -32,6 +34,7 @@ const mockPosts = [
   },
   {
     id: 2,
+    images: ["/emo-light.png"],
     content:
       "Chia sẻ một tip nhỏ: Khi stress, thử ngồi thiền 10 phút hoặc nghe nhạc nhẹ nhàng. Mình thấy rất hiệu quả! 🧘‍♀️✨",
     author: {
@@ -47,6 +50,7 @@ const mockPosts = [
   },
   {
     id: 3,
+    images: ["/emo-qc-d.png"],
     content:
       "Có ai muốn tham gia nhóm chat về sách tâm lý học không? Mình muốn tìm những người cùng sở thích để thảo luận và học hỏi! 📚",
     author: {
@@ -62,6 +66,7 @@ const mockPosts = [
   },
   {
     id: 4,
+    images: ["public/emo-qc.png"],
     content:
       "Gần đây cảm thấy rất cô đơn và tuyệt vọng. Không biết phải làm sao nữa... 😭",
     author: {

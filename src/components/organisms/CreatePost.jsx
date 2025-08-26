@@ -8,7 +8,7 @@ import { generateAnonymousName, sanitizeInput } from "../../utils/helpers";
 import { motion } from "framer-motion";
 
 // Reusable CreatePostForm component
-const CreatePostForm = ({ content, setContent, isPosting, handleSubmit, handleKeyPress, user }) => (
+const CreatePostForm = ({ content, setContent, isPosting, handleSubmit, handleKeyPress, user, images, handleImageChange, removeImage }) => (
   <>
     <div className="flex items-center space-x-3 mb-4">
       <Avatar
@@ -35,16 +35,30 @@ const CreatePostForm = ({ content, setContent, isPosting, handleSubmit, handleKe
         className="w-full resize-none border-0 bg-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-0 text-base sm:text-lg leading-relaxed"
         disabled={isPosting}
       />
+      {/* Image upload preview and input */}
+      <div className="flex flex-col gap-2">
+        {images && images.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {images.map((img, idx) => (
+              <div key={idx} className="relative w-fit">
+                <img src={img} alt={`preview-${idx}`} className="max-h-32 rounded-lg border" />
+                <button type="button" onClick={() => removeImage(idx)} className="absolute top-1 right-1 bg-white bg-opacity-80 rounded-full px-2 py-1 text-xs text-red-500">X</button>
+              </div>
+            ))}
+          </div>
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImageChange}
+          disabled={isPosting}
+          className="block text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
+        />
+      </div>
       <div className="space-y-3">
         <div className="flex flex-wrap gap-2 sm:gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            disabled
-            className="flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-            <Image className="w-4 h-4" />
-            <span>Ảnh</span>
-          </Button>
+          {/* Đã có input ảnh phía trên */}
           <Button
             variant="ghost"
             size="sm"
@@ -96,6 +110,7 @@ const CreatePost = () => {
   const [content, setContent] = useState("");
   const [isPosting, setIsPosting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [images, setImages] = useState([]);
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -116,9 +131,11 @@ const CreatePost = () => {
         commentsCount: 0,
         liked: false,
         comments: [],
+        images: images || [],
       };
       dispatch(addPost(newPost));
       setContent("");
+      setImages([]);
       setShowPopup(false);
     } catch (error) {
       console.error("Failed to create post:", error);
@@ -126,6 +143,25 @@ const CreatePost = () => {
       setIsPosting(false);
     }
   };
+
+  // Xử lý chọn nhiều ảnh và chuyển sang base64
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      const readers = files.map(
+        (file) =>
+          new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+          })
+      );
+      Promise.all(readers).then((base64s) => {
+        setImages((prev) => [...prev, ...base64s]);
+      });
+    }
+  };
+  const removeImage = (idx) => setImages((prev) => prev.filter((_, i) => i !== idx));
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
@@ -220,6 +256,9 @@ const CreatePost = () => {
               handleSubmit={handleSubmit}
               handleKeyPress={handleKeyPress}
               user={user}
+              images={images}
+              handleImageChange={handleImageChange}
+              removeImage={removeImage}
             />
             <div className="mt-6 px-4 py-3 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-t border-purple-100 dark:border-purple-800/30 rounded-b-xl sm:rounded-b-2xl">
               <div className="flex items-start space-x-2">
