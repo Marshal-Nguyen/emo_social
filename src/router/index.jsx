@@ -6,6 +6,7 @@ import HomePage from "../pages/HomePage";
 import ChatPage from "../pages/ChatPage";
 import NotificationsPage from "../pages/NotificationsPage";
 import ProfilePage from "../pages/ProfilePage";
+import IconEmotion from "../pages/IconEmotion";
 import SettingsPage from "../pages/SettingsPage";
 import Layout from "../components/layouts/Layout";
 import LoadingSpinner from "../components/atoms/LoadingSpinner";
@@ -50,6 +51,10 @@ function AppRouter() {
                     <Route
                         path="/settings"
                         element={isAuthenticated ? <SettingsPage /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/icons"
+                        element={isAuthenticated ? <IconEmotion /> : <Navigate to="/auth" />}
                     />
                     <Route
                         path="/"

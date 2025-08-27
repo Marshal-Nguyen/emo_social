@@ -1,0 +1,1562 @@
+[
+    {
+        "id": 2001,
+        "name": "Positive",
+        "moodItems": [
+            {
+                "id": 3001,
+                "name": "Supportive",
+                "icon": "\uD83D\uDE18",
+                "nameVi": "Hỗ trợ"
+            },
+            {
+                "id": 3002,
+                "name": "Caring",
+                "icon": "\uD83D\uDE0A",
+                "nameVi": "Quan tâm"
+            },
+            {
+                "id": 3003,
+                "name": "Loving",
+                "icon": "\uD83D\uDE0D",
+                "nameVi": "Yêu thương"
+            },
+            {
+                "id": 3004,
+                "name": "Inspired",
+                "icon": "\uD83E\uDD29",
+                "nameVi": "Truyền cảm hứng"
+            },
+            {
+                "id": 3005,
+                "name": "Proud",
+                "icon": "\uD83D\uDE01",
+                "nameVi": "Tự hào"
+            },
+            {
+                "id": 3006,
+                "name": "Hopeful",
+                "icon": "\uD83D\uDE00",
+                "nameVi": "Hy vọng"
+            },
+            {
+                "id": 3007,
+                "name": "Nostalgic",
+                "icon": "\uD83E\uDD72",
+                "nameVi": "Hoài niệm"
+            },
+            {
+                "id": 3008,
+                "name": "Positive",
+                "icon": "\uD83D\uDE03",
+                "nameVi": "Tích cực"
+            },
+            {
+                "id": 3009,
+                "name": "Loved",
+                "icon": "\uD83E\uDD70",
+                "nameVi": "Được yêu"
+            },
+            {
+                "id": 3010,
+                "name": "Supported",
+                "icon": "\uD83D\uDE0C",
+                "nameVi": "Được hỗ trợ"
+            },
+            {
+                "id": 3011,
+                "name": "Amazed",
+                "icon": "\uD83D\uDE06",
+                "nameVi": "Kinh ngạc"
+            },
+            {
+                "id": 3012,
+                "name": "Happy",
+                "icon": "\uD83E\uDD17",
+                "nameVi": "Vui vẻ"
+            }
+        ]
+    },
+    {
+        "id": 2002,
+        "name": "Happy",
+        "moodItems": [
+            {
+                "id": 3013,
+                "name": "Amused",
+                "icon": "\uD83E\uDD2D",
+                "nameVi": "Vui thích"
+            },
+            {
+                "id": 3014,
+                "name": "Calm",
+                "icon": "\uD83D\uDE42",
+                "nameVi": "Bình tĩnh"
+            },
+            {
+                "id": 3015,
+                "name": "Relaxed",
+                "icon": "\uD83D\uDE42",
+                "nameVi": "Thư giãn"
+            },
+            {
+                "id": 3016,
+                "name": "Chilled",
+                "icon": "\uD83D\uDE0E",
+                "nameVi": "Thoải mái"
+            },
+            {
+                "id": 3017,
+                "name": "Relieved",
+                "icon": "\uD83D\uDE05",
+                "nameVi": "Nhẹ nhõm"
+            },
+            {
+                "id": 3018,
+                "name": "Excited",
+                "icon": "\uD83E\uDD73",
+                "nameVi": "Phấn khích"
+            },
+            {
+                "id": 3019,
+                "name": "Jolly",
+                "icon": "\uD83D\uDE06",
+                "nameVi": "Vui vẻ"
+            },
+            {
+                "id": 3020,
+                "name": "Thankful",
+                "icon": "\uD83D\uDE01",
+                "nameVi": "Biết ơn"
+            },
+            {
+                "id": 3021,
+                "name": "Determined",
+                "icon": "\uD83E\uDD29",
+                "nameVi": "Quyết tâm"
+            },
+            {
+                "id": 3022,
+                "name": "Motivated",
+                "icon": "\uD83D\uDE09",
+                "nameVi": "Động lực"
+            },
+            {
+                "id": 3023,
+                "name": "Surprised",
+                "icon": "\uD83D\uDE32",
+                "nameVi": "Ngạc nhiên"
+            },
+            {
+                "id": 3024,
+                "name": "Energetic",
+                "icon": "\uD83E\uDD20",
+                "nameVi": "Năng động"
+            }
+        ]
+    },
+    {
+        "id": 2003,
+        "name": "Sad",
+        "moodItems": [
+            {
+                "id": 3025,
+                "name": "Sad",
+                "icon": "\uD83D\uDE41",
+                "nameVi": "Buồn"
+            },
+            {
+                "id": 3026,
+                "name": "Heartbroken",
+                "icon": "\uD83D\uDE2D",
+                "nameVi": "Đau lòng"
+            },
+            {
+                "id": 3027,
+                "name": "Afraid",
+                "icon": "\uD83D\uDE26",
+                "nameVi": "Sợ hãi"
+            },
+            {
+                "id": 3028,
+                "name": "Anxious",
+                "icon": "\uD83D\uDE28",
+                "nameVi": "Lo lắng"
+            },
+            {
+                "id": 3029,
+                "name": "Nervous",
+                "icon": "\uD83D\uDE2C",
+                "nameVi": "Hồi hộp"
+            },
+            {
+                "id": 3030,
+                "name": "Lonely",
+                "icon": "\uD83D\uDE1E",
+                "nameVi": "Cô đơn"
+            },
+            {
+                "id": 3031,
+                "name": "Tired",
+                "icon": "\uD83D\uDE34",
+                "nameVi": "Mệt mỏi"
+            },
+            {
+                "id": 3032,
+                "name": "Insecure",
+                "icon": "\uD83D\uDE1F",
+                "nameVi": "Bất an"
+            },
+            {
+                "id": 3033,
+                "name": "Exhausted",
+                "icon": "\uD83D\uDE35‍\uD83D\uDCAB",
+                "nameVi": "Kiệt sức"
+            },
+            {
+                "id": 3034,
+                "name": "Down",
+                "icon": "\uD83D\uDE14",
+                "nameVi": "Chán nản"
+            },
+            {
+                "id": 3035,
+                "name": "Overwhelmed",
+                "icon": "\uD83D\uDE13",
+                "nameVi": "Quá tải"
+            },
+            {
+                "id": 3036,
+                "name": "Depressed",
+                "icon": "\uD83D\uDE30",
+                "nameVi": "Trầm cảm"
+            }
+        ]
+    },
+    {
+        "id": 2004,
+        "name": "Worried",
+        "moodItems": [
+            {
+                "id": 3037,
+                "name": "Worried",
+                "icon": "\uD83D\uDE27",
+                "nameVi": "Lo lắng"
+            },
+            {
+                "id": 3038,
+                "name": "Confused",
+                "icon": "\uD83E\uDD14",
+                "nameVi": "Bối rối"
+            },
+            {
+                "id": 3039,
+                "name": "Embarrassed",
+                "icon": "\uD83D\uDE33",
+                "nameVi": "Xấu hổ"
+            },
+            {
+                "id": 3040,
+                "name": "Not Enough",
+                "icon": "\uD83D\uDE15",
+                "nameVi": "Không đủ"
+            },
+            {
+                "id": 3041,
+                "name": "Meh",
+                "icon": "\uD83D\uDE12",
+                "nameVi": "Thờ ơ"
+            },
+            {
+                "id": 3042,
+                "name": "Sick",
+                "icon": "\uD83E\uDD22",
+                "nameVi": "Ốm"
+            },
+            {
+                "id": 3043,
+                "name": "Numb",
+                "icon": "\uD83D\uDE36",
+                "nameVi": "Tê liệt"
+            },
+            {
+                "id": 3044,
+                "name": "Bored",
+                "icon": "\uD83E\uDD71",
+                "nameVi": "Chán"
+            },
+            {
+                "id": 3045,
+                "name": "Nothing",
+                "icon": "\uD83D\uDE36",
+                "nameVi": "Không gì cả"
+            },
+            {
+                "id": 3046,
+                "name": "Inadequate",
+                "icon": "\uD83E\uDD7A",
+                "nameVi": "Thiếu thốn"
+            },
+            {
+                "id": 3047,
+                "name": "Struggling",
+                "icon": "\uD83D\uDE22",
+                "nameVi": "Đấu tranh"
+            },
+            {
+                "id": 3048,
+                "name": "Ashamed",
+                "icon": "\uD83D\uDE1E",
+                "nameVi": "Hổ thẹn"
+            }
+        ]
+    },
+    {
+        "id": 2005,
+        "name": "Angry",
+        "moodItems": [
+            {
+                "id": 3049,
+                "name": "Frustrated",
+                "icon": "\uD83D\uDE24",
+                "nameVi": "Bực bội"
+            },
+            {
+                "id": 3050,
+                "name": "Annoyed",
+                "icon": "\uD83D\uDE11",
+                "nameVi": "Khó chịu"
+            },
+            {
+                "id": 3051,
+                "name": "Angry",
+                "icon": "\uD83D\uDE21",
+                "nameVi": "Tức giận"
+            },
+            {
+                "id": 3052,
+                "name": "Furious",
+                "icon": "\uD83E\uDD2C",
+                "nameVi": "Giận dữ"
+            },
+            {
+                "id": 3053,
+                "name": "Irritated",
+                "icon": "\uD83D\uDE2E\u200D\uD83D\uDCA8",
+                "nameVi": "Cáu kỉnh"
+            },
+            {
+                "id": 3054,
+                "name": "Jealous",
+                "icon": "\uD83D\uDE20",
+                "nameVi": "Ghen tị"
+            },
+            {
+                "id": 3055,
+                "name": "Stressed",
+                "icon": "\uD83D\uDE23",
+                "nameVi": "Căng thẳng"
+            },
+            {
+                "id": 3056,
+                "name": "Moody",
+                "icon": "\uD83D\uDE1F",
+                "nameVi": "Tâm trạng"
+            },
+            {
+                "id": 3057,
+                "name": "Disgusted",
+                "icon": "\uD83E\uDD2E",
+                "nameVi": "Kinh tởm"
+            },
+            {
+                "id": 3058,
+                "name": "Failure",
+                "icon": "\uD83D\uDE30",
+                "nameVi": "Thất bại"
+            },
+            {
+                "id": 3059,
+                "name": "Misfit",
+                "icon": "\uD83E\uDD78",
+                "nameVi": "Không phù hợp"
+            },
+            {
+                "id": 3060,
+                "name": "Shocked",
+                "icon": "\uD83D\uDE31",
+                "nameVi": "Sốc"
+            }
+        ]
+    },
+    {
+        "id": 2006,
+        "name": "Space",
+        "moodItems": [
+            {
+                "id": 3061,
+                "name": "Aligned",
+                "icon": "\uD83E\uDE90",
+                "nameVi": "Cân bằng"
+            },
+            {
+                "id": 3062,
+                "name": "Celestial",
+                "icon": "\uD83C\uDF0C",
+                "nameVi": "Thiên thể"
+            },
+            {
+                "id": 3063,
+                "name": "Cold",
+                "icon": "❄️",
+                "nameVi": "Lạnh lẽo"
+            },
+            {
+                "id": 3064,
+                "name": "Dark",
+                "icon": "\uD83C\uDF11",
+                "nameVi": "Tối tăm"
+            },
+            {
+                "id": 3065,
+                "name": "Exploring",
+                "icon": "\uD83D\uDE80",
+                "nameVi": "Khám phá"
+            },
+            {
+                "id": 3066,
+                "name": "Falling",
+                "icon": "☄️",
+                "nameVi": "Rơi"
+            },
+            {
+                "id": 3067,
+                "name": "Lunar",
+                "icon": "\uD83C\uDF19",
+                "nameVi": "Mặt trăng"
+            },
+            {
+                "id": 3068,
+                "name": "Orbiting",
+                "icon": "\uD83D\uDEF0️",
+                "nameVi": "Quay quanh"
+            },
+            {
+                "id": 3069,
+                "name": "Solar",
+                "icon": "☀️",
+                "nameVi": "Mặt trời"
+            },
+            {
+                "id": 3070,
+                "name": "Stargazing",
+                "icon": "\uD83D\uDD2D",
+                "nameVi": "Ngắm sao"
+            },
+            {
+                "id": 3071,
+                "name": "Stellar",
+                "icon": "\uD83C\uDF1F",
+                "nameVi": "Rực rỡ"
+            },
+            {
+                "id": 3072,
+                "name": "Unearthly",
+                "icon": "\uD83D\uDC7D",
+                "nameVi": "Siêu thực"
+            }
+        ]
+    },
+    {
+        "id": 2007,
+        "name": "Mental Health",
+        "moodItems": [
+            {
+                "id": 3073,
+                "name": "Aware",
+                "icon": "\uD83C\uDF97️",
+                "nameVi": "Nhận thức"
+            },
+            {
+                "id": 3074,
+                "name": "Coping",
+                "icon": "\uD83C\uDF3F",
+                "nameVi": "Đối phó"
+            },
+            {
+                "id": 3075,
+                "name": "Exhausted",
+                "icon": "\uD83C\uDF03",
+                "nameVi": "Kiệt sức"
+            },
+            {
+                "id": 3076,
+                "name": "Grounded",
+                "icon": "\uD83C\uDF31",
+                "nameVi": "Căn bản"
+            },
+            {
+                "id": 3077,
+                "name": "Growing",
+                "icon": "\uD83E\uDD8B",
+                "nameVi": "Phát triển"
+            },
+            {
+                "id": 3078,
+                "name": "Helpful",
+                "icon": "\uD83E\uDDAE",
+                "nameVi": "Hữu ích"
+            },
+            {
+                "id": 3079,
+                "name": "Mindful",
+                "icon": "\uD83D\uDCAD",
+                "nameVi": "Tỉnh thức"
+            },
+            {
+                "id": 3080,
+                "name": "Persistent",
+                "icon": "\uD83E\uDD8C",
+                "nameVi": "Kiên trì"
+            },
+            {
+                "id": 3081,
+                "name": "Recovering",
+                "icon": "\uD83C\uDF43",
+                "nameVi": "Hồi phục"
+            },
+            {
+                "id": 3082,
+                "name": "Resilient",
+                "icon": "\uD83D\uDC32",
+                "nameVi": "Bền bỉ"
+            },
+            {
+                "id": 3083,
+                "name": "Set Back",
+                "icon": "\uD83D\uDD19",
+                "nameVi": "Thụt lùi"
+            },
+            {
+                "id": 3084,
+                "name": "Struggling",
+                "icon": "☔",
+                "nameVi": "Đấu tranh"
+            }
+        ]
+    },
+    {
+        "id": 2008,
+        "name": "Mindfulness",
+        "moodItems": [
+            {
+                "id": 3085,
+                "name": "Accepting",
+                "icon": "⛰️",
+                "nameVi": "Chấp nhận"
+            },
+            {
+                "id": 3086,
+                "name": "Breathing",
+                "icon": "\uD83C\uDF05",
+                "nameVi": "Hít thở"
+            },
+            {
+                "id": 3087,
+                "name": "Grateful",
+                "icon": "\uD83C\uDF40",
+                "nameVi": "Biết ơn"
+            },
+            {
+                "id": 3088,
+                "name": "Grounded",
+                "icon": "\uD83E\uDDCA",
+                "nameVi": "Căn bản"
+            },
+            {
+                "id": 3089,
+                "name": "Here",
+                "icon": "☁️",
+                "nameVi": "Hiện tại"
+            },
+            {
+                "id": 3090,
+                "name": "Listening",
+                "icon": "\uD83D\uDC42",
+                "nameVi": "Lắng nghe"
+            },
+            {
+                "id": 3091,
+                "name": "Open",
+                "icon": "\uD83D\uDD13",
+                "nameVi": "Cởi mở"
+            },
+            {
+                "id": 3092,
+                "name": "Patient",
+                "icon": "\uD83E\uDD0D",
+                "nameVi": "Kiên nhẫn"
+            },
+            {
+                "id": 3093,
+                "name": "Pausing",
+                "icon": "⏸️",
+                "nameVi": "Tạm dừng"
+            },
+            {
+                "id": 3094,
+                "name": "Resting",
+                "icon": "☕",
+                "nameVi": "Nghỉ ngơi"
+            },
+            {
+                "id": 3095,
+                "name": "Trusting",
+                "icon": "\uD83D\uDC1B",
+                "nameVi": "Tin tưởng"
+            },
+            {
+                "id": 3096,
+                "name": "Watchful",
+                "icon": "\uD83E\uDD89",
+                "nameVi": "Cẩn trọng"
+            }
+        ]
+    },
+    {
+        "id": 2009,
+        "name": "Gothic",
+        "moodItems": [
+            {
+                "id": 3097,
+                "name": "Brooding",
+                "icon": "\uD83D\uDC80",
+                "nameVi": "Trầm tư"
+            },
+            {
+                "id": 3098,
+                "name": "Cured",
+                "icon": "\uD83E\uDD40",
+                "nameVi": "Hồi phục"
+            },
+            {
+                "id": 3099,
+                "name": "Dark",
+                "icon": "\uD83C\uDF18",
+                "nameVi": "Tối tăm"
+            },
+            {
+                "id": 3100,
+                "name": "Haunting",
+                "icon": "\uD83C\uDFAD",
+                "nameVi": "Ám ảnh"
+            },
+            {
+                "id": 3101,
+                "name": "Immortal",
+                "icon": "\uD83C\uDFB9",
+                "nameVi": "Bất tử"
+            },
+            {
+                "id": 3102,
+                "name": "Hollow",
+                "icon": "\uD83E\uDEE5",
+                "nameVi": "Trống rỗng"
+            },
+            {
+                "id": 3103,
+                "name": "Mystified",
+                "icon": "\uD83C\uDF2B️",
+                "nameVi": "Huyền bí"
+            },
+            {
+                "id": 3104,
+                "name": "Resplendent",
+                "icon": "\uD83D\uDD25",
+                "nameVi": "Rực rỡ"
+            },
+            {
+                "id": 3105,
+                "name": "Scrawling",
+                "icon": "✒️",
+                "nameVi": "Nguệch ngoạc"
+            },
+            {
+                "id": 3106,
+                "name": "Somber",
+                "icon": "\uD83D\uDD6F️",
+                "nameVi": "U ám"
+            },
+            {
+                "id": 3107,
+                "name": "Spellbound",
+                "icon": "✨",
+                "nameVi": "Mê hoặc"
+            },
+            {
+                "id": 3108,
+                "name": "Tormented",
+                "icon": "⛓️",
+                "nameVi": "Đau khổ"
+            }
+        ]
+    },
+    {
+        "id": 2010,
+        "name": "Cat",
+        "moodItems": [
+            {
+                "id": 3109,
+                "name": "Allergic",
+                "icon": "\uD83D\uDE3F",
+                "nameVi": "Dị ứng"
+            },
+            {
+                "id": 3110,
+                "name": "Catastrophic",
+                "icon": "\uD83D\uDCA5",
+                "nameVi": "Thảm họa"
+            },
+            {
+                "id": 3111,
+                "name": "Clawful",
+                "icon": "\uD83D\uDCA2",
+                "nameVi": "Kinh khủng"
+            },
+            {
+                "id": 3112,
+                "name": "Fur-ious",
+                "icon": "\uD83D\uDE3E",
+                "nameVi": "Giận dữ"
+            },
+            {
+                "id": 3113,
+                "name": "Furry",
+                "icon": "\uD83D\uDC31",
+                "nameVi": "Lông xù"
+            },
+            {
+                "id": 3114,
+                "name": "Hissterical",
+                "icon": "\uD83D\uDE39",
+                "nameVi": "Hài hước"
+            },
+            {
+                "id": 3115,
+                "name": "Kneady",
+                "icon": "\uD83C\uDF5E",
+                "nameVi": "Đòi hỏi"
+            },
+            {
+                "id": 3116,
+                "name": "Meowtta here",
+                "icon": "\uD83D\uDCA8",
+                "nameVi": "Có mặt"
+            },
+            {
+                "id": 3117,
+                "name": "Mousechievous",
+                "icon": "\uD83D\uDC2D",
+                "nameVi": "Tinh nghịch"
+            },
+            {
+                "id": 3118,
+                "name": "Pawsome",
+                "icon": "\uD83D\uDC3E",
+                "nameVi": "Tuyệt vời"
+            },
+            {
+                "id": 3119,
+                "name": "Uninterested",
+                "icon": "\uD83D\uDC85",
+                "nameVi": "Thờ ơ"
+            },
+            {
+                "id": 3120,
+                "name": "Purrfect",
+                "icon": "\uD83D\uDC08",
+                "nameVi": "Hoàn hảo"
+            }
+        ]
+    },
+    {
+        "id": 2011,
+        "name": "Affection",
+        "moodItems": [
+            {
+                "id": 3121,
+                "name": "Adoring",
+                "icon": "\uD83C\uDF80",
+                "nameVi": "Say mê"
+            },
+            {
+                "id": 3122,
+                "name": "Affectionate",
+                "icon": "\uD83D\uDE18",
+                "nameVi": "Yêu thương"
+            },
+            {
+                "id": 3123,
+                "name": "Caring",
+                "icon": "\uD83E\uDD1D",
+                "nameVi": "Quan tâm"
+            },
+            {
+                "id": 3124,
+                "name": "Cuddly",
+                "icon": "\uD83E\uDDF8",
+                "nameVi": "Dễ thương"
+            },
+            {
+                "id": 3125,
+                "name": "Devoted",
+                "icon": "\uD83D\uDCFF",
+                "nameVi": "Tận tụy"
+            },
+            {
+                "id": 3126,
+                "name": "Flustered",
+                "icon": "\uD83E\uDEAD",
+                "nameVi": "Lúng túng"
+            },
+            {
+                "id": 3127,
+                "name": "Fond",
+                "icon": "✨",
+                "nameVi": "Yêu thích"
+            },
+            {
+                "id": 3128,
+                "name": "Infatuated",
+                "icon": "\uD83E\uDDFF",
+                "nameVi": "Say đắm"
+            },
+            {
+                "id": 3129,
+                "name": "Longing",
+                "icon": "\uD83C\uDF42",
+                "nameVi": "Khao khát"
+            },
+            {
+                "id": 3130,
+                "name": "Loving",
+                "icon": "\uD83D\uDC97",
+                "nameVi": "Yêu thương"
+            },
+            {
+                "id": 3131,
+                "name": "Needy",
+                "icon": "\uD83E\uDDF7",
+                "nameVi": "Thiếu thốn"
+            },
+            {
+                "id": 3132,
+                "name": "Passionate",
+                "icon": "\uD83D\uDD25",
+                "nameVi": "Đam mê"
+            }
+        ]
+    },
+    {
+        "id": 2012,
+        "name": "Main Character Energy",
+        "moodItems": [
+            {
+                "id": 3133,
+                "name": "Mousy",
+                "icon": "\uD83D\uDC2D",
+                "nameVi": "Nhút nhát"
+            },
+            {
+                "id": 3134,
+                "name": "Goofy",
+                "icon": "\uD83E\uDDAE",
+                "nameVi": "Ngớ ngẩn"
+            },
+            {
+                "id": 3135,
+                "name": "Silly",
+                "icon": "\uD83E\uDD2A",
+                "nameVi": "Ngố"
+            },
+            {
+                "id": 3136,
+                "name": "Clumsy",
+                "icon": "\uD83D\uDE48",
+                "nameVi": "Vụng về"
+            },
+            {
+                "id": 3137,
+                "name": "Iconic",
+                "icon": "\uD83C\uDF1F",
+                "nameVi": "Biểu tượng"
+            },
+            {
+                "id": 3138,
+                "name": "Mischievious",
+                "icon": "\uD83E\uDDDA‍♀️",
+                "nameVi": "Tinh nghịch"
+            },
+            {
+                "id": 3139,
+                "name": "Fiery",
+                "icon": "\uD83D\uDD25",
+                "nameVi": "Bùng cháy"
+            },
+            {
+                "id": 3140,
+                "name": "Wicked",
+                "icon": "\uD83D\uDE08",
+                "nameVi": "Xảo quyệt"
+            },
+            {
+                "id": 3141,
+                "name": "Courageous",
+                "icon": "\uD83D\uDC09",
+                "nameVi": "Dũng cảm"
+            },
+            {
+                "id": 3142,
+                "name": "Bookish",
+                "icon": "\uD83D\uDCDA",
+                "nameVi": "Mê sách"
+            },
+            {
+                "id": 3143,
+                "name": "Charismatic",
+                "icon": "\uD83E\uDD81",
+                "nameVi": "Lôi cuốn"
+            },
+            {
+                "id": 3144,
+                "name": "Introspective",
+                "icon": "❄️",
+                "nameVi": "Nội tâm"
+            }
+        ]
+    },
+    {
+        "id": 2013,
+        "name": "Sleepy",
+        "moodItems": [
+            {
+                "id": 3145,
+                "name": "Yawning",
+                "icon": "\uD83E\uDD71",
+                "nameVi": "Ngáp"
+            },
+            {
+                "id": 3146,
+                "name": "Heavy-eyed",
+                "icon": "\uD83D\uDC41",
+                "nameVi": "Mắt nặng"
+            },
+            {
+                "id": 3147,
+                "name": "Lethargic",
+                "icon": "\uD83D\uDECC",
+                "nameVi": "Uể oải"
+            },
+            {
+                "id": 3148,
+                "name": "Sluggish",
+                "icon": "\uD83D\uDC0C",
+                "nameVi": "Chậm chạp"
+            },
+            {
+                "id": 3149,
+                "name": "Blanket-bound",
+                "icon": "\uD83C\uDF2F",
+                "nameVi": "Gắn bó với chăn"
+            },
+            {
+                "id": 3150,
+                "name": "Fatigued",
+                "icon": "\uD83D\uDE2E\u200D\uD83D\uDCA8",
+                "nameVi": "Mệt mỏi"
+            },
+            {
+                "id": 3151,
+                "name": "Dozy",
+                "icon": "\uD83E\uDDF8",
+                "nameVi": "Ngái ngủ"
+            },
+            {
+                "id": 3152,
+                "name": "Not today",
+                "icon": "✋",
+                "nameVi": "Không hôm nay"
+            },
+            {
+                "id": 3153,
+                "name": "Soporific",
+                "icon": "\uD83D\uDC11",
+                "nameVi": "Gây buồn ngủ"
+            },
+            {
+                "id": 3154,
+                "name": "Weary",
+                "icon": "\uD83D\uDE34",
+                "nameVi": "Mệt mỏi"
+            },
+            {
+                "id": 3155,
+                "name": "Dog-tired",
+                "icon": "\uD83D\uDC15",
+                "nameVi": "Kiệt sức"
+            },
+            {
+                "id": 3156,
+                "name": "Drowsy",
+                "icon": "\uD83C\uDF18",
+                "nameVi": "Buồn ngủ"
+            }
+        ]
+    },
+    {
+        "id": 2014,
+        "name": "Neutral",
+        "moodItems": [
+            {
+                "id": 3157,
+                "name": "Aloof",
+                "icon": "☁️",
+                "nameVi": "Lạnh lùng"
+            },
+            {
+                "id": 3158,
+                "name": "Apathetic",
+                "icon": "❌",
+                "nameVi": "Thờ ơ"
+            },
+            {
+                "id": 3159,
+                "name": "Blank",
+                "icon": "\uD83D\uDCC4",
+                "nameVi": "Trống rỗng"
+            },
+            {
+                "id": 3160,
+                "name": "Bored",
+                "icon": "\uD83D\uDCA4",
+                "nameVi": "Chán"
+            },
+            {
+                "id": 3161,
+                "name": "Detached",
+                "icon": "\uD83C\uDF2B️",
+                "nameVi": "Tách rời"
+            },
+            {
+                "id": 3162,
+                "name": "Idle",
+                "icon": "\uD83D\uDCAC",
+                "nameVi": "Nhàn rỗi"
+            },
+            {
+                "id": 3163,
+                "name": "Neutral",
+                "icon": "➖",
+                "nameVi": "Trung lập"
+            },
+            {
+                "id": 3164,
+                "name": "Okay",
+                "icon": "⭕",
+                "nameVi": "Ổn"
+            },
+            {
+                "id": 3165,
+                "name": "Passive",
+                "icon": "\uD83C\uDF42",
+                "nameVi": "Thụ động"
+            },
+            {
+                "id": 3166,
+                "name": "Scrolling",
+                "icon": "\uD83D\uDCF1",
+                "nameVi": "Cuộn (mạng xã hội)"
+            },
+            {
+                "id": 3167,
+                "name": "Stoic",
+                "icon": "❄️",
+                "nameVi": "Kiên định"
+            },
+            {
+                "id": 3168,
+                "name": "Thinking",
+                "icon": "\uD83D\uDCAD",
+                "nameVi": "Suy nghĩ"
+            }
+        ]
+    },
+    {
+        "id": 2015,
+        "name": "Uncertainty",
+        "moodItems": [
+            {
+                "id": 3169,
+                "name": "Avoiding",
+                "icon": "\uD83D\uDEA7",
+                "nameVi": "Tránh né"
+            },
+            {
+                "id": 3170,
+                "name": "Concerned",
+                "icon": "⚠️",
+                "nameVi": "Lo ngại"
+            },
+            {
+                "id": 3171,
+                "name": "Considering",
+                "icon": "⚖️",
+                "nameVi": "Cân nhắc"
+            },
+            {
+                "id": 3172,
+                "name": "Disappointed",
+                "icon": "☁️",
+                "nameVi": "Thất vọng"
+            },
+            {
+                "id": 3173,
+                "name": "Failing",
+                "icon": "❌",
+                "nameVi": "Thất bại"
+            },
+            {
+                "id": 3174,
+                "name": "Hesitant",
+                "icon": "\uD83D\uDCAC",
+                "nameVi": "Do dự"
+            },
+            {
+                "id": 3175,
+                "name": "Journaling",
+                "icon": "\uD83D\uDCD3",
+                "nameVi": "Viết nhật ký"
+            },
+            {
+                "id": 3176,
+                "name": "Powerless",
+                "icon": "\uD83E\uDEAB",
+                "nameVi": "Bất lực"
+            },
+            {
+                "id": 3177,
+                "name": "Trapped",
+                "icon": "\uD83D\uDD78",
+                "nameVi": "Mắc kẹt"
+            },
+            {
+                "id": 3178,
+                "name": "Trying",
+                "icon": "\uD83E\uDD1E",
+                "nameVi": "Cố gắng"
+            },
+            {
+                "id": 3179,
+                "name": "Unsure",
+                "icon": "❔",
+                "nameVi": "Không chắc"
+            },
+            {
+                "id": 3180,
+                "name": "Void",
+                "icon": "\uD83D\uDD73️",
+                "nameVi": "Trống rỗng"
+            }
+        ]
+    },
+    {
+        "id": 2016,
+        "name": "Disability",
+        "moodItems": [
+            {
+                "id": 3181,
+                "name": "Fatigued",
+                "icon": "\uD83D\uDCA4",
+                "nameVi": "Mệt mỏi"
+            },
+            {
+                "id": 3182,
+                "name": "Foggy",
+                "icon": "\uD83C\uDF2B️",
+                "nameVi": "Mơ hồ"
+            },
+            {
+                "id": 3183,
+                "name": "Hurting",
+                "icon": "\uD83D\uDCA2",
+                "nameVi": "Đau đớn"
+            },
+            {
+                "id": 3184,
+                "name": "Invisible",
+                "icon": "☁️",
+                "nameVi": "Vô hình"
+            },
+            {
+                "id": 3185,
+                "name": "Mobile",
+                "icon": "♿",
+                "nameVi": "Di chuyển"
+            },
+            {
+                "id": 3186,
+                "name": "Mute",
+                "icon": "\uD83D\uDE4A",
+                "nameVi": "Câm"
+            },
+            {
+                "id": 3187,
+                "name": "Processing",
+                "icon": "\uD83D\uDCAC",
+                "nameVi": "Xử lý"
+            },
+            {
+                "id": 3188,
+                "name": "Rare",
+                "icon": "\uD83E\uDD93",
+                "nameVi": "Hiếm"
+            },
+            {
+                "id": 3189,
+                "name": "Rhythmic",
+                "icon": "⚡",
+                "nameVi": "Nhịp nhàng"
+            },
+            {
+                "id": 3190,
+                "name": "Sick",
+                "icon": "\uD83C\uDF21️",
+                "nameVi": "Ốm"
+            },
+            {
+                "id": 3191,
+                "name": "Signing",
+                "icon": "\uD83D\uDC4B",
+                "nameVi": "Ra dấu"
+            },
+            {
+                "id": 3192,
+                "name": "Supported",
+                "icon": "\uD83D\uDC9E",
+                "nameVi": "Được hỗ trợ"
+            }
+        ]
+    },
+    {
+        "id": 2017,
+        "name": "Self-love",
+        "moodItems": [
+            {
+                "id": 3193,
+                "name": "Comforted",
+                "icon": "\uD83E\uDDF8",
+                "nameVi": "Được an ủi"
+            },
+            {
+                "id": 3194,
+                "name": "Complete",
+                "icon": "\uD83E\uDDE9",
+                "nameVi": "Hoàn thiện"
+            },
+            {
+                "id": 3195,
+                "name": "Confident",
+                "icon": "\uD83C\uDF3C",
+                "nameVi": "Tự tin"
+            },
+            {
+                "id": 3196,
+                "name": "Getting There",
+                "icon": "\uD83D\uDE80",
+                "nameVi": "Đang tiến bộ"
+            },
+            {
+                "id": 3197,
+                "name": "Imperfect",
+                "icon": "\uD83C\uDF12",
+                "nameVi": "Không hoàn hảo"
+            },
+            {
+                "id": 3198,
+                "name": "Important",
+                "icon": "\uD83D\uDCAB",
+                "nameVi": "Quan trọng"
+            },
+            {
+                "id": 3199,
+                "name": "Positive",
+                "icon": "☀️",
+                "nameVi": "Tích cực"
+            },
+            {
+                "id": 3200,
+                "name": "Respected",
+                "icon": "\uD83D\uDC51",
+                "nameVi": "Được tôn trọng"
+            },
+            {
+                "id": 3201,
+                "name": "Serene",
+                "icon": "\uD83D\uDC1A",
+                "nameVi": "Thanh thản"
+            },
+            {
+                "id": 3202,
+                "name": "Shameless",
+                "icon": "\uD83D\uDEA8",
+                "nameVi": "Không xấu hổ"
+            },
+            {
+                "id": 3203,
+                "name": "Trying",
+                "icon": "⛅",
+                "nameVi": "Cố gắng"
+            },
+            {
+                "id": 3204,
+                "name": "Uplifted",
+                "icon": "☁️",
+                "nameVi": "Nâng cao tinh thần"
+            }
+        ]
+    },
+    {
+        "id": 2018,
+        "name": "Night Owls",
+        "moodItems": [
+            {
+                "id": 3205,
+                "name": "Spacey",
+                "icon": "\uD83C\uDF0C",
+                "nameVi": "Mơ màng"
+            },
+            {
+                "id": 3206,
+                "name": "Nocturnal",
+                "icon": "\uD83E\uDD89",
+                "nameVi": "Hoạt động về đêm"
+            },
+            {
+                "id": 3207,
+                "name": "Sleepy",
+                "icon": "\uD83D\uDCA4",
+                "nameVi": "Buồn ngủ"
+            },
+            {
+                "id": 3208,
+                "name": "Silent",
+                "icon": "\uD83E\uDD97",
+                "nameVi": "Im lặng"
+            },
+            {
+                "id": 3209,
+                "name": "Lonely",
+                "icon": "\uD83C\uDF03",
+                "nameVi": "Cô đơn"
+            },
+            {
+                "id": 3210,
+                "name": "Hopeful",
+                "icon": "\uD83C\uDF20",
+                "nameVi": "Hy vọng"
+            },
+            {
+                "id": 3211,
+                "name": "Dreaming",
+                "icon": "\uD83D\uDCAD",
+                "nameVi": "Mơ mộng"
+            },
+            {
+                "id": 3212,
+                "name": "Tranquil",
+                "icon": "\uD83C\uDF19",
+                "nameVi": "Thanh bình"
+            },
+            {
+                "id": 3213,
+                "name": "Dark",
+                "icon": "\uD83C\uDF11",
+                "nameVi": "Tối tăm"
+            },
+            {
+                "id": 3214,
+                "name": "Drained",
+                "icon": "\uD83E\uDEAB",
+                "nameVi": "Kiệt sức"
+            },
+            {
+                "id": 3215,
+                "name": "Comfy",
+                "icon": "\uD83E\uDDF8",
+                "nameVi": "Thoải mái"
+            },
+            {
+                "id": 3216,
+                "name": "Snoozing",
+                "icon": "⏰",
+                "nameVi": "Ngáp ngủ"
+            }
+        ]
+    },
+    {
+        "id": 2019,
+        "name": "Grief",
+        "moodItems": [
+            {
+                "id": 3217,
+                "name": "Absent",
+                "icon": "\uD83E\uDEE5",
+                "nameVi": "Vắng mặt"
+            },
+            {
+                "id": 3218,
+                "name": "Anxious",
+                "icon": "\uD83D\uDCA6",
+                "nameVi": "Lo lắng"
+            },
+            {
+                "id": 3219,
+                "name": "Grieving",
+                "icon": "\uD83E\uDD40",
+                "nameVi": "Đau buồn"
+            },
+            {
+                "id": 3220,
+                "name": "Inhibited",
+                "icon": "\uD83D\uDD12",
+                "nameVi": "Kìm nén"
+            },
+            {
+                "id": 3221,
+                "name": "Longing",
+                "icon": "\uD83D\uDCAD",
+                "nameVi": "Khao khát"
+            },
+            {
+                "id": 3222,
+                "name": "Masking",
+                "icon": "\uD83C\uDFAD",
+                "nameVi": "Che giấu"
+            },
+            {
+                "id": 3223,
+                "name": "Melancholic",
+                "icon": "\uD83C\uDF27️",
+                "nameVi": "U sầu"
+            },
+            {
+                "id": 3224,
+                "name": "Mourning",
+                "icon": "\uD83D\uDDA4",
+                "nameVi": "Thương tiếc"
+            },
+            {
+                "id": 3225,
+                "name": "Overwhelmed",
+                "icon": "\uD83C\uDF2A️",
+                "nameVi": "Quá tải"
+            },
+            {
+                "id": 3226,
+                "name": "Processing",
+                "icon": "\uD83D\uDCAC",
+                "nameVi": "Xử lý"
+            },
+            {
+                "id": 3227,
+                "name": "Remembering",
+                "icon": "\uD83D\uDD6F️",
+                "nameVi": "Nhớ lại"
+            },
+            {
+                "id": 3228,
+                "name": "Tearful",
+                "icon": "\uD83D\uDCA7",
+                "nameVi": "Đẫm lệ"
+            }
+        ]
+    },
+    {
+        "id": 2020,
+        "name": "Camping",
+        "moodItems": [
+            {
+                "id": 3229,
+                "name": "Camping",
+                "icon": "\uD83C\uDFD5️",
+                "nameVi": "Cắm trại"
+            },
+            {
+                "id": 3230,
+                "name": "Earthy",
+                "icon": "\uD83E\uDEB1",
+                "nameVi": "Gần gũi thiên nhiên"
+            },
+            {
+                "id": 3231,
+                "name": "Fleeting",
+                "icon": "\uD83C\uDF86",
+                "nameVi": "Thoáng qua"
+            },
+            {
+                "id": 3232,
+                "name": "Foraging",
+                "icon": "\uD83C\uDF44",
+                "nameVi": "Tìm kiếm"
+            },
+            {
+                "id": 3233,
+                "name": "Gazing",
+                "icon": "\uD83C\uDF20",
+                "nameVi": "Ngắm nhìn"
+            },
+            {
+                "id": 3234,
+                "name": "Grilling",
+                "icon": "\uD83C\uDF54",
+                "nameVi": "Nướng"
+            },
+            {
+                "id": 3235,
+                "name": "Hollow",
+                "icon": "\uD83E\uDEB5",
+                "nameVi": "Trống rỗng"
+            },
+            {
+                "id": 3236,
+                "name": "Mellow",
+                "icon": "☁️",
+                "nameVi": "Dịu dàng"
+            },
+            {
+                "id": 3237,
+                "name": "Pesky",
+                "icon": "\uD83E\uDD9F",
+                "nameVi": "Phiền phức"
+            },
+            {
+                "id": 3238,
+                "name": "Sly",
+                "icon": "\uD83E\uDD8A",
+                "nameVi": "Xảo quyệt"
+            },
+            {
+                "id": 3239,
+                "name": "Telling",
+                "icon": "\uD83D\uDD26",
+                "nameVi": "Kể chuyện"
+            },
+            {
+                "id": 3240,
+                "name": "Tranquil",
+                "icon": "\uD83C\uDF15",
+                "nameVi": "Thanh bình"
+            }
+        ]
+    }
+]

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
-import { Home, LogOut, MessageCircle, Bell, User, Settings } from "lucide-react";
+import { Home, LogOut, MessageCircle, Bell, User, Settings, Smile } from "lucide-react";
 import ThemeToggle from "../molecules/ThemeToggle";
 import Avatar from "../atoms/Avatar";
 import { logout } from "../../store/authSlice";
@@ -75,6 +75,15 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications }
             textColor: "text-gray-600 dark:text-gray-400",
             bgColor: "bg-gray-100 dark:bg-gray-700/30",
             hoverBg: "group-hover:bg-gray-200 dark:group-hover:bg-gray-700/50",
+        },
+        {
+            key: "icons",
+            icon: Smile,
+            label: t("nav.icons"),
+            gradient: "from-red-500 to-slate-600",
+            textColor: "text-red-600 dark:text-red-400",
+            bgColor: "bg-red-100 dark:bg-red-700/30",
+            hoverBg: "group-hover:bg-red-200 dark:group-hover:bg-red-700/50",
         },
     ];
 

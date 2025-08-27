@@ -66,7 +66,7 @@ const mockPosts = [
   },
   {
     id: 4,
-    images: ["public/emo-qc.png"],
+    images: ["/emo-qc.png"],
     content:
       "Gần đây cảm thấy rất cô đơn và tuyệt vọng. Không biết phải làm sao nữa... 😭",
     author: {
