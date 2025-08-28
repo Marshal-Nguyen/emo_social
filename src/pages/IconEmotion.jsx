@@ -3,6 +3,7 @@ import EmojiList from '../components/organisms/EmojiList';
 import GiftList from '../components/organisms/GiftList';
 import CategoriList from '../components/organisms/CategoriList';
 import WellnessHub from '../components/organisms/WellnessHub';
+import EmojiCmt from '../components/organisms/EmojiCmt';
 function EmojiGiftPage() {
     const [activeTab, setActiveTab] = useState('emoji');
 
@@ -19,6 +20,15 @@ function EmojiGiftPage() {
                         onClick={() => setActiveTab('emoji')}
                     >
                         Emoji
+                    </button>
+                    <button
+                        className={`px-6 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 transform hover:scale-105 ${activeTab === 'iconCmt'
+                            ? 'bg-[#A855F7] text-white shadow-lg shadow-purple-500/30'
+                            : 'bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-200 backdrop-blur-md hover:bg-purple-100 dark:hover:bg-gray-600'
+                            }`}
+                        onClick={() => setActiveTab('iconCmt')}
+                    >
+                        Icon Comment
                     </button>
                     <button
                         className={`px-6 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 transform hover:scale-105 ${activeTab === 'categories'
@@ -53,6 +63,11 @@ function EmojiGiftPage() {
                     {activeTab === 'emoji' && (
                         <div className="animate-fadeIn">
                             <EmojiList />
+                        </div>
+                    )}
+                    {activeTab === 'iconCmt' && (
+                        <div className="animate-fadeIn">
+                            <EmojiCmt />
                         </div>
                     )}
                     {activeTab === 'categories' && (

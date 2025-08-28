@@ -1,0 +1,190 @@
+{
+    "reactions_en": [
+        {
+            "reaction": "HUG",
+            "icon": "\uD83E\uDD17",
+            "meaning_en": "Send a warm hug, showing comfort & support",
+            "suggested_translation_vn": "Ôm / Gửi ôm"
+        },
+        {
+            "reaction": "SAME",
+            "icon": "\uD83D\uDE4C",
+            "meaning_en": "“Me too / Same here” – showing empathy, I feel the same",
+            "suggested_translation_vn": "Mình cũng thế"
+        },
+        {
+            "reaction": "YNA",
+            "icon": "\uD83D\uDC99",
+            "meaning_en": "“You’re Not Alone” – reassurance you’re not alone",
+            "suggested_translation_vn": "Bạn không cô đơn"
+        },
+        {
+            "reaction": "POV",
+            "icon": "\uD83D\uDC40",
+            "meaning_en": "“Point of View” – putting oneself in the other person’s shoes",
+            "suggested_translation_vn": "Góc nhìn / Nhìn từ bạn"
+        },
+        {
+            "reaction": "LIKE / HEART",
+            "icon": "\u2764\uFE0F",
+            "meaning_en": "Like / love a post",
+            "suggested_translation_vn": "Thích / Yêu thích"
+        },
+        {
+            "reaction": "ILY",
+            "icon": "\u2764\uFE0F",
+            "meaning_en": "I Love You",
+            "suggested_translation_vn": "Mình thương bạn / Mình quý bạn"
+        },
+        {
+            "reaction": "H4U",
+            "icon": "\uD83E\uDD17",
+            "meaning_en": "Here for You",
+            "suggested_translation_vn": "Mình ở đây vì bạn"
+        },
+        {
+            "reaction": "LOL",
+            "icon": "\uD83D\uDE05",
+            "meaning_en": "Laugh Out Loud – laughing reaction",
+            "suggested_translation_vn": "Cười lớn / Vui quá"
+        },
+        {
+            "reaction": "AWW",
+            "icon": "\uD83E\uDD70",
+            "meaning_en": "Cute / endearing reaction",
+            "suggested_translation_vn": "Thương ghê / Dễ thương quá"
+        },
+        {
+            "reaction": "DW",
+            "icon": "\uD83D\uDE4F",
+            "meaning_en": "Don’t Worry",
+            "suggested_translation_vn": "Đừng lo"
+        },
+        {
+            "reaction": "YGT",
+            "icon": "\uD83D\uDCAA",
+            "meaning_en": "You Got This",
+            "suggested_translation_vn": "Bạn làm được mà"
+        },
+        {
+            "reaction": "SOS",
+            "icon": "\uD83C\uDD98",
+            "meaning_en": "Emergency help call",
+            "suggested_translation_vn": "Cần giúp gấp / Cứu với"
+        },
+        {
+            "reaction": "GL",
+            "icon": "\uD83C\uDF40",
+            "meaning_en": "Good Luck",
+            "suggested_translation_vn": "Chúc may mắn"
+        },
+        {
+            "reaction": "NICE",
+            "icon": "\uD83D\uDC4D",
+            "meaning_en": "Nice / well done reaction",
+            "suggested_translation_vn": "Tuyệt vời / Hay đó"
+        },
+        {
+            "reaction": "POY",
+            "icon": "\uD83C\uDF1F",
+            "meaning_en": "Proud of You",
+            "suggested_translation_vn": "Tự hào về bạn"
+        },
+        {
+            "reaction": "OOF",
+            "icon": "\uD83D\uDE2E\u200D\uD83D\uDCA8",
+            "meaning_en": "Empathy when something is tough",
+            "suggested_translation_vn": "Nghe nặng ghê / Thương quá"
+        },
+        {
+            "reaction": "TMM",
+            "icon": "\uD83E\uDD1D",
+            "meaning_en": "Tell Me More",
+            "suggested_translation_vn": "Kể mình nghe thêm đi"
+        },
+        {
+            "reaction": "TY",
+            "icon": "\uD83D\uDE4C",
+            "meaning_en": "Thank You",
+            "suggested_translation_vn": "Cảm ơn bạn"
+        }
+    ],
+    "reactions_vn": {
+        "comfort_group": [
+            {
+                "text": "Ôm nhé",
+                "icon": "\uD83E\uDD17"
+            },
+            {
+                "text": "Không cô đơn",
+                "icon": "\uD83D\uDC99"
+            },
+            {
+                "text": "Đừng lo nha",
+                "icon": "\uD83D\uDE4F"
+            },
+            {
+                "text": "Thương bạn",
+                "icon": "\uD83E\uDD70"
+            },
+            {
+                "text": "Thương ghê",
+                "icon": "\uD83D\uDE2E\u200D\uD83D\uDCA8"
+            }
+        ],
+        "empathy_group": [
+            {
+                "text": "Cũng vậy",
+                "icon": "\uD83D\uDE4C"
+            },
+            {
+                "text": "Hiểu mà",
+                "icon": "\uD83D\uDC42"
+            },
+            {
+                "text": "Kể thêm đi",
+                "icon": "\uD83E\uDD1D"
+            },
+            {
+                "text": "Ở đây với bạn",
+                "icon": "\uD83E\uDD17"
+            }
+        ],
+        "encouragement_group": [
+            {
+                "text": "Bạn làm được",
+                "icon": "\uD83D\uDCAA"
+            },
+            {
+                "text": "Tự hào",
+                "icon": "\uD83C\uDF1F"
+            },
+            {
+                "text": "May mắn nhé",
+                "icon": "\uD83C\uDF40"
+            },
+            {
+                "text": "Hay quá",
+                "icon": "\uD83D\uDC4D"
+            }
+        ],
+        "friendly_group": [
+            {
+                "text": "Haha",
+                "icon": "\uD83D\uDE05"
+            },
+            {
+                "text": "Dễ thương",
+                "icon": "\uD83E\uDD70"
+            },
+            {
+                "text": "Thả tim",
+                "icon": "\u2764\uFE0F"
+            },
+            {
+                "text": "Cảm ơn",
+                "icon": "\uD83D\uDE4C"
+            }
+        ]
+    }
+}
