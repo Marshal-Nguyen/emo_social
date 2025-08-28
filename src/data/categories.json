@@ -1,0 +1,266 @@
+[
+    {
+        "id": 1,
+        "name": "Relationships",
+        "icon": "\uD83D\uDC9E",
+        "nameVi": "Các mối quan hệ",
+        "description": "Exploring connections and bonds between individuals",
+        "descriptionVi": "Khám phá các mối liên kết và gắn bó giữa các cá nhân"
+    },
+    {
+        "id": 2,
+        "name": "Family",
+        "icon": "\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66",
+        "nameVi": "Gia đình",
+        "description": "Matters related to family dynamics and relationships",
+        "descriptionVi": "Các vấn đề liên quan đến động lực và mối quan hệ gia đình"
+    },
+    {
+        "id": 3,
+        "name": "Habits",
+        "icon": "\uD83D\uDD04",
+        "nameVi": "Thói quen",
+        "description": "Daily routines and behaviors",
+        "descriptionVi": "Thói quen và hành vi hàng ngày"
+    },
+    {
+        "id": 4,
+        "name": "Friends",
+        "icon": "\uD83E\uDD1D",
+        "nameVi": "Bạn bè",
+        "description": "Friendship and social connections",
+        "descriptionVi": "Tình bạn và các mối quan hệ xã hội"
+    },
+    {
+        "id": 5,
+        "name": "Hopes",
+        "icon": "\uD83C\uDF1F",
+        "nameVi": "Hy vọng",
+        "description": "Aspirations and dreams for the future",
+        "descriptionVi": "Khao khát và ước mơ cho tương lai"
+    },
+    {
+        "id": 6,
+        "name": "Bullying",
+        "icon": "\uD83D\uDED1",
+        "nameVi": "Bắt nạt",
+        "description": "Addressing and preventing bullying behaviors",
+        "descriptionVi": "Giải quyết và ngăn chặn hành vi bắt nạt"
+    },
+    {
+        "id": 7,
+        "name": "Health",
+        "icon": "\uD83E\uDE7A",
+        "nameVi": "Sức khỏe",
+        "description": "Physical and mental well-being",
+        "descriptionVi": "Sức khỏe thể chất và tinh thần"
+    },
+    {
+        "id": 8,
+        "name": "Work",
+        "icon": "\uD83D\uDCBC",
+        "nameVi": "Công việc",
+        "description": "Career and professional life",
+        "descriptionVi": "Sự nghiệp và cuộc sống chuyên nghiệp"
+    },
+    {
+        "id": 9,
+        "name": "Music",
+        "icon": "\uD83C\uDFB6",
+        "nameVi": "Âm nhạc",
+        "description": "Music and its impact on life",
+        "descriptionVi": "Âm nhạc và tác động của nó đến cuộc sống"
+    },
+    {
+        "id": 10,
+        "name": "Helpful Tips",
+        "icon": "\uD83D\uDCA1",
+        "nameVi": "Mẹo hữu ích",
+        "description": "Practical advice for everyday life",
+        "descriptionVi": "Lời khuyên thực tế cho cuộc sống hàng ngày"
+    },
+    {
+        "id": 11,
+        "name": "Parenting",
+        "icon": "\uD83D\uDC76",
+        "nameVi": "Nuôi dạy con cái",
+        "description": "Raising and nurturing children",
+        "descriptionVi": "Nuôi dưỡng và chăm sóc con cái"
+    },
+    {
+        "id": 12,
+        "name": "Education",
+        "icon": "\uD83D\uDCDC",
+        "nameVi": "Giáo dục",
+        "description": "Learning and academic growth",
+        "descriptionVi": "Học tập và phát triển học thuật"
+    },
+    {
+        "id": 13,
+        "name": "Religion",
+        "icon": "\uD83D\uDE4F",
+        "nameVi": "Tôn giáo",
+        "description": "Faith and spiritual beliefs",
+        "descriptionVi": "Đức tin và niềm tin tâm linh"
+    },
+    {
+        "id": 14,
+        "name": "LGBTQ+",
+        "icon": "\uD83C\uDF08",
+        "nameVi": "LGBTQ+",
+        "description": "Diversity and inclusion in gender and sexuality",
+        "descriptionVi": "Đa dạng và hòa nhập trong giới tính và xu hướng tính dục"
+    },
+    {
+        "id": 15,
+        "name": "Pregnancy",
+        "icon": "\uD83E\uDD30",
+        "nameVi": "Thai sản / Mang thai",
+        "description": "Pregnancy and motherhood",
+        "descriptionVi": "Mang thai và vai trò làm mẹ"
+    },
+    {
+        "id": 16,
+        "name": "Positive",
+        "icon": "\uD83D\uDE0A\uD83D\uDC4D",
+        "nameVi": "Tích cực",
+        "description": "Promoting positivity and optimism",
+        "descriptionVi": "Thúc đẩy sự tích cực và lạc quan"
+    },
+    {
+        "id": 17,
+        "name": "Wellbeing",
+        "icon": "\uD83E\uDDD8",
+        "nameVi": "Sự an lành / Hạnh phúc",
+        "description": "Mental and emotional wellness",
+        "descriptionVi": "Sức khỏe tinh thần và cảm xúc"
+    },
+    {
+        "id": 18,
+        "name": "My Story",
+        "icon": "\uD83D\uDCD3",
+        "nameVi": "Câu chuyện của tôi",
+        "description": "Personal narratives and experiences",
+        "descriptionVi": "Câu chuyện và trải nghiệm cá nhân"
+    },
+    {
+        "id": 19,
+        "name": "Poetry",
+        "icon": "\uD83D\uDCDC",
+        "nameVi": "Thơ ca",
+        "description": "Creative expression through poetry",
+        "descriptionVi": "Bày tỏ sáng tạo qua thơ ca"
+    },
+    {
+        "id": 20,
+        "name": "Resilience",
+        "icon": "\uD83D\uDCAA",
+        "nameVi": "Kiên cường",
+        "description": "Strength and perseverance",
+        "descriptionVi": "Sức mạnh và sự kiên trì"
+    },
+    {
+        "id": 21,
+        "name": "Challenges",
+        "icon": "\uD83C\uDFCB",
+        "nameVi": "Thử thách",
+        "description": "Overcoming obstacles and difficulties",
+        "descriptionVi": "Vượt qua trở ngại và khó khăn"
+    },
+    {
+        "id": 22,
+        "name": "Self-Care",
+        "icon": "\uD83D\uDEC1",
+        "nameVi": "Chăm sóc bản thân",
+        "description": "Practices for personal well-being",
+        "descriptionVi": "Thực hành chăm sóc sức khỏe cá nhân"
+    },
+    {
+        "id": 23,
+        "name": "Guidance",
+        "icon": "\uD83E\uDDED",
+        "nameVi": "Hướng dẫn / Định hướng",
+        "description": "Advice and direction for life",
+        "descriptionVi": "Lời khuyên và định hướng cho cuộc sống"
+    },
+    {
+        "id": 24,
+        "name": "New Parents",
+        "icon": "\uD83C\uDF7C",
+        "nameVi": "Ba mẹ bỉm sũa",
+        "description": "Support for new parents",
+        "descriptionVi": "Hỗ trợ cho các bậc cha mẹ mới"
+    },
+    {
+        "id": 25,
+        "name": "Gaming",
+        "icon": "\uD83C\uDFAE",
+        "nameVi": "Chơi game",
+        "description": "Gaming culture and experiences",
+        "descriptionVi": "Văn hóa và trải nghiệm chơi game"
+    },
+    {
+        "id": 26,
+        "name": "Grief",
+        "icon": "\uD83D\uDE22",
+        "nameVi": "Đau buồn / Mất mát",
+        "description": "Coping with loss and sorrow",
+        "descriptionVi": "Đối mặt với mất mát và nỗi buồn"
+    },
+    {
+        "id": 27,
+        "name": "Stress",
+        "icon": "\uD83D\uDE13",
+        "nameVi": "Căng thẳng",
+        "description": "Managing stress and anxiety",
+        "descriptionVi": "Quản lý căng thẳng và lo âu"
+    },
+    {
+        "id": 28,
+        "name": "Disabilities",
+        "icon": "\u267F",
+        "nameVi": "Khuyết tật",
+        "description": "Support for people with disabilities",
+        "descriptionVi": "Hỗ trợ cho người khuyết tật"
+    },
+    {
+        "id": 29,
+        "name": "Emotions",
+        "icon": "\uD83D\uDE0A\uD83D\uDE22",
+        "nameVi": "Cảm xúc",
+        "description": "Understanding and expressing emotions",
+        "descriptionVi": "Hiểu và thể hiện cảm xúc"
+    },
+    {
+        "id": 30,
+        "name": "Life Hacks",
+        "icon": "\uD83D\uDEE0",
+        "nameVi": "Mẹo vặt cuộc sống",
+        "description": "Practical solutions for daily life",
+        "descriptionVi": "Giải pháp thực tế cho cuộc sống hàng ngày"
+    },
+    {
+        "id": 31,
+        "name": "Politics",
+        "icon": "\uD83D\uDDF3",
+        "nameVi": "Chính trị",
+        "description": "Civic engagement and governance",
+        "descriptionVi": "Tham gia công dân và quản trị"
+    },
+    {
+        "id": 32,
+        "name": "Ask EmoEase",
+        "icon": "\u2753",
+        "nameVi": "Trò chuyện với EmoEase",
+        "description": "Ask questions and seek support",
+        "descriptionVi": "Đặt câu hỏi và tìm kiếm hỗ trợ"
+    },
+    {
+        "id": 33,
+        "name": "Others",
+        "icon": "\uD83C\uDF0E",
+        "nameVi": "Khác",
+        "description": "Miscellaneous topics",
+        "descriptionVi": "Các chủ đề khác"
+    }
+]

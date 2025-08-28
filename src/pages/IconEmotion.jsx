@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import EmojiList from '../components/organisms/EmojiList';
 import GiftList from '../components/organisms/GiftList';
-
+import CategoriList from '../components/organisms/CategoriList';
+import WellnessHub from '../components/organisms/WellnessHub';
 function EmojiGiftPage() {
     const [activeTab, setActiveTab] = useState('emoji');
 
@@ -20,6 +21,15 @@ function EmojiGiftPage() {
                         Emoji
                     </button>
                     <button
+                        className={`px-6 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 transform hover:scale-105 ${activeTab === 'categories'
+                            ? 'bg-[#A855F7] text-white shadow-lg shadow-purple-500/30'
+                            : 'bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-200 backdrop-blur-md hover:bg-purple-100 dark:hover:bg-gray-600'
+                            }`}
+                        onClick={() => setActiveTab('categories')}
+                    >
+                        Categories
+                    </button>
+                    <button
                         className={`px-6 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 transform hover:scale-105 ${activeTab === 'gift'
                             ? 'bg-[#A855F7] text-white shadow-lg shadow-purple-500/30'
                             : 'bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-200 backdrop-blur-md hover:bg-purple-100 dark:hover:bg-gray-600'
@@ -27,6 +37,15 @@ function EmojiGiftPage() {
                         onClick={() => setActiveTab('gift')}
                     >
                         Quà tặng
+                    </button>
+                    <button
+                        className={`px-6 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 transform hover:scale-105 ${activeTab === 'wellness'
+                            ? 'bg-[#A855F7] text-white shadow-lg shadow-purple-500/30'
+                            : 'bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-200 backdrop-blur-md hover:bg-purple-100 dark:hover:bg-gray-600'
+                            }`}
+                        onClick={() => setActiveTab('wellness')}
+                    >
+                        Wellness Hub
                     </button>
                 </div>
                 {/* Tab Content */}
@@ -36,9 +55,19 @@ function EmojiGiftPage() {
                             <EmojiList />
                         </div>
                     )}
+                    {activeTab === 'categories' && (
+                        <div className="animate-fadeIn">
+                            <CategoriList />
+                        </div>
+                    )}
                     {activeTab === 'gift' && (
                         <div className="animate-fadeIn">
                             <GiftList />
+                        </div>
+                    )}
+                    {activeTab === 'wellness' && (
+                        <div className="animate-fadeIn">
+                            <WellnessHub />
                         </div>
                     )}
                 </div>

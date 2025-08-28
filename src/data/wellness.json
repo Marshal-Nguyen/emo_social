@@ -1,0 +1,402 @@
+[
+    {
+        "id": 2015,
+        "name": "Self-Directed Learning Modules",
+        "modules": [
+            {
+                "id": 2001,
+                "name": "Depression",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/8975d640-89fb-4845-b301-b94f32a0c7bd_file.jpg",
+                "totalDuration": 56,
+                "completedDuration": 56,
+                "description": "<p>This module is designed to help if you’re feeling low in mood most of the time, you’ve lost the motivation to do the things you used to enjoy and feel like things are getting on top of you. The module aims to help you recognise the signs and symptoms of depression, understand what causes depression and what keeps the problem going. It will also help you to learn some techniques and strategies to help manage your symptoms. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please note- &nbsp;This module is designed for <strong>information and educational purposes only. </strong>TalkLife does not provide and is <strong>not a substitute for professional advice, diagnosis or treatment. &nbsp;</strong>If you are experiencing distress or feel that you may need professional support, please seek help from a qualified health professional.&nbsp;</p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:22:14.457",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2002,
+                "name": "Social Anxiety",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/7cdbe965-00ce-4f2c-82f7-082fa515ad17_file.jpg",
+                "totalDuration": 54,
+                "completedDuration": 3,
+                "description": "<p>This module is designed to help if you feel very fearful or anxious about social situations, you avoid joining in with things and it impacts your self esteem. The module aims to help you recognise the signs and symptoms of social anxiety, understand what causes social anxiety and what keeps the problem going. It will also help you to learn some techniques and strategies to help manage your symptoms. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please note- &nbsp;This module is designed for <strong>information and educational purposes only. </strong>TalkLife does not provide and is <strong>not a substitute for professional advice, diagnosis or treatment. &nbsp;</strong>If you are experiencing distress or feel that you may need professional support, please seek help from a qualified health professional.&nbsp;</p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:23:59.337",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2003,
+                "name": "Managing Worry",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/4c72f0fa-a3cd-4a45-83b1-c5b5c9e3c765_file.jpg",
+                "totalDuration": 63,
+                "completedDuration": 0,
+                "description": "<p>This module is designed to help if you find yourself worrying all the time and feel constantly anxious, tense or stressed out. The module talks about a mental health problem called generalised anxiety disorder (GAD) but anyone who feels that they worry too much can find the module helpful. The module aims to help you recognise problem worry, what might be causing it and what keeps the problem going. It will also help you to learn some techniques to help manage your worry. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please note- &nbsp;This module is designed for <strong>information and educational purposes only. </strong>TalkLife does not provide and is <strong>not a substitute for professional advice, diagnosis or treatment. &nbsp;</strong>If you are experiencing distress or feel that you may need professional support, please seek help from a qualified health professional.&nbsp;</p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:25:42.683",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2004,
+                "name": "Panic",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/40db0c19-97c7-4c42-9acb-f43d8eee35d6_file.jpg",
+                "totalDuration": 68,
+                "completedDuration": 0,
+                "description": "<p>This module is designed to help if you experience regular panic attacks, you’re not sure why they happen or how to cope with them. The module talks about a mental health problem called panic disorder but anyone who experiences panic attacks can find it helpful. The module aims to help you recognise the signs and symptoms of panic attacks and panic disorder, understand what causes them and what keeps the problem going. It will also help you to learn some techniques to help manage your symptoms. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please note- &nbsp;This module is designed for <strong>information and educational purposes only. </strong>TalkLife does not provide and is <strong>not a substitute for professional advice, diagnosis or treatment. &nbsp;</strong>If you are experiencing distress or feel that you may need professional support, please seek help from a qualified health professional.&nbsp;</p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:26:38.99",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2005,
+                "name": "Health Anxiety",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/5abe4937-6a21-4b31-8ae2-f71334741e7c_file.jpg",
+                "totalDuration": 40,
+                "completedDuration": 0,
+                "description": "<p>This module is designed to help if you find yourself constantly worrying about the possibility of having or developing a serious illness, and it’s starting to take over your life. The module aims to help you recognise the signs and symptoms of health anxiety, understand what causes health anxiety and what keeps the problem going. It will also help you to learn some techniques and strategies to help manage your symptoms. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please note- &nbsp;This module is designed for <strong>information and educational purposes only. </strong>TalkLife does not provide and is <strong>not a substitute for professional advice, diagnosis or treatment. &nbsp;</strong>If you are experiencing distress or feel that you may need professional support, please seek help from a qualified health professional.&nbsp;</p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:28:12.467",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2006,
+                "name": "OCD",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/c8ef0c9c-2fad-4d48-890e-ec8e7c1beede_file.jpg",
+                "totalDuration": 60,
+                "completedDuration": 0,
+                "description": "<p>This module is designed to help if you're struggling with obsessive thoughts, images or urges and compulsive behaviours. This module aims to help you recognise the signs and symptoms of Obsessive Compulsive Disorder (OCD), understand what causes OCD and what keeps the problem going. It will also help you to learn some techniques and strategies to help manage your symptoms. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Please note- &nbsp;This module is designed for <strong>information and educational purposes only. </strong>TalkLife does not provide and is <strong>not a substitute for professional advice, diagnosis or treatment. &nbsp;</strong>If you are experiencing distress or feel that you may need professional support, please seek help from a qualified health professional.&nbsp;</p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:29:23.57",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2007,
+                "name": "PTSD",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/749d7d59-964d-4623-a91b-bac61fcd0aa9_file.jpg",
+                "totalDuration": 53,
+                "completedDuration": 0,
+                "description": "<p>This module is designed to help if you’ve experienced a traumatic event and you’ve been struggling to cope since it happened. The aim of the module is to help you recognise the signs and symptoms of Post Traumatic Stress Disorder (PTSD), understand what causes PTSD and what keeps the problem going. It will also help you to learn some techniques and strategies to help manage your symptoms. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Please note- &nbsp;This module is designed for <strong>information and educational purposes only. </strong>TalkLife does not provide and is <strong>not a substitute for professional advice, diagnosis or treatment. &nbsp;</strong>If you are experiencing distress or feel that you may need professional support, please seek help from a qualified health professional.&nbsp;</p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:30:10.363",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 2044,
+        "name": "Wellbeing & Self Care",
+        "modules": [
+            {
+                "id": 2029,
+                "name": "9 tips to develop your empathy skills",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/446ee84f-04a3-4246-8e3a-f37df0122001_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "<p>If you’re looking to improve your empathy skills or simply want to spread a bit more kindness, it’s always a good time to start practicing empathy in your everyday life. In this blog, we’ll take a quick tour through the different types of empathy, explore how it can benefit both you and those around you, and share some tips on how to supercharge your empathy skills.</p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-02-18T10:10:56.07",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2030,
+                "name": "What is mindfulness, exactly?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/8f144d40-f96a-43d0-a804-2106e17ab3d0_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "When did you last stop and notice what was going on around you and inside you? Life can be so full of distractions that it’s easy to charge through each day in a bit of a blur. It’s rare that we really focus on one task and really give it all of our attention. Our mind is full, but that doesn't mean we're mindful.\r\n\r\nSo, what is mindfulness, exactly? Let's have a look at the definition of mindfulness and how you can practice it in your everyday life.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-30T10:23:28.5",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2032,
+                "name": "How to boost your self-esteem: Tips to feel 100%",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/fbe5320a-7d5c-4ba8-8421-95273205d63e_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "You might think self-esteem is just about what you see in the mirror, but it’s so much more. The way we view ourselves and our worth as individuals plays a big role in our mental health and overall wellbeing.\r\n\r\nImproving your self-esteem can not only help you get through a bad day, but also feel happier overall. Try these 8 tips to improve your self-esteem.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-27T11:58:55.683",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2031,
+                "name": "What is perfectionism and when is it a problem?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/67d5d3c3-7ad0-4730-bcd7-58c99cd48e95_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Most people would agree that having high standards and striving to do your best is a good thing. Some people may even describe themselves as a “perfectionist”, meaning that they strive for excellence. Being hard-working and ambitious can be admirable qualities. However, when we talk about clinical perfectionism, we're talking about something quite different.\r\n\r\nRead on to find out how to stay on the healthy side of “perfectionism”.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-28T15:20:21.783",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2033,
+                "name": "Why is the first step the hardest?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/4bf07797-3b28-43bc-bc04-360a8a5d0734_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "Starting something new, whether it's a project, a life goal, or a new habit, can be incredibly challenging. It often feels like the first step is the hardest one to take. \r\n\r\nMany of us struggle with procrastination and find it difficult to find the motivation to get started. Let’s delve into the reasons behind the reluctance to take that initial leap and explore effective strategies to overcome this barrier. ",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-28T15:20:46.69",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2034,
+                "name": "Am I introverted, shy, or socially anxious?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/4b385687-9f37-4097-afe2-087f6d7127ef_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Even though we live in a world that values extroversion and constant social interaction, many of us are introverted, shy, or socially anxious. However, these terms are often used interchangeably, leading to confusion.\r\n\r\nLet’s explore the distinctions between introversion, shyness, and social anxiety, to help you better assess your needs and how to nurture your wellbeing.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-27T11:57:27.15",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 2043,
+        "name": "Sleep & Wellness",
+        "modules": [
+            {
+                "id": 2026,
+                "name": "Sleep essentials for a restful night",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/169f4f04-f6a5-426e-adbb-0a9d35e86af9_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Many of us worry about whether we will get a decent night's sleep, how well we’ll cope if we don’t, and what impact a lack of sleep is having on our health. \r\n\r\nLet’s try to unravel the mysteries of sleep: why we need it, how much sleep is enough, what happens when we sleep, and get some tips to get a better night's rest. \r\n",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-20T16:41:10.84",
+                "wellnessCentreGroupModuleId": 2043,
+                "sections": []
+            },
+            {
+                "id": 2027,
+                "name": "Relaxation techniques for better sleep",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/2ef4d0c8-07e2-4645-8118-41aa0a8150bf_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Stress and sleepless nights are closely linked. That can be down to worries in our minds and stress hormones in our bodies. Doing something that switches on the body's natural relaxation response can help. That’s where relaxation techniques come in. \r\n\r\nWe’ve rounded up the best relaxation techniques for getting better sleep, including mindfulness meditation, progressive muscle relaxation, and breathing exercises. Rest assured, we’ve got your relaxation needs covered.\r\n",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-21T08:00:15.377",
+                "wellnessCentreGroupModuleId": 2043,
+                "sections": []
+            },
+            {
+                "id": 2028,
+                "name": "Breathing exercises for a more restful sleep",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/6df8cb4f-51ae-4833-9765-9e8da9a72b94_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "Breathing exercises are a super simple way to relax, destress, and unwind before bed. They can help if you’re feeling jittery or stuck in a whirlwind of anxious thoughts, helping to restore a sense of calm.\r\n\r\nHere are some of the best breathing exercises to help you to relax and drift off in no time.\r\n",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-21T19:29:47.813",
+                "wellnessCentreGroupModuleId": 2043,
+                "sections": []
+            },
+            {
+                "id": 2022,
+                "name": "Insomnia: what to do when sleep eludes you",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/6a5097cb-1196-4600-b4ca-5a4e40e048e4_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "There's nothing glamorous about a sleepless night.\r\n\r\nWe asked the TalkLife community about their experience with insomnia and sleep issues. Rose, Dany, Pradyumna, Winnie, Powder, and Raquel shared their stories.\r\n\r\n",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-21T15:43:24.61",
+                "wellnessCentreGroupModuleId": 2043,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 2045,
+        "name": "Stress and Anxiety",
+        "modules": [
+            {
+                "id": 2035,
+                "name": "Anxiety 101",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_1c0f17e9b80844c984ae393742e38f22~mv2.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "<p><span style=\"font-size:18px;\">Anxiety is something that we all experience. We’ve all encountered those unsettling moments of unease, fear or apprehension. You know the ones - when your heart races, you feel hot and bothered, and you struggle to catch your breath. These sensations can be uncomfortable to say the least. In fact, they can sometimes even escalate into a full-blown panic attack and leave us feeling powerless and afraid.&nbsp;</span></p><p><span style=\"font-size:18px;\">But let’s look a bit closer at what anxiety actually is and, more importantly, how we can regain some control and learn to live with it.&nbsp;&nbsp;</span></p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2024-10-15T19:40:01.533",
+                "wellnessCentreGroupModuleId": 2045,
+                "sections": []
+            },
+            {
+                "id": 2036,
+                "name": "Managing Stress: Your Guide to Finding Balance and Resilience",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_8705551147aa4c6c87eb5c110c612636~mv2.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "<p><span style=\"font-size:18px;\">We all know that feeling when life piles on the pressure, and stress starts to get a grip on us. But guess what? Stress is entirely normal, and each one of us experiences it from time to time. The key is knowing how to manage it and prevent it from taking over our lives.&nbsp;</span></p><p><span style=\"font-size:18px;\">Let’s put stress under the microscope, learn about its upsides, downsides, and most importantly, discover practical tips to help cope with it.&nbsp;</span></p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2024-10-15T19:46:52.053",
+                "wellnessCentreGroupModuleId": 2045,
+                "sections": []
+            },
+            {
+                "id": 2037,
+                "name": "Feeling overwhelmed? How to find calm in the chaos",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_075b189e19af4508818f5208b04b322f~mv2.jpg",
+                "totalDuration": 8,
+                "completedDuration": 0,
+                "description": "<p><span style=\"font-size:18px\">Life is busy. Whether it&rsquo;s due to work, studies, personal or family obligations, or something else altogether, the demands placed upon us can sometimes feel relentless.</span></p>\r\n\r\n<p><span style=\"font-size:18px\">Too much stress can lead to us feeling overwhelmed and it can sometimes sneak up on us when we least expect it.&nbsp;</span></p>\r\n\r\n<p><span style=\"font-size:18px\">If you find yourself feeling this way, try these 6 super simple strategies that can help you to feel calmer in the moment, when you need it the most. The trick is to reset quickly and effectively, so you can recover and get back to what you need to do.</span></p>\r\n",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-09-21T13:08:29.087",
+                "wellnessCentreGroupModuleId": 2045,
+                "sections": []
+            },
+            {
+                "id": 2038,
+                "name": "Breathing, Meditation, and Relaxation Techniques",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_f18f9ce37f0346d69d9792015b2b4c4c~mv2.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "<p><span style=\"font-size:18px\">Finding inner calm in today&#39;s fast-paced world can be a challenge, especially when anxiety decides to make itself at home in our minds. But fear not, for there are effective techniques to help us regain control and restore a sense of calm. Let&rsquo;s explore the power of breathing, meditation, and relaxation techniques to overcome anxiety, reduce stress and enhance our overall well being.&nbsp;</span></p>\r\n",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-09-21T13:11:19.407",
+                "wellnessCentreGroupModuleId": 2045,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 2042,
+        "name": "Relationships",
+        "modules": [
+            {
+                "id": 2021,
+                "name": "How to get along with your siblings",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/ac4275f8-6e7a-4726-bd3a-47ef4fb774e5_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 10,
+                "description": "Siblings share about 50% of their genes. That’s a lot in common but also a lot of potential differences.\r\n\r\nSome siblings get along tremendously well and are each other’s best friends. Others don’t understand how they could even come from the same household. Nurturing positive relationships can have an incredible impact on your future wellbeing. Here’s some advice to bond with your siblings if you want to get closer.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-14T14:22:38.787",
+                "wellnessCentreGroupModuleId": 2042,
+                "sections": []
+            },
+            {
+                "id": 2023,
+                "name": "How to make friends (and keep them)",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/c01c2024-bd04-47a4-b4b3-00248f3a93a0_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "It can be difficult to meet new people. Sometimes, making new friends can feel even more challenging than dating. That’s especially true if you’re struggling with self-confidence. So, how should you go about it? Here’s the lowdown on how to make new friends – and keep them. ",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-14T13:53:49.1",
+                "wellnessCentreGroupModuleId": 2042,
+                "sections": []
+            },
+            {
+                "id": 2024,
+                "name": "What do I say when I don’t know what to say?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/0229c001-bb81-48bc-8b45-6f85c64ebc61_file.jpg",
+                "totalDuration": 8,
+                "completedDuration": 0,
+                "description": "It’s not always easy to find the right words when someone is struggling. It can feel daunting and sometimes we worry about saying the wrong thing so we don’t say anything at all. \r\n\r\nHere are a few tips about how you can offer support when you see someone else struggling on TalkLife or anywhere else on or offline.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-14T14:20:32.173",
+                "wellnessCentreGroupModuleId": 2042,
+                "sections": []
+            },
+            {
+                "id": 2025,
+                "name": "How to deal with people who get on your nerves",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/0b23e9e4-8b7e-480c-86c7-e297407a88db_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "Some people just have a natural talent for getting on our nerves. No matter what they say, they really get our hackles up. Others just irritate us occasionally, because of the exasperating patterns they keep repeating.\r\n\r\nSo, what can we do about it? A lot, actually. Here are a few tips to deal with irritating people or loved ones that tick us off every now and then.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-14T13:54:48.1",
+                "wellnessCentreGroupModuleId": 2042,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 3000,
+        "name": "Keeping Safe",
+        "modules": [
+            {
+                "id": 3001,
+                "name": "Self-Harm: Tips on how to cope",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_654316d461604fd395f140a6bf12b018~mv2.png",
+                "totalDuration": 20,
+                "completedDuration": 0,
+                "description": "<p><span style=\"font-size:16px;\"><i>The content here talks about self-harm, suicidal thoughts and other mental health problems, which some people may find triggering.</i></span></p><p><span style=\"font-size:16px;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;TalkLife does not provide and is not a substitute for professional advice, diagnosis or treatment. If you’re feeling distressed or are in a crisis or self-harming, online peer support might not be the best place for you to get support.&nbsp; Please seek professional advice from your doctor or health care provider.</span></p><p><span style=\"font-size:16px;\">If you’ve seriously harmed yourself or have immediate plans to do so, call emergency services or go straight to your nearest emergency department.&nbsp;</span></p><p><span style=\"font-size:16px;\">You can find links to mental health crisis support in the sidebar.</span></p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:45:57.923",
+                "wellnessCentreGroupModuleId": 3000,
+                "sections": []
+            },
+            {
+                "id": 3002,
+                "name": "Suicidal Thoughts: How to Cope",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_32a5f9bda8444a9cae9a12361ef6d92f~mv2.png",
+                "totalDuration": 20,
+                "completedDuration": 0,
+                "description": "<p><span style=\"font-size:16px;\"><i>The content here talks about suicidal thoughts, which some people may find triggering.</i></span></p><p><span style=\"font-size:16px;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; TalkLife does not provide and is not a substitute for professional advice, diagnosis or treatment. If you’re feeling distressed or are in a crisis or self-harming, online peer support might not be the best place for you to get support.&nbsp; Please seek professional advice from your doctor or health care provider.</span></p><p><span style=\"font-size:16px;\">If you’ve seriously harmed yourself or have immediate plans to do so, call emergency services or go straight to your nearest emergency department.&nbsp;</span></p><p><span style=\"font-size:16px;\">You can find links to mental health crisis support in the sidebar.</span></p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T14:25:31.47",
+                "wellnessCentreGroupModuleId": 3000,
+                "sections": []
+            },
+            {
+                "id": 3000,
+                "name": "Eating Disorders: Information and Resources",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_6b37072066564609a2925effc38401c4~mv2.png",
+                "totalDuration": 20,
+                "completedDuration": 0,
+                "description": "<p><span style=\"font-size:16px;\"><i>The content here talks about eating disorders, eating disorder behaviours, weight and body image, and references suicide and self harm, which some people may find triggering.</i></span><br><span style=\"font-size:16px;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;TalkLife does not provide and is not a substitute for professional advice, diagnosis or treatment. If you’re struggling with an eating disorder online peer support might not be the best place for you to get support.&nbsp; Please seek professional advice from your doctor or health care provider.</span></p><p><span style=\"font-size:16px;\">You can find links to mental health crisis support in the sidebar.</span></p>",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T14:37:54.23",
+                "wellnessCentreGroupModuleId": 3000,
+                "sections": []
+            }
+        ]
+    }
+]
