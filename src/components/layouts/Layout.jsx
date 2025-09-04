@@ -15,6 +15,7 @@ const Layout = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [activeTab, setActiveTab] = useState("home");
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const { t } = useTranslation();
 
     // Mock data for unread counts
@@ -47,21 +48,25 @@ const Layout = () => {
         navigate(`/${tab}`);
     };
 
+    const handleCollapseChange = (isCollapsed) => {
+        setIsSidebarCollapsed(isCollapsed);
+    };
+
     return (
-        <div className="min-h-screen dark:bg-gray-900  pb-16 md:pb-0 relative overflow-hidden z-10">
+        <div className="min-h-screen dark:bg-gray-900 pb-16 md:pb-0 relative overflow-hidden z-10">
             <div className="fixed inset-0 pointer-events-none">
                 <motion.div
-                    className="absolute -top-32 -left-32 w-96 h-96  dark:from-purple-900/20 dark:to-pink-900/20 rounded-full filter blur-3xl opacity-30"
+                    className="absolute -top-32 -left-32 w-96 h-96 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full filter blur-3xl opacity-30"
                     animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
                     transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
                 />
                 <motion.div
-                    className="absolute top-1/2 -right-32 w-96 h-96  dark:from-blue-900/20 dark:to-cyan-900/20 rounded-full filter blur-3xl opacity-30"
+                    className="absolute top-1/2 -right-32 w-96 h-96 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-full filter blur-3xl opacity-30"
                     animate={{ scale: [1.2, 1, 1.2], rotate: [90, 180, 90] }}
                     transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
                 />
                 <motion.div
-                    className="absolute -bottom-32 left-1/2 w-96 h-96  dark:from-emerald-900/20 dark:to-teal-900/20 rounded-full filter blur-3xl opacity-30"
+                    className="absolute -bottom-32 left-1/2 w-96 h-96 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-full filter blur-3xl opacity-30"
                     animate={{ scale: [1, 1.3, 1], rotate: [180, 270, 180] }}
                     transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
                 />
@@ -72,8 +77,9 @@ const Layout = () => {
                     onTabChange={handleTabChange}
                     unreadMessages={totalUnreadMessages}
                     unreadNotifications={unreadNotificationsCount}
+                    onCollapseChange={handleCollapseChange}
                 />
-                <div className={`flex-1 ${!isMobile ? "ml-80" : ""} relative z-20`}>
+                <div className={`flex-1 ${!isMobile ? (isSidebarCollapsed ? "ml-20" : "ml-80") : ""} relative z-20 transition-all duration-300`}>
                     <div className="mx-auto">
                         <Outlet context={{ handleNavigateToChat: (id) => navigate(`/chat${id ? `?id=${id}` : ""}`) }} />
                     </div>
