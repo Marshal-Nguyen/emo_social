@@ -1,0 +1,412 @@
+{
+    "blooks": [
+        {
+            "name": "Baby Penguin",
+            "url": "https://ac.blooket.com/marketassets/blooks/babypenguin.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Arctic Fox",
+            "url": "https://ac.blooket.com/marketassets/blooks/arcticfox.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Arctic Hare",
+            "url": "https://ac.blooket.com/marketassets/blooks/arctichare.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Penguin",
+            "url": "https://ac.blooket.com/marketassets/blooks/penguin.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Polar Bear",
+            "url": "https://ac.blooket.com/marketassets/blooks/polarbear.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Seal",
+            "url": "https://ac.blooket.com/marketassets/blooks/seal.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Snowy Owl",
+            "url": "https://ac.blooket.com/marketassets/blooks/snowyowl.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Walrus",
+            "url": "https://ac.blooket.com/marketassets/blooks/walrus.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Chick",
+            "url": "https://ac.blooket.com/marketassets/blooks/chick.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Chicken",
+            "url": "https://ac.blooket.com/marketassets/blooks/chicken.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Cow",
+            "url": "https://ac.blooket.com/marketassets/blooks/cow.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Duck",
+            "url": "https://ac.blooket.com/marketassets/blooks/duck.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Goat",
+            "url": "https://ac.blooket.com/marketassets/blooks/goat.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Horse",
+            "url": "https://ac.blooket.com/marketassets/blooks/horse.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Pig",
+            "url": "https://ac.blooket.com/marketassets/blooks/pig.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Sheep",
+            "url": "https://ac.blooket.com/marketassets/blooks/sheep.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Bear",
+            "url": "https://ac.blooket.com/marketassets/blooks/bear.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Fox",
+            "url": "https://ac.blooket.com/marketassets/blooks/fox.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Hedgehog",
+            "url": "https://ac.blooket.com/marketassets/blooks/hedgehog.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Moose",
+            "url": "https://ac.blooket.com/marketassets/blooks/moose.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Cat",
+            "url": "https://ac.blooket.com/marketassets/blooks/cat.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Dog",
+            "url": "https://ac.blooket.com/marketassets/blooks/dog.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Goldfish",
+            "url": "https://ac.blooket.com/marketassets/blooks/goldfish.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Hamster",
+            "url": "https://ac.blooket.com/marketassets/blooks/hamster.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Kitten",
+            "url": "https://ac.blooket.com/marketassets/blooks/kitten.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Puppy",
+            "url": "https://ac.blooket.com/marketassets/blooks/puppy.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Rabbit",
+            "url": "https://ac.blooket.com/marketassets/blooks/rabbit.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Turtle",
+            "url": "https://ac.blooket.com/marketassets/blooks/turtle.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Anaconda",
+            "url": "https://ac.blooket.com/marketassets/blooks/anaconda.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Capuchin",
+            "url": "https://ac.blooket.com/marketassets/blooks/capuchinmonkey.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Cockatoo",
+            "url": "https://ac.blooket.com/marketassets/blooks/cockatoo.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Jaguar",
+            "url": "https://ac.blooket.com/marketassets/blooks/jaguar.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Macaw",
+            "url": "https://ac.blooket.com/marketassets/blooks/macaw.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Orangutan",
+            "url": "https://ac.blooket.com/marketassets/blooks/orangutan.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Parrot",
+            "url": "https://ac.blooket.com/marketassets/blooks/parrot.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Panther",
+            "url": "https://ac.blooket.com/marketassets/blooks/panther.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Tiger",
+            "url": "https://ac.blooket.com/marketassets/blooks/tiger.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Toucan",
+            "url": "https://ac.blooket.com/marketassets/blooks/toucan.svg",
+            "rarity": "Common"
+        },
+        {
+            "name": "Frost Wreath",
+            "url": "https://ac.blooket.com/marketassets/blooks/frostwreath.svg",
+            "rarity": "Uncommon"
+        },
+        {
+            "name": "Jester",
+            "url": "https://ac.blooket.com/marketassets/blooks/jester.svg",
+            "rarity": "Rare"
+        },
+        {
+            "name": "Dragon",
+            "url": "https://ac.blooket.com/marketassets/blooks/dragon.svg",
+            "rarity": "Epic"
+        },
+        {
+            "name": "Queen",
+            "url": "https://ac.blooket.com/marketassets/blooks/queen.svg",
+            "rarity": "Legendary"
+        },
+        {
+            "name": "King",
+            "url": "https://ac.blooket.com/marketassets/blooks/king.svg",
+            "rarity": "Legendary"
+        },
+        {
+            "name": "Eat Me",
+            "url": "https://ac.blooket.com/marketassets/blooks/eatme.svg",
+            "rarity": "Uncommon"
+        },
+        {
+            "name": "Dormouse",
+            "url": "https://ac.blooket.com/marketassets/blooks/dormouse.svg",
+            "rarity": "Rare"
+        },
+        {
+            "name": "King of Hearts",
+            "url": "https://ac.blooket.com/marketassets/blooks/kingofhearts.svg",
+            "rarity": "Chroma"
+        },
+        {
+            "name": "Astronaut",
+            "url": "https://ac.blooket.com/marketassets/blooks/astronaut.svg",
+            "rarity": "Legendary"
+        },
+        {
+            "name": "Red Astronaut",
+            "url": "https://ac.blooket.com/marketassets/blooks/redastronaut.svg",
+            "rarity": "Chroma"
+        },
+        {
+            "name": "Black Astronaut",
+            "url": "https://ac.blooket.com/marketassets/blooks/blackastronaut.svg",
+            "rarity": "Chroma"
+        },
+        {
+            "name": "Rainbow Astronaut",
+            "url": "https://ac.blooket.com/marketassets/blooks/rainbowastronaut.svg",
+            "rarity": "Mystical"
+        },
+        {
+            "name": "Megalodon",
+            "url": "https://ac.blooket.com/marketassets/blooks/megalodon.svg",
+            "rarity": "Legendary",
+            "dropRate": "0.2%",
+            "sellValue": 250
+        },
+        {
+            "name": "Mega Bot",
+            "url": "https://ac.blooket.com/marketassets/blooks/megabot.svg",
+            "rarity": "Legendary",
+            "dropRate": "0.3%",
+            "sellValue": 200
+        },
+        {
+            "name": "Elf Sweater Snowman",
+            "url": "https://ac.blooket.com/marketassets/blooks/elfsweatersnowman.svg",
+            "rarity": "Chroma",
+            "dropRate": "0.02%",
+            "sellValue": 300
+        },
+        {
+            "name": "Tropical Globe",
+            "url": "https://ac.blooket.com/marketassets/blooks/tropicalglobe.svg",
+            "rarity": "Chroma",
+            "dropRate": "0.02%",
+            "sellValue": 300
+        },
+        {
+            "name": "Hamsta Claus",
+            "url": "https://ac.blooket.com/marketassets/blooks/hamstaclaus.svg",
+            "rarity": "Mystical",
+            "sellValue": 1000
+        },
+        {
+            "name": "Phantom King",
+            "url": "https://ac.blooket.com/marketassets/blooks/phantomking.svg",
+            "rarity": "Mystical",
+            "sellValue": 1000
+        },
+        {
+            "name": "Spooky Ghost",
+            "url": "https://ac.blooket.com/marketassets/blooks/spookyghost.svg",
+            "rarity": "Mystical",
+            "sellValue": 1000
+        },
+        {
+            "name": "Tim the Alien",
+            "url": "https://ac.blooket.com/marketassets/blooks/timthealien.svg",
+            "rarity": "Mystical",
+            "sellValue": 1000
+        },
+        {
+            "name": "Wise Caterpillar",
+            "url": "https://ac.blooket.com/marketassets/blooks/wisecaterpillar.svg",
+            "rarity": "Unique"
+        },
+        {
+            "name": "Lucky Frog",
+            "url": "https://ac.blooket.com/marketassets/blooks/luckyfrog.svg",
+            "rarity": "Chroma"
+        },
+        {
+            "name": "Leprechaun",
+            "url": "https://ac.blooket.com/marketassets/blooks/leprechaun.svg",
+            "rarity": "Chroma"
+        },
+        {
+            "name": "Santa Claus",
+            "url": "https://ac.blooket.com/marketassets/blooks/santaclaus.svg",
+            "rarity": "Chroma"
+        },
+        {
+            "name": "Snowman",
+            "url": "https://ac.blooket.com/marketassets/blooks/snowman.svg",
+            "rarity": "Rare"
+        },
+        {
+            "name": "Unicorn",
+            "url": "https://ac.blooket.com/marketassets/blooks/unicorn.svg",
+            "rarity": "Epic"
+        },
+        {
+            "name": "French Toast",
+            "url": "https://ac.blooket.com/marketassets/blooks/frenchtoast.svg",
+            "rarity": "Rare"
+        },
+        {
+            "name": "Bush Monster",
+            "url": "https://ac.blooket.com/marketassets/blooks/bushmonster.svg",
+            "rarity": "Rare"
+        },
+        {
+            "name": "Spaceship",
+            "url": "https://ac.blooket.com/marketassets/blooks/spaceship.svg",
+            "rarity": "Epic"
+        },
+        {
+            "name": "Brainy Bot",
+            "url": "https://ac.blooket.com/marketassets/blooks/brainybot.svg",
+            "rarity": "Epic"
+        },
+        {
+            "name": "Lion",
+            "url": "https://ac.blooket.com/marketassets/blooks/lion.svg",
+            "rarity": "Legendary",
+            "dropRate": "0.05%"
+        },
+        {
+            "name": "Rainbow Panda",
+            "url": "https://ac.blooket.com/marketassets/blooks/rainbowpanda.svg",
+            "rarity": "Chroma",
+            "dropRate": "0.02%"
+        },
+        {
+            "name": "Pirate Ship",
+            "url": "https://ac.blooket.com/marketassets/blooks/pirateship.svg",
+            "rarity": "Legendary"
+        },
+        {
+            "name": "Cyan Astronaut",
+            "url": "https://ac.blooket.com/marketassets/blooks/cyanastronaut.svg",
+            "rarity": "Chroma",
+            "sellValue": 350
+        },
+        {
+            "name": "Lime Astronaut",
+            "url": "https://ac.blooket.com/marketassets/blooks/limeastronaut.svg",
+            "rarity": "Chroma",
+            "sellValue": 350
+        },
+        {
+            "name": "Tiger Zebra",
+            "url": "https://ac.blooket.com/marketassets/blooks/tigerzebra.svg",
+            "rarity": "Mystical"
+        },
+        {
+            "name": "White Peacock",
+            "url": "https://ac.blooket.com/marketassets/blooks/whitepeacock.svg",
+            "rarity": "Chroma"
+        },
+        {
+            "name": "Spooky Mummy",
+            "url": "https://ac.blooket.com/marketassets/blooks/spookymummy.svg",
+            "rarity": "Chroma"
+        },
+        {
+            "name": "Ice Crab",
+            "url": "https://ac.blooket.com/marketassets/blooks/icecrab.svg",
+            "rarity": "Chroma",
+            "dropRate": "0.02%"
+        },
+        {
+            "name": "Frozen Fossil",
+            "url": "https://ac.blooket.com/marketassets/blooks/frozenfossil.svg",
+            "rarity": "Chroma",
+            "dropRate": "0.05%"
+        }
+    ]
+}

@@ -4,6 +4,7 @@ import GiftList from '../components/organisms/GiftList';
 import CategoriList from '../components/organisms/CategoriList';
 import WellnessHub from '../components/organisms/WellnessHub';
 import EmojiCmt from '../components/organisms/EmojiCmt';
+import AvtBlooket from '../components/organisms/AvtBlooket';
 function EmojiGiftPage() {
     const [activeTab, setActiveTab] = useState('emoji');
 
@@ -57,6 +58,15 @@ function EmojiGiftPage() {
                     >
                         Wellness Hub
                     </button>
+                    <button
+                        className={`px-6 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 transform hover:scale-105 ${activeTab === 'avtBlooket'
+                            ? 'bg-[#A855F7] text-white shadow-lg shadow-purple-500/30'
+                            : 'bg-white/80 dark:bg-gray-700/80 text-gray-700 dark:text-gray-200 backdrop-blur-md hover:bg-purple-100 dark:hover:bg-gray-600'
+                            }`}
+                        onClick={() => setActiveTab('avtBlooket')}
+                    >
+                        Avatar Blooket
+                    </button>
                 </div>
                 {/* Tab Content */}
                 <div className="tab-content bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg rounded-2xl p-6 shadow-xl transition-all duration-300">
@@ -83,6 +93,11 @@ function EmojiGiftPage() {
                     {activeTab === 'wellness' && (
                         <div className="animate-fadeIn">
                             <WellnessHub />
+                        </div>
+                    )}
+                    {activeTab === 'avtBlooket' && (
+                        <div className="animate-fadeIn">
+                            <AvtBlooket />
                         </div>
                     )}
                 </div>
