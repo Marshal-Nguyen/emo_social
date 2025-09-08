@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import PostCard from "../molecules/PostCard";
+import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../atoms/LoadingSpinner";
 import Button from "../atoms/Button";
 import { fetchPostsSuccess } from "../../store/postsSlice";
@@ -90,7 +91,8 @@ const mockPosts = [
   },
 ];
 
-const Feed = ({ onNavigateToChat, onSelectPost }) => {
+const Feed = ({ onNavigateToChat }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { posts, loading, error, hasMore } = useSelector(
     (state) => state.posts
@@ -152,7 +154,7 @@ const Feed = ({ onNavigateToChat, onSelectPost }) => {
               post={post}
               onNavigateToChat={onNavigateToChat}
               index={index}
-              onShowComment={() => onSelectPost && onSelectPost(post)}
+              onShowComment={() => navigate(`/post/${post.id}`)}
             />
           </motion.div>
         ))}

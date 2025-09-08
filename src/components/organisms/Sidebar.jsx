@@ -118,7 +118,7 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
                     <div className="space-y-2">
                         {navigationItems.map((item, index) => {
                             const Icon = item.icon;
-                            const isActive = activeTab === item.key;
+                            const isActive = location.pathname.startsWith(`/${item.key}`);
                             return (
                                 <motion.button
                                     key={item.key}

@@ -8,6 +8,7 @@ import NotificationsPage from "../pages/NotificationsPage";
 import ProfilePage from "../pages/ProfilePage";
 import IconEmotion from "../pages/IconEmotion";
 import SettingsPage from "../pages/SettingsPage";
+import PostDetailPage from "../pages/PostDetailPage";
 import Layout from "../components/layouts/Layout";
 import LoadingSpinner from "../components/atoms/LoadingSpinner";
 import NotificationSystem from "../components/organisms/NotificationSystem";
@@ -35,6 +36,10 @@ function AppRouter() {
                     <Route
                         path="/home"
                         element={isAuthenticated ? <HomePage /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/post/:id"
+                        element={isAuthenticated ? <PostDetailPage /> : <Navigate to="/auth" />}
                     />
                     <Route
                         path="/chat"
