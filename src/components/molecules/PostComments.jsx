@@ -15,6 +15,7 @@ const PostComments = ({
   onReply,
   onLike,
   parentId = null,
+  hideRepliesByDefault = false,
 }) => {
   const [replyingTo, setReplyingTo] = useState(null);
   const [openReplies, setOpenReplies] = useState({}); // { [commentId]: true/false }
@@ -28,7 +29,10 @@ const PostComments = ({
   const renderComments = (commentsList, level = 0) => {
     return commentsList.map((comment, index) => {
       const hasReplies = comment.replies && comment.replies.length > 0;
-      const isOpen = openReplies[comment.id] !== false; // mặc định mở
+      // Nếu hideRepliesByDefault=true và chưa từng mở thì mặc định đóng replies
+      const isOpen = openReplies[comment.id] !== undefined
+        ? openReplies[comment.id]
+        : !hideRepliesByDefault;
       return (
         <div key={comment.id} className={`flex space-x-3 ${level > 0 ? 'ml-8' : ''} mt-2`}>
           <Avatar
@@ -52,7 +56,11 @@ const PostComments = ({
               <div className="flex items-center space-x-4 mt-1">
                 <button
                   className="text-xs text-blue-500 hover:underline"
-                  onClick={() => setReplyingTo(comment.id)}
+                  onClick={() => {
+                    setReplyingTo(comment.id);
+                    // Khi nhấn trả lời thì mở replies nếu đang bị ẩn
+                    setOpenReplies((prev) => ({ ...prev, [comment.id]: true }));
+                  }}
                 >
                   Trả lời
                 </button>

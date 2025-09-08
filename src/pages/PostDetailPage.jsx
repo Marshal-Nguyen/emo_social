@@ -22,11 +22,11 @@ const PostDetailPage = () => {
                 index={0}
                 showFullContent={true}
                 forceShowComments={true}
+                hideRepliesByDefault={true}
                 onBack={() => navigate(-1)}
                 onNavigateToChat={(conversationId) => {
                     navigate(`/chat?id=${conversationId}`);
                 }}
-
             />
         </div>
     );
