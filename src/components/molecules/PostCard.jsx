@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
 import PostHeader from "./PostHeader";
@@ -12,12 +12,18 @@ import JoinGroupButton from "./JoinGroupButton";
 import { likePost, addComment } from "../../store/postsSlice";
 import { addConversation } from "../../store/chatSlice";
 
-const PostCard = ({ post, onNavigateToChat, index, onShowComment }) => {
+const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComments, onBack }) => {
   const dispatch = useDispatch();
   const { isSafeMode } = useSelector((state) => state.theme);
   const { user } = useSelector((state) => state.auth);
 
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(!!forceShowComments);
+  const [maxVisibleComments, setMaxVisibleComments] = useState(3);
+  const commentsBoxRef = useRef(null);
+  // Nếu forceShowComments thay đổi (ví dụ khi vào trang chi tiết), luôn mở khung bình luận
+  React.useEffect(() => {
+    if (forceShowComments) setShowComments(true);
+  }, [forceShowComments]);
   const [isLiking, setIsLiking] = useState(false);
   const [isCommenting, setIsCommenting] = useState(false);
 
@@ -97,15 +103,16 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment }) => {
       transition={{ duration: 0.3 }}
       className={`relative bg-[${bgColor}] dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow p-4 sm:p-6 flex flex-col`}
     >
-      {/* Post Header */}
+
       <PostHeader
         post={post}
         showJoinedBadge={post.joinStatus === "joined"}
         className="mb-4"
+        onBack={onBack}
       />
 
       {/* Post Content */}
-      <PostContent post={post} isSafeMode={isSafeMode} className="mb-4" />
+      <PostContent post={post} isSafeMode={isSafeMode} className="mb-4 dark:bg-gray-900 rounded-lg p-2" />
 
       {/* Group Join Button */}
       {post.type === "group" && (
@@ -141,11 +148,25 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment }) => {
         />
       </div>
       {/* Comments Section */}
-      <PostComments
-        comments={post.comments || []}
-        show={showComments}
-        maxVisible={3}
-      />
+      <div
+        ref={commentsBoxRef}
+        style={{ maxHeight: showComments ? 320 : 0, overflowY: showComments ? 'auto' : 'hidden', transition: 'max-height 0.3s' }}
+        className="scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+      >
+        <PostComments
+          comments={post.comments || []}
+          show={showComments}
+          maxVisible={maxVisibleComments}
+          onShowMore={() => {
+            setMaxVisibleComments((prev) => prev + 10);
+            setTimeout(() => {
+              if (commentsBoxRef.current) {
+                commentsBoxRef.current.scrollTop = commentsBoxRef.current.scrollHeight;
+              }
+            }, 100);
+          }}
+        />
+      </div>
 
       {/* Comment Form */}
       {showComments && (

@@ -1,5 +1,6 @@
+
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import PostCard from "../components/molecules/PostCard";
 
@@ -8,14 +9,28 @@ const PostDetailPage = () => {
     const posts = useSelector((state) => state.posts.posts);
     const post = posts.find((p) => String(p.id) === String(id));
 
+    const navigate = useNavigate();
     if (!post) {
         return <div>Không tìm thấy bài viết.</div>;
     }
 
+    // Trick: truyền prop index=0 để PostCard luôn mở khung comment (sẽ sửa PostCard nếu cần)
     return (
-        <div className="max-w-xl mx-auto py-8">
-            <PostCard post={post} showFullContent={true} />
-            {/* Có thể thêm phần comment ở đây nếu muốn */}
+        <div className="max-w-3xl mx-auto py-8">
+            <PostCard
+                post={post}
+                index={0}
+                showFullContent={true}
+                forceShowComments={true}
+                onBack={() => navigate(-1)}
+                onNavigateToChat={(conversationId) => {
+                    // Điều hướng tới trang chat nếu cần, hoặc mở modal chat
+                    // Ví dụ: navigate(`/chat/${conversationId}`)
+                    // Ở đây chỉ alert để test
+                    alert(`Đi tới nhóm chat: ${conversationId}`);
+                }}
+
+            />
         </div>
     );
 };

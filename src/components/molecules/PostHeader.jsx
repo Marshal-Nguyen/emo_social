@@ -1,5 +1,5 @@
 import React from "react";
-import { Clock, MoreHorizontal } from "lucide-react";
+import { Clock, MoreHorizontal, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import Avatar from "../atoms/Avatar";
 import IconButton from "../atoms/IconButton";
@@ -11,10 +11,20 @@ const PostHeader = ({
   showJoinedBadge = false,
   onMoreClick,
   className = "",
+  onBack
 }) => {
   return (
     <div className={`flex items-start justify-between ${className}`}>
       <div className="flex items-center space-x-3">
+        {onBack && (
+          <button
+            className="mr-1 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
+            onClick={onBack}
+            title="Quay lại"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+          </button>
+        )}
         <Avatar
           username={post.author.username}
           size="md"
