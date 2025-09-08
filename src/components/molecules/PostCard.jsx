@@ -9,7 +9,7 @@ import { MessageSquare } from "lucide-react";
 import PostComments from "./PostComments";
 import CommentForm from "./CommentForm";
 import JoinGroupButton from "./JoinGroupButton";
-import { likePost, addComment } from "../../store/postsSlice";
+import { likePost, addComment, likeComment } from "../../store/postsSlice";
 import { addConversation } from "../../store/chatSlice";
 
 const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComments, onBack }) => {
@@ -45,7 +45,8 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComme
     }
   };
 
-  const handleComment = async (commentText) => {
+  // Hỗ trợ gửi comment hoặc reply (nhiều tầng)
+  const handleComment = async (commentText, parentId = null) => {
     if (!commentText.trim() || isCommenting) return;
     setIsCommenting(true);
     try {
@@ -55,11 +56,15 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComme
         author: user.username,
         createdAt: new Date().toISOString(),
         avatar: user.avatar,
+        likesCount: 0,
+        liked: false,
+        replies: [],
       };
       dispatch(
         addComment({
           postId: post.id,
           comment: newComment,
+          parentId: parentId || null,
         })
       );
     } catch (error) {
@@ -148,6 +153,7 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComme
         />
       </div>
       {/* Comments Section */}
+
       <div
         ref={commentsBoxRef}
         style={{ maxHeight: showComments ? 320 : 0, overflowY: showComments ? 'auto' : 'hidden', transition: 'max-height 0.3s' }}
@@ -164,6 +170,14 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComme
                 commentsBoxRef.current.scrollTop = commentsBoxRef.current.scrollHeight;
               }
             }, 100);
+          }}
+          onReply={handleComment}
+          onLike={(comment, parentId) => {
+            dispatch(likeComment({
+              postId: post.id,
+              commentId: comment.id,
+              parentId: parentId || null,
+            }));
           }}
         />
       </div>

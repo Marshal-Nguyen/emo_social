@@ -51,15 +51,59 @@ const postsSlice = createSlice({
         post.likesCount = action.payload.likesCount;
       }
     },
+    // Thêm comment hoặc reply nhiều tầng
     addComment: (state, action) => {
-      const post = state.posts.find(
-        (post) => post.id === action.payload.postId
-      );
-      if (post) {
-        if (!post.comments) post.comments = [];
-        post.comments.push(action.payload.comment);
+      const { postId, comment, parentId } = action.payload;
+      const post = state.posts.find((post) => post.id === postId);
+      if (!post) return;
+      if (!post.comments) post.comments = [];
+
+      // Nếu không có parentId, thêm vào comment gốc
+      if (!parentId) {
+        post.comments.push(comment);
         post.commentsCount = (post.commentsCount || 0) + 1;
+        return;
       }
+
+      // Đệ quy tìm parent comment và thêm vào replies
+      const addReplyRecursive = (comments) => {
+        for (let c of comments) {
+          if (c.id === parentId) {
+            if (!c.replies) c.replies = [];
+            c.replies.push(comment);
+            return true;
+          }
+          if (c.replies && c.replies.length > 0) {
+            if (addReplyRecursive(c.replies)) return true;
+          }
+        }
+        return false;
+      };
+      addReplyRecursive(post.comments);
+      post.commentsCount = (post.commentsCount || 0) + 1;
+    },
+
+    // Like/unlike từng comment hoặc reply (nhiều tầng)
+    likeComment: (state, action) => {
+      const { postId, commentId, parentId } = action.payload;
+      const post = state.posts.find((post) => post.id === postId);
+      if (!post || !post.comments) return;
+
+      // Đệ quy tìm comment cần like
+      const toggleLikeRecursive = (comments) => {
+        for (let c of comments) {
+          if (c.id === commentId) {
+            c.liked = !c.liked;
+            c.likesCount = (c.likesCount || 0) + (c.liked ? 1 : -1);
+            return true;
+          }
+          if (c.replies && c.replies.length > 0) {
+            if (toggleLikeRecursive(c.replies)) return true;
+          }
+        }
+        return false;
+      };
+      toggleLikeRecursive(post.comments);
     },
   },
 });
@@ -73,6 +117,7 @@ export const {
   deletePost,
   likePost,
   addComment,
+  likeComment,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;
