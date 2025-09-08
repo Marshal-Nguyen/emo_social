@@ -5,6 +5,7 @@ import Divider from "../atoms/Divider";
 import { formatTimeAgo } from "../../utils/helpers";
 import CommentForm from "./CommentForm";
 
+import { Heart } from "lucide-react";
 
 const PostComments = ({
   comments = [],
@@ -53,51 +54,59 @@ const PostComments = ({
               <p className="text-sm text-gray-900 dark:text-white">
                 {comment.content}
               </p>
-              <div className="flex items-center space-x-4 mt-1">
+            </div>
+            {/* Các nút Like, Reply, View Replies nằm ngoài div nội dung */}
+            <div className="flex items-center space-x-4 mt-1 ml-4">
+              <button
+                className={`flex items-center gap-1 text-xs ${comment.liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
+                  }`}
+                onClick={() => onLike && onLike(comment, parentId)}
+              >
+                <Heart
+                  className="w-4 h-4"
+                  fill={comment.liked ? "currentColor" : "none"}
+                />
+                {comment.likesCount || 0}
+              </button>
+
+              <button
+                className="text-xs text-blue-500 hover:underline"
+                onClick={() => {
+                  setReplyingTo(comment.id);
+                  // Khi nhấn trả lời thì mở replies nếu đang bị ẩn
+                  setOpenReplies((prev) => ({ ...prev, [comment.id]: true }));
+                }}
+              >
+                Trả lời
+              </button>
+
+              {hasReplies && (
                 <button
-                  className="text-xs text-blue-500 hover:underline"
-                  onClick={() => {
-                    setReplyingTo(comment.id);
-                    // Khi nhấn trả lời thì mở replies nếu đang bị ẩn
-                    setOpenReplies((prev) => ({ ...prev, [comment.id]: true }));
-                  }}
+                  className="text-xs text-gray-700 dark:text-gray-300 hover:underline"
+                  onClick={() => setOpenReplies((prev) => ({ ...prev, [comment.id]: !isOpen }))}
                 >
-                  Trả lời
+                  {isOpen ? 'Ẩn phản hồi' : `Xem phản hồi (${comment.replies.length})`}
                 </button>
-                <button
-                  className={`text-xs ${comment.liked ? 'text-red-500' : 'text-gray-500'} hover:underline`}
-                  onClick={() => onLike && onLike(comment, parentId)}
-                >
-                  {comment.liked ? '❤️' : '🤍'} {comment.likesCount || 0}
-                </button>
-                {hasReplies && (
-                  <button
-                    className="text-xs text-gray-500 hover:underline"
-                    onClick={() => setOpenReplies((prev) => ({ ...prev, [comment.id]: !isOpen }))}
-                  >
-                    {isOpen ? 'Ẩn trả lời' : `Hiện trả lời (${comment.replies.length})`}
-                  </button>
-                )}
-              </div>
-              {/* Form trả lời */}
-              {replyingTo === comment.id && (
-                <div className="mt-2">
-                  <CommentForm
-                    placeholder={`Trả lời ${comment.author}...`}
-                    onSubmit={(text) => {
-                      if (onReply) onReply(text, comment.id);
-                      setReplyingTo(null);
-                    }}
-                  />
-                </div>
-              )}
-              {/* Đệ quy hiển thị reply */}
-              {hasReplies && isOpen && (
-                <div className="mt-2">
-                  {renderComments(comment.replies, level + 1)}
-                </div>
               )}
             </div>
+            {/* Form trả lời */}
+            {replyingTo === comment.id && (
+              <div className="mt-2">
+                <CommentForm
+                  placeholder={`Trả lời ${comment.author}...`}
+                  onSubmit={(text) => {
+                    if (onReply) onReply(text, comment.id);
+                    setReplyingTo(null);
+                  }}
+                />
+              </div>
+            )}
+            {/* Đệ quy hiển thị reply */}
+            {hasReplies && isOpen && (
+              <div className="mt-2">
+                {renderComments(comment.replies, level + 1)}
+              </div>
+            )}
           </div>
         </div>
       );
