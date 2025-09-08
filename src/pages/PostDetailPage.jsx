@@ -24,10 +24,7 @@ const PostDetailPage = () => {
                 forceShowComments={true}
                 onBack={() => navigate(-1)}
                 onNavigateToChat={(conversationId) => {
-                    // Điều hướng tới trang chat nếu cần, hoặc mở modal chat
-                    // Ví dụ: navigate(`/chat/${conversationId}`)
-                    // Ở đây chỉ alert để test
-                    alert(`Đi tới nhóm chat: ${conversationId}`);
+                    navigate(`/chat?id=${conversationId}`);
                 }}
 
             />
