@@ -43,16 +43,18 @@ const CommentInput = ({
           autoFocus={autoFocus}
           rows="1"
           className={`
-            flex-1 resize-none rounded-lg border border-gray-200 dark:border-gray-700 
-            bg-white dark:bg-gray-800 px-3 py-2 text-sm
-            text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
-            focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
-            disabled:opacity-50 disabled:cursor-not-allowed
-            transition-colors duration-200
-          `}
+    flex-1 resize-none rounded-lg border border-gray-200 dark:border-gray-700 
+    bg-white dark:bg-gray-800 px-3 py-2 text-sm
+    text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
+    focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent
+    disabled:opacity-50 disabled:cursor-not-allowed
+    transition-colors duration-200 break-words
+  `}
           style={{
             minHeight: "38px",
             maxHeight: "120px",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
           }}
         />
 
@@ -63,10 +65,9 @@ const CommentInput = ({
             px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200
             focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
             disabled:opacity-50 disabled:cursor-not-allowed
-            ${
-              value.trim() && !disabled && !loading
-                ? "bg-purple-500 hover:bg-purple-600 text-white shadow-sm hover:shadow-md"
-                : "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
+            ${value.trim() && !disabled && !loading
+              ? "bg-purple-500 hover:bg-purple-600 text-white shadow-sm hover:shadow-md"
+              : "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500"
             }
           `}>
           {loading ? (

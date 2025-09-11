@@ -4,8 +4,9 @@ import Avatar from "../atoms/Avatar";
 import Divider from "../atoms/Divider";
 import { formatTimeAgo } from "../../utils/helpers";
 import CommentForm from "./CommentForm";
-
-import { Heart } from "lucide-react";
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { Repeat2, Share2, MessageCircle, Heart } from "lucide-react";
 
 const PostComments = ({
   comments = [],
@@ -26,23 +27,49 @@ const PostComments = ({
   const visibleComments = comments.slice(0, maxVisible);
   const hasMore = comments.length > maxVisible;
 
+  // Hàm xử lý nội dung để nhận diện code block
+  const renderContent = (content) => {
+    if (!content) return null;
+
+    // Tìm các đoạn code được bao bởi ```
+    const codeBlocks = content.split(/```(.+?)```/s).map((part, index) => {
+      if (index % 2 === 0) {
+        // Văn bản thông thường
+        return part.split('\n').map((line, i) => (
+          <p key={i} className="text-sm text-gray-900 dark:text-white break-words max-w-full">
+            {line}
+          </p>
+        ));
+      } else {
+        // Đoạn code
+        return (
+          <SyntaxHighlighter language="javascript" style={docco} key={index}>
+            {part.trim()}
+          </SyntaxHighlighter>
+        );
+      }
+    });
+
+    return <div>{codeBlocks}</div>;
+  };
+
   // Đệ quy render comment và reply
   const renderComments = (commentsList, level = 0) => {
-    return commentsList.map((comment, index) => {
+    return commentsList.map((comment) => {
       const hasReplies = comment.replies && comment.replies.length > 0;
-      // Nếu hideRepliesByDefault=true và chưa từng mở thì mặc định đóng replies
-      const isOpen = openReplies[comment.id] !== undefined
-        ? openReplies[comment.id]
-        : !hideRepliesByDefault;
+      const isOpen =
+        openReplies[comment.id] !== undefined
+          ? openReplies[comment.id]
+          : !hideRepliesByDefault;
+
       return (
-        <div key={comment.id} className={`flex space-x-3 ${level > 0 ? 'ml-8' : ''} mt-2`}>
-          <Avatar
-            username={comment.author}
-            size="sm"
-            className="flex-shrink-0"
-          />
+        <div
+          key={comment.id}
+          className={`flex space-x-3 ${level > 0 ? "ml-8" : ""} mt-2`}
+        >
+          <Avatar username={comment.author} size="sm" className="flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg px-4 py-3">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
               <div className="flex items-center space-x-2 mb-1">
                 <span className="font-semibold text-sm text-gray-900 dark:text-white">
                   {comment.author}
@@ -51,9 +78,7 @@ const PostComments = ({
                   {formatTimeAgo(comment.createdAt)}
                 </span>
               </div>
-              <p className="text-sm text-gray-900 dark:text-white">
-                {comment.content}
-              </p>
+              {renderContent(comment.content)}
             </div>
             {/* Các nút Like, Reply, View Replies nằm ngoài div nội dung */}
             <div className="flex items-center space-x-4 mt-1 ml-4">
