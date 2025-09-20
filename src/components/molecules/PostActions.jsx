@@ -8,7 +8,7 @@ const PostActions = ({ post, onLike, onComment, isLiking = false, className = ""
       {/* Like */}
       <div className="flex items-center gap-1">
         {post.likesCount > 0 && (
-          <span className="text-xs text-gray-600 dark:text-gray-400">{post.likesCount}</span>
+          <span className="text-md text-gray-600 dark:text-gray-400">{post.likesCount}</span>
         )}
         <Button
           variant="ghost"

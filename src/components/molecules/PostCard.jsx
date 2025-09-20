@@ -93,9 +93,7 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComme
     }
   };
 
-  const toggleComments = () => {
-    setShowComments(!showComments);
-  };
+
 
   const bgColors = ["#FFF5DF", "#E0EDFF", "#FFE6CC", "#E6FFE6", "#FFE8F0"];
   const bgColor = bgColors[index % bgColors.length];
@@ -106,25 +104,25 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComme
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -2 }}
       transition={{ duration: 0.3 }}
-      className={`relative bg-[${bgColor}] dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow p-4 sm:p-6 flex flex-col h-full`}
+      className={`relative bg-[${bgColor}]  rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow p-4 flex flex-col h-full`}
       style={{ minHeight: 0 }}
     >
       {/* PostHeader luôn hiển thị, không cuộn */}
       <PostHeader
         post={post}
         showJoinedBadge={post.joinStatus === "joined"}
-        className="mb-4 flex-shrink-0"
+        className=" flex-shrink-0"
         onBack={onBack}
       />
 
       {/* Vùng cuộn chung cho PostContent + bình luận */}
-      <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 flex flex-col gap-2">
+      <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 flex flex-col gap-1">
         {/* Post Content */}
-        <PostContent post={post} isSafeMode={isSafeMode} className="mb-4 dark:bg-gray-900 rounded-lg p-2" />
+        <PostContent post={post} isSafeMode={isSafeMode} className=" dark:bg-gray-900 rounded-lg p-2" />
 
         {/* Group Join Button */}
         {post.type === "group" && (
-          <div className="mb-4">
+          <div className="">
             <JoinGroupButton
               initialStatus={post.joinStatus}
               groupName={post.groupName}
@@ -133,7 +131,17 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComme
         )}
 
         {/* Direct Message Button and Post Actions */}
-        <div className="flex justify-between items-center my-2">
+        <div className="flex justify-between items-center px-4">
+
+          <PostActions
+            post={post}
+            onLike={handleLike}
+            onComment={() => {
+              // toggleComments();
+              if (onShowComment) onShowComment(post);
+            }}
+            isLiking={isLiking}
+          />
           <Button
             variant="ghost"
             className="bg-[#FB88AA] hover:bg-[#E94B7D] text-white text-sm dark:text-white flex items-center space-x-2 p-1 rounded-full"
@@ -143,15 +151,6 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComme
             <MessageSquare className="w-4 h-4" />
             <span className="hidden sm:inline">Nhóm chat</span>
           </Button>
-          <PostActions
-            post={post}
-            onLike={handleLike}
-            onComment={() => {
-              toggleComments();
-              if (onShowComment) onShowComment(post);
-            }}
-            isLiking={isLiking}
-          />
         </div>
 
         {/* Comments Section */}

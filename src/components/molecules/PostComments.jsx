@@ -20,28 +20,24 @@ const PostComments = ({
   hideRepliesByDefault = false,
 }) => {
   const [replyingTo, setReplyingTo] = useState(null);
-  const [openReplies, setOpenReplies] = useState({}); // { [commentId]: true/false }
+  const [openReplies, setOpenReplies] = useState({});
 
   if (!show || comments.length === 0) return null;
 
   const visibleComments = comments.slice(0, maxVisible);
   const hasMore = comments.length > maxVisible;
 
-  // Hàm xử lý nội dung để nhận diện code block
   const renderContent = (content) => {
     if (!content) return null;
 
-    // Tìm các đoạn code được bao bởi ```
     const codeBlocks = content.split(/```(.+?)```/s).map((part, index) => {
       if (index % 2 === 0) {
-        // Văn bản thông thường
         return part.split('\n').map((line, i) => (
           <p key={i} className="text-sm text-gray-900 dark:text-white break-words max-w-full">
             {line}
           </p>
         ));
       } else {
-        // Đoạn code
         return (
           <SyntaxHighlighter language="javascript" style={docco} key={index}>
             {part.trim()}
@@ -53,7 +49,6 @@ const PostComments = ({
     return <div>{codeBlocks}</div>;
   };
 
-  // Đệ quy render comment và reply
   const renderComments = (commentsList, level = 0) => {
     return commentsList.map((comment) => {
       const hasReplies = comment.replies && comment.replies.length > 0;
@@ -69,7 +64,7 @@ const PostComments = ({
         >
           <Avatar username={comment.author} size="sm" className="flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg" style={{ padding: '4px 8px', display: 'inline-block' }}>
               <div className="flex items-center space-x-2 mb-1">
                 <span className="font-semibold text-sm text-gray-900 dark:text-white">
                   {comment.author}
@@ -80,11 +75,9 @@ const PostComments = ({
               </div>
               {renderContent(comment.content)}
             </div>
-            {/* Các nút Like, Reply, View Replies nằm ngoài div nội dung */}
             <div className="flex items-center space-x-4 mt-1 ml-4">
               <button
-                className={`flex items-center gap-1 text-xs ${comment.liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
-                  }`}
+                className={`flex items-center gap-1 text-xs ${comment.liked ? "text-red-500" : "text-gray-500 hover:text-red-500"}`}
                 onClick={() => onLike && onLike(comment, parentId)}
               >
                 <Heart
@@ -93,18 +86,15 @@ const PostComments = ({
                 />
                 {comment.likesCount || 0}
               </button>
-
               <button
                 className="text-xs text-blue-500 hover:underline"
                 onClick={() => {
                   setReplyingTo(comment.id);
-                  // Khi nhấn trả lời thì mở replies nếu đang bị ẩn
                   setOpenReplies((prev) => ({ ...prev, [comment.id]: true }));
                 }}
               >
                 Trả lời
               </button>
-
               {hasReplies && (
                 <button
                   className="text-xs text-gray-700 dark:text-gray-300 hover:underline"
@@ -114,7 +104,6 @@ const PostComments = ({
                 </button>
               )}
             </div>
-            {/* Form trả lời */}
             {replyingTo === comment.id && (
               <div className="mt-2">
                 <CommentForm
@@ -126,7 +115,6 @@ const PostComments = ({
                 />
               </div>
             )}
-            {/* Đệ quy hiển thị reply */}
             {hasReplies && isOpen && (
               <div className="mt-2">
                 {renderComments(comment.replies, level + 1)}
@@ -149,7 +137,6 @@ const PostComments = ({
       >
         <div className="pt-4 space-y-4">
           {renderComments(visibleComments)}
-          {/* Show More Button */}
           {hasMore && (
             <div className="pt-2">
               <button

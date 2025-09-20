@@ -1,23 +1,20 @@
-
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import CreatePost from "../components/organisms/CreatePost";
 import Feed from "../components/organisms/Feed";
-import Comment from "../components/organisms/Comment";
 import { useOutletContext } from "react-router-dom";
 import SearchBar from "../components/molecules/SearchBar";
 import FeedNav from "../components/molecules/FeedNav";
+import categories from "../data/categories.json"; // Adjust the path based on your file location
 
 const HomePage = () => {
   const { handleNavigateToChat } = useOutletContext();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [search, setSearch] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("all");
+  const [selectedFilters, setSelectedFilters] = useState([]); // Changed to array
   const [selectedTab, setSelectedTab] = useState("most_recent");
-  const [showComment, setShowComment] = useState(true);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [localComments, setLocalComments] = useState({});
-  const user = { username: "User", avatar: undefined };
+  const [anonymousPost, setAnonymousPost] = useState("");
+  const [selectedMood, setSelectedMood] = useState(null);
 
   const tagSuggestions = [
     { value: "stress", label: "Stress", icon: "😣", count: 42 },
@@ -28,6 +25,27 @@ const HomePage = () => {
     { value: "hoc-duong", label: "Học đường", icon: "🎓", count: 15 },
   ];
 
+  const quotes = [
+    "Ngay cả trong đêm tối nhất, mặt trăng vẫn tỏa sáng.",
+    "Mỗi ngày là một cơ hội để bắt đầu lại.",
+    "Hãy mỉm cười, vì bạn xứng đáng với niềm vui.",
+  ];
+
+  const activities = [
+    "Uống một cốc nước",
+    "Đi bộ 5 phút",
+    "Gửi tin nhắn cho một người bạn",
+    "Hít thở sâu 10 lần",
+    "Nghe một bài hát yêu thích",
+  ];
+
+  const moods = [
+    { emoji: "😊", label: "Vui", count: 12 },
+    { emoji: "😢", label: "Buồn", count: 5 },
+    { emoji: "😴", label: "Mệt", count: 8 },
+    { emoji: "😡", label: "Bực", count: 3 },
+  ];
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -36,11 +54,29 @@ const HomePage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const handleAnonymousSubmit = () => {
+    if (anonymousPost.trim()) {
+      alert("Đã gửi ẩn danh: " + anonymousPost);
+      setAnonymousPost("");
+    }
+  };
+
+  // Toggle filter selection
+  const toggleFilter = (filter) => {
+    setSelectedFilters((prev) =>
+      prev.includes(filter)
+        ? prev.filter((item) => item !== filter) // Remove if already selected
+        : [...prev, filter] // Add if not selected
+    );
+  };
+
+  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+  const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+
   return (
     <div className="flex h-screen">
       {/* Left section: Expands to fill available space */}
       <div className="flex-1 space-y-4 overflow-y-auto no-scrollbar z-20 px-2">
-        {/* Sticky header with FeedNav and SearchBar side by side */}
         <div className="sticky top-0 z-30 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md pb-2 pt-2 mb-2 flex items-center gap-4 shadow-sm">
           <FeedNav selected={selectedTab} onSelect={setSelectedTab} />
           <div className="flex-1 flex justify-end">
@@ -48,13 +84,13 @@ const HomePage = () => {
               <SearchBar
                 onSearch={(searchValue, filterValue) => {
                   setSearch(searchValue);
-                  setSelectedFilter(filterValue);
+                  setSelectedFilters(filterValue ? [filterValue] : []); // Update to handle array
                 }}
                 tags={tagSuggestions}
                 search={search}
                 setSearch={setSearch}
-                selectedFilter={selectedFilter}
-                setSelectedFilter={setSelectedFilter}
+                selectedFilter={selectedFilters} // Pass array
+                setSelectedFilter={setSelectedFilters} // Update to handle array
               />
             </div>
           </div>
@@ -74,60 +110,78 @@ const HomePage = () => {
           <Feed
             onNavigateToChat={handleNavigateToChat}
             search={search}
-            filter={selectedFilter}
+            filter={selectedFilters} // Pass array
           />
         </motion.div>
       </div>
-      {/* Right section: Fixed width (320px), hidden on mobile */}
+      {/* Right section: Fixed width (320px), hidden on mobile, scrollable */}
       {!isMobile && (
-        <div className="w-80 flex flex-col h-full">
-          {/* Atomic action buttons group at top */}
-          <div className="flex items-center bg-gray-900 dark:bg-gray-500 text-white rounded-full p-1 gap-4 mt-4 mb-2 mr-2 shadow-lg">
-            <button
-              onClick={() => alert("Nhận xu!")}
-              className="flex items-center gap-2 hover:bg-neutral-800 px-3 py-1 rounded-full transition"
-            >
-              <span role="img" aria-label="coin">🪙</span>
-              <span className="text-sm font-medium">Nhận Xu</span>
-            </button>
-            <button
-              onClick={() => alert("Tải app!")}
-              className="flex items-center gap-2 hover:bg-neutral-800 px-3 py-1 rounded-full transition"
-            >
-              <span role="img" aria-label="app">📱</span>
-              <span className="text-sm font-medium truncate max-w-[100px]">Tải ứng dụng</span>
-            </button>
-            <div className="w-px h-6 bg-gray-500/40"></div>
-            <div className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden bg-gray-700">
-              <img
-                src={user.avatar}
-                alt={user.username}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-
-          {/* Comment or emo-light.png in the middle, stretches to fill */}
+        <div className="w-80 flex flex-col h-full p-4 dark:from-neutral-800 dark:to-neutral-900 overflow-y-auto">
+          {/* Inspirational Quote */}
           <motion.div
-            className="flex flex-col items-center justify-center h-full"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4 text-center"
           >
-            <div className="text-center text-lg animate-blink">Đây là quảng cáo</div>
-            <img
-              src="/emo-light.png"
-              alt="No comments"
-              className="max-w-full max-h-full object-contain mb-4"
-            />
+            <div className="flex items-center gap-2 mb-2 justify-center">
+              <span className="text-2xl">🌟</span>
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                Quote hôm nay
+              </h3>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-300 italic">
+              "{randomQuote}"
+            </p>
           </motion.div>
 
-          {/* Chat at the bottom */}
-          <div className="py-4 px-2">
-            <div className="w-full rounded-lg bg-white shadow p-4 flex items-center justify-center text-gray-700 font-semibold">
-              Chat
+          {/* Positive Activities */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">🌿</span>
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                Thử một điều nhỏ để cảm thấy tốt hơn
+              </h3>
             </div>
-          </div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">
+              <p>✔ {randomActivity}</p>
+            </div>
+          </motion.div>
+
+          {/* Topic Filter */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">📌</span>
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                Lọc theo chủ đề
+              </h3>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => toggleFilter(category.name)}
+                  className={`flex items-center gap-2 p-2 rounded-xl dark:text-white text-sm ${selectedFilters.includes(category.name)
+                    ? "bg-purple-100 dark:text-black"
+                    : "bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-neutral-500"
+                    } transition-colors`}
+                >
+                  <span>{category.icon}</span>
+                  <span>{category.nameVi}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
         </div>
       )}
     </div>

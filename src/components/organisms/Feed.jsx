@@ -12,7 +12,7 @@ import { image } from "framer-motion/client";
 const mockPosts = [
   {
     id: 1,
-    images: ["https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=800&q=80"],
+    images: ["https://chus.vn/images/Blog/CH%E1%BB%AEA%20L%C3%80NH%20B%E1%BA%A2N%20TH%C3%82N%20L%C3%80%20G%C3%8C/%E1%BA%A2nh%2001.%20Ch%E1%BB%AFa%20l%C3%A0nh%20b%E1%BA%A3n%20th%C3%A2n%2C%20ch%E1%BB%AFa%20l%C3%A0nh%2C%20xu%20h%C6%B0%E1%BB%9Bng%20ch%E1%BB%AFa%20l%C3%A0nh.png?1721633950094"],
     content:
       "Hôm nay cảm thấy khá buồn vì công việc. Ai cũng có những ngày khó khăn như vậy không? 😔",
     author: {
@@ -35,7 +35,7 @@ const mockPosts = [
   },
   {
     id: 2,
-    images: ["/emo-light.png"],
+    images: ["https://bchannel.vn/wp-content/uploads/2023/08/tu-chua-lanhv-vet-thuong-tam-hon.jpg"],
     content:
       "Chia sẻ một tip nhỏ: Khi stress, thử ngồi thiền 10 phút hoặc nghe nhạc nhẹ nhàng. Mình thấy rất hiệu quả! 🧘‍♀️✨",
     author: {
@@ -51,7 +51,7 @@ const mockPosts = [
   },
   {
     id: 3,
-    images: ["/emo-qc-d.png"],
+    images: ["https://luxuo.vn/wp-content/uploads/2021/07/photo-1624137461186-b1e0196b8702.jpg"],
     content:
       "Có ai muốn tham gia nhóm chat về sách tâm lý học không? Mình muốn tìm những người cùng sở thích để thảo luận và học hỏi! 📚",
     author: {
@@ -67,7 +67,7 @@ const mockPosts = [
   },
   {
     id: 4,
-    images: ["/emo-qc.png"],
+    images: ["https://nguoiduatin.mediacdn.vn/thumb_w/642/media/dong-xuan-thuan/2024/05/06/shutterstock1803134719-2-870x522jpg-.jpeg"],
     content:
       "Gần đây cảm thấy rất cô đơn và tuyệt vọng. Không biết phải làm sao nữa... 😭",
     author: {
