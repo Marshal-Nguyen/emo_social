@@ -11,7 +11,7 @@ const HomePage = () => {
   const { handleNavigateToChat } = useOutletContext();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [search, setSearch] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState([]); // Changed to array
+  const [selectedFilters, setSelectedFilters] = useState([]);
   const [selectedTab, setSelectedTab] = useState("most_recent");
   const [anonymousPost, setAnonymousPost] = useState("");
   const [selectedMood, setSelectedMood] = useState(null);
@@ -61,12 +61,11 @@ const HomePage = () => {
     }
   };
 
-  // Toggle filter selection
   const toggleFilter = (filter) => {
     setSelectedFilters((prev) =>
       prev.includes(filter)
-        ? prev.filter((item) => item !== filter) // Remove if already selected
-        : [...prev, filter] // Add if not selected
+        ? prev.filter((item) => item !== filter)
+        : [...prev, filter]
     );
   };
 
@@ -74,50 +73,77 @@ const HomePage = () => {
   const randomActivity = activities[Math.floor(Math.random() * activities.length)];
 
   return (
-    <div className="flex h-screen">
-      {/* Left section: Expands to fill available space */}
+    <div className="flex h-screen flex-col md:flex-row">
+      {/* Main content */}
       <div className="flex-1 space-y-4 overflow-y-auto no-scrollbar z-20 px-2">
-        <div className="sticky top-0 z-30 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md pb-2 pt-2 mb-2 flex items-center gap-4 shadow-sm">
-          <FeedNav selected={selectedTab} onSelect={setSelectedTab} />
-          <div className="flex-1 flex justify-end">
-            <div className="w-full max-w-xs">
-              <SearchBar
-                onSearch={(searchValue, filterValue) => {
-                  setSearch(searchValue);
-                  setSelectedFilters(filterValue ? [filterValue] : []); // Update to handle array
-                }}
-                tags={tagSuggestions}
-                search={search}
-                setSearch={setSearch}
-                selectedFilter={selectedFilters} // Pass array
-                setSelectedFilter={setSelectedFilters} // Update to handle array
-              />
+        <div className="sticky top-0 z-30 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md pb-2 pt-2 mb-2 shadow-sm">
+          {/* On mobile, FeedNav is above SearchBar */}
+          {isMobile ? (
+            <div className="flex flex-col gap-4">
+              <FeedNav selected={selectedTab} onSelect={setSelectedTab} />
+              <div className="w-full">
+                <SearchBar
+                  onSearch={(searchValue, filterValue) => {
+                    setSearch(searchValue);
+                    setSelectedFilters(filterValue ? [filterValue] : []);
+                  }}
+                  tags={tagSuggestions}
+                  search={search}
+                  setSearch={setSearch}
+                  selectedFilter={selectedFilters}
+                  setSelectedFilter={setSelectedFilters}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <FeedNav selected={selectedTab} onSelect={setSelectedTab} />
+              <div className="flex-1 flex justify-end">
+                <div className="w-full max-w-xs">
+                  <SearchBar
+                    onSearch={(searchValue, filterValue) => {
+                      setSearch(searchValue);
+                      setSelectedFilters(filterValue ? [filterValue] : []);
+                    }}
+                    tags={tagSuggestions}
+                    search={search}
+                    setSearch={setSearch}
+                    selectedFilter={selectedFilters}
+                    setSelectedFilter={setSelectedFilters}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className={isMobile ? "flex justify-center" : ""}
         >
-          <CreatePost />
+          <div className={isMobile ? "w-full max-w-md" : ""}>
+            <CreatePost />
+          </div>
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          className={isMobile ? "flex justify-center" : ""}
         >
-          <Feed
-            onNavigateToChat={handleNavigateToChat}
-            search={search}
-            filter={selectedFilters} // Pass array
-          />
+          <div className={isMobile ? "w-full max-w-md" : ""}>
+            <Feed
+              onNavigateToChat={handleNavigateToChat}
+              search={search}
+              filter={selectedFilters}
+            />
+          </div>
         </motion.div>
       </div>
       {/* Right section: Fixed width (320px), hidden on mobile, scrollable */}
       {!isMobile && (
         <div className="w-80 flex flex-col h-full p-4 dark:from-neutral-800 dark:to-neutral-900 overflow-y-auto">
-          {/* Inspirational Quote */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -134,8 +160,6 @@ const HomePage = () => {
               "{randomQuote}"
             </p>
           </motion.div>
-
-          {/* Positive Activities */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -152,8 +176,6 @@ const HomePage = () => {
               <p>✔ {randomActivity}</p>
             </div>
           </motion.div>
-
-          {/* Topic Filter */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

@@ -58,11 +58,10 @@ const MobileNavBar = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => onTabChange?.(item.id)}
-                className={`flex flex-col items-center space-y-1 p-2 min-w-[60px] ${
-                  isActive
-                    ? "text-purple-600 dark:text-purple-400"
-                    : "text-gray-500 dark:text-gray-400"
-                }`}>
+                className={`flex flex-col items-center space-y-1 p-2 min-w-[60px] ${isActive
+                  ? "text-purple-600 dark:text-purple-400"
+                  : "text-gray-500 dark:text-gray-400"
+                  }`}>
                 <div className="relative">
                   <Icon className="w-5 h-5" />
                   {item.badge && (
@@ -71,13 +70,13 @@ const MobileNavBar = ({
                     </span>
                   )}
                 </div>
-                <span className="text-xs font-medium">{item.label}</span>
               </Button>
               {isActive && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-purple-600 dark:bg-purple-400 rounded-full"
+                  className="absolute top-0 left-0 right-0 mx-auto w-8 h-0.5 bg-purple-600 dark:bg-purple-400 rounded-full"
                 />
+
               )}
             </motion.div>
           );
