@@ -3,7 +3,7 @@
         "id": 1,
         "name": "Relationships",
         "icon": "\uD83D\uDC9E",
-        "nameVi": "Các mối quan hệ",
+        "nameVi": "Mối quan hệ",
         "description": "Exploring connections and bonds between individuals",
         "descriptionVi": "Khám phá các mối liên kết và gắn bó giữa các cá nhân"
     },
@@ -83,7 +83,7 @@
         "id": 11,
         "name": "Parenting",
         "icon": "\uD83D\uDC76",
-        "nameVi": "Nuôi dạy con cái",
+        "nameVi": "con cái",
         "description": "Raising and nurturing children",
         "descriptionVi": "Nuôi dưỡng và chăm sóc con cái"
     },
@@ -115,7 +115,7 @@
         "id": 15,
         "name": "Pregnancy",
         "icon": "\uD83E\uDD30",
-        "nameVi": "Thai sản / Mang thai",
+        "nameVi": "Thai sản",
         "description": "Pregnancy and motherhood",
         "descriptionVi": "Mang thai và vai trò làm mẹ"
     },
@@ -131,7 +131,7 @@
         "id": 17,
         "name": "Wellbeing",
         "icon": "\uD83E\uDDD8",
-        "nameVi": "Sự an lành / Hạnh phúc",
+        "nameVi": "Sự an lành",
         "description": "Mental and emotional wellness",
         "descriptionVi": "Sức khỏe tinh thần và cảm xúc"
     },
@@ -139,7 +139,7 @@
         "id": 18,
         "name": "My Story",
         "icon": "\uD83D\uDCD3",
-        "nameVi": "Câu chuyện của tôi",
+        "nameVi": "Câu chuyện",
         "description": "Personal narratives and experiences",
         "descriptionVi": "Câu chuyện và trải nghiệm cá nhân"
     },
@@ -171,7 +171,7 @@
         "id": 22,
         "name": "Self-Care",
         "icon": "\uD83D\uDEC1",
-        "nameVi": "Chăm sóc bản thân",
+        "nameVi": "Chăm sóc",
         "description": "Practices for personal well-being",
         "descriptionVi": "Thực hành chăm sóc sức khỏe cá nhân"
     },
@@ -179,7 +179,7 @@
         "id": 23,
         "name": "Guidance",
         "icon": "\uD83E\uDDED",
-        "nameVi": "Hướng dẫn / Định hướng",
+        "nameVi": " Định hướng",
         "description": "Advice and direction for life",
         "descriptionVi": "Lời khuyên và định hướng cho cuộc sống"
     },
@@ -187,7 +187,7 @@
         "id": 24,
         "name": "New Parents",
         "icon": "\uD83C\uDF7C",
-        "nameVi": "Ba mẹ bỉm sũa",
+        "nameVi": "bỉm sũa",
         "description": "Support for new parents",
         "descriptionVi": "Hỗ trợ cho các bậc cha mẹ mới"
     },
@@ -203,7 +203,7 @@
         "id": 26,
         "name": "Grief",
         "icon": "\uD83D\uDE22",
-        "nameVi": "Đau buồn / Mất mát",
+        "nameVi": "Đau buồn",
         "description": "Coping with loss and sorrow",
         "descriptionVi": "Đối mặt với mất mát và nỗi buồn"
     },
@@ -251,7 +251,7 @@
         "id": 32,
         "name": "Ask EmoEase",
         "icon": "\u2753",
-        "nameVi": "Trò chuyện với EmoEase",
+        "nameVi": "Ask EmoEase",
         "description": "Ask questions and seek support",
         "descriptionVi": "Đặt câu hỏi và tìm kiếm hỗ trợ"
     },
