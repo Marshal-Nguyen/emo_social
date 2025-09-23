@@ -12,6 +12,7 @@ import PostDetailPage from "../pages/PostDetailPage";
 import Layout from "../components/layouts/Layout";
 import LoadingSpinner from "../components/atoms/LoadingSpinner";
 import NotificationSystem from "../components/organisms/NotificationSystem";
+import WellnessHub from "../pages/WellnessHub";
 import { useAutoTheme, useTheme } from "../hooks/useTheme";
 
 function AppRouter() {
@@ -52,6 +53,10 @@ function AppRouter() {
                     <Route
                         path="/profile"
                         element={isAuthenticated ? <ProfilePage /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/wellness-hub"
+                        element={isAuthenticated ? <WellnessHub /> : <Navigate to="/auth" />}
                     />
                     <Route
                         path="/settings"

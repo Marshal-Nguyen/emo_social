@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
-import { Home, LogOut, MessageCircle, Bell, User, Settings, Smile, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, LogOut, MessageCircle, Bell, User, Settings, Smile, ChevronLeft, ChevronRight, Leaf } from "lucide-react";
+
 import ThemeToggle from "../molecules/ThemeToggle";
 import Avatar from "../atoms/Avatar";
 import { logout } from "../../store/authSlice";
@@ -35,6 +36,7 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
         { key: "chat", icon: MessageCircle, label: t("nav.chat"), gradient: "from-blue-500 to-cyan-600", textColor: "text-blue-600 dark:text-blue-400", bgColor: "bg-blue-100 dark:bg-blue-900/30", hoverBg: "group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50", badge: unreadMessages },
         { key: "notifications", icon: Bell, label: t("nav.notifications"), gradient: "from-orange-500 to-red-600", textColor: "text-orange-600 dark:text-orange-400", bgColor: "bg-orange-100 dark:bg-orange-900/30", hoverBg: "group-hover:bg-orange-200 dark:group-hover:bg-orange-900/50", badge: unreadNotifications },
         { key: "profile", icon: User, label: t("nav.profile"), gradient: "from-green-500 to-emerald-600", textColor: "text-green-600 dark:text-green-400", bgColor: "bg-green-100 dark:bg-green-900/30", hoverBg: "group-hover:bg-green-200 dark:group-hover:bg-green-900/50" },
+        { key: "wellness-hub", icon: Leaf, label: t("nav.wellness-hub"), gradient: "from-gray-500 to-slate-600", textColor: "text-gray-600 dark:text-gray-400", bgColor: "bg-gray-100 dark:bg-gray-700/30", hoverBg: "group-hover:bg-gray-200 dark:group-hover:bg-gray-700/50" },
         { key: "settings", icon: Settings, label: t("nav.settings"), gradient: "from-gray-500 to-slate-600", textColor: "text-gray-600 dark:text-gray-400", bgColor: "bg-gray-100 dark:bg-gray-700/30", hoverBg: "group-hover:bg-gray-200 dark:group-hover:bg-gray-700/50" },
         { key: "icons", icon: Smile, label: t("nav.icons"), gradient: "from-red-500 to-slate-600", textColor: "text-red-600 dark:text-red-400", bgColor: "bg-red-100 dark:bg-red-700/30", hoverBg: "group-hover:bg-red-200 dark:group-hover:bg-red-700/50" },
     ];

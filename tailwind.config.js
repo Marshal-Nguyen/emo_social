@@ -58,7 +58,7 @@ export default {
         "fade-in": "fadeIn 0.5s ease-in-out",
         "slide-up": "slideUp 0.3s ease-out",
         "bounce-gentle": "bounceGentle 2s ease-in-out infinite",
-        blink: "blink 0.5s infinite alternate", // Thêm hiệu ứng blink
+        blink: "blink 0.5s infinite alternate",
       },
       keyframes: {
         breathe: {
@@ -86,7 +86,7 @@ export default {
             color: "#00ff00",
             textShadow: "0 0 10px #00ff00, 0 0 20px #00ff00",
           },
-        }, // Thêm keyframes cho blink
+        },
       },
       fontFamily: {
         sans: [
@@ -110,5 +110,9 @@ export default {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/typography"),
+    require("tailwind-scrollbar")({ nocompatible: true }), // 👈 thêm dòng này
+  ],
 };
