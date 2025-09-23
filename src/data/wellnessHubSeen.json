@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "title": "Business Analytics",
+        "title": "Giấc ngủ",
         "places": "37/40 Places",
         "percent": 78,
         "avatars": [
@@ -14,7 +14,7 @@
     },
     {
         "id": 2,
-        "title": "Web Development",
+        "title": "Trầm cảm",
         "places": "22/30 Places",
         "percent": 65,
         "avatars": [
@@ -26,7 +26,7 @@
     },
     {
         "id": 3,
-        "title": "UI/UX Design",
+        "title": "Lo âu",
         "places": "18/25 Places",
         "percent": 40,
         "avatars": [
@@ -38,7 +38,7 @@
     },
     {
         "id": 4,
-        "title": "Data Science",
+        "title": "Quản lý lo lắng",
         "places": "10/20 Places",
         "percent": 50,
         "avatars": [
