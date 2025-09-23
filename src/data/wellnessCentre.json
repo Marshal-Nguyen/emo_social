@@ -1,0 +1,402 @@
+[
+    {
+        "id": 2015,
+        "name": "Các Mô-đun Học Tập Tự Hướng Dẫn",
+        "modules": [
+            {
+                "id": 2001,
+                "name": "Trầm Cảm",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/8975d640-89fb-4845-b301-b94f32a0c7bd_file.jpg",
+                "totalDuration": 56,
+                "completedDuration": 56,
+                "description": "Mô-đun này được thiết kế để hỗ trợ nếu bạn thường xuyên cảm thấy buồn bã, mất động lực với những việc từng yêu thích và cảm thấy mọi thứ vượt quá khả năng kiểm soát. Nó giúp bạn nhận biết dấu hiệu và triệu chứng của trầm cảm, hiểu nguyên nhân và cách duy trì vấn đề, đồng thời học các kỹ thuật quản lý triệu chứng. Lưu ý: Mô-đun này chỉ mang tính thông tin và giáo dục, không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn, hãy tìm sự hỗ trợ từ chuyên gia y tế.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:22:14.457",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2002,
+                "name": "Lo Lắng Xã Hội",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/7cdbe965-00ce-4f2c-82f7-082fa515ad17_file.jpg",
+                "totalDuration": 54,
+                "completedDuration": 17,
+                "description": "Mô-đun này giúp nếu bạn cảm thấy sợ hãi hoặc lo lắng trong các tình huống xã hội, tránh tham gia và ảnh hưởng đến lòng tự trọng. Nó hỗ trợ nhận biết dấu hiệu và triệu chứng của lo lắng xã hội, hiểu nguyên nhân và cách duy trì vấn đề, đồng thời học các kỹ thuật quản lý triệu chứng. Lưu ý: Mô-đun này chỉ mang tính thông tin và giáo dục, không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn, hãy tìm sự hỗ trợ từ chuyên gia y tế.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:23:59.337",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2003,
+                "name": "Quản Lý Lo Lắng",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/4c72f0fa-a3cd-4a45-83b1-c5b5c9e3c765_file.jpg",
+                "totalDuration": 63,
+                "completedDuration": 0,
+                "description": "Mô-đun này hỗ trợ nếu bạn lo lắng thường xuyên và cảm thấy căng thẳng hoặc stress liên tục. Nó đề cập đến rối loạn lo âu lan tỏa (GAD) nhưng bất kỳ ai lo lắng quá mức đều có thể thấy hữu ích. Mô-đun giúp nhận biết lo lắng bất thường, nguyên nhân và cách duy trì, đồng thời học kỹ thuật quản lý lo lắng. Lưu ý: Mô-đun này chỉ mang tính thông tin và giáo dục, không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn, hãy tìm sự hỗ trợ từ chuyên gia y tế.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:25:42.683",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2004,
+                "name": "Hoảng Loạn",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/40db0c19-97c7-4c42-9acb-f43d8eee35d6_file.jpg",
+                "totalDuration": 68,
+                "completedDuration": 0,
+                "description": "Mô-đun này hỗ trợ nếu bạn thường xuyên gặp cơn hoảng loạn, không rõ nguyên nhân hoặc cách đối phó. Nó đề cập đến rối loạn hoảng loạn nhưng bất kỳ ai gặp cơn hoảng loạn đều có thể thấy hữu ích. Mô-đun giúp nhận biết dấu hiệu và triệu chứng, hiểu nguyên nhân và cách duy trì, đồng thời học kỹ thuật quản lý. Lưu ý: Mô-đun này chỉ mang tính thông tin và giáo dục, không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn, hãy tìm sự hỗ trợ từ chuyên gia y tế.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:26:38.99",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2005,
+                "name": "Lo Lắng Về Sức Khỏe",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/5abe4937-6a21-4b31-8ae2-f71334741e7c_file.jpg",
+                "totalDuration": 40,
+                "completedDuration": 4,
+                "description": "Mô-đun này hỗ trợ nếu bạn lo lắng thường xuyên về khả năng mắc hoặc phát triển bệnh nghiêm trọng, ảnh hưởng đến cuộc sống. Nó giúp nhận biết dấu hiệu và triệu chứng của lo lắng về sức khỏe, hiểu nguyên nhân và cách duy trì, đồng thời học kỹ thuật quản lý. Lưu ý: Mô-đun này chỉ mang tính thông tin và giáo dục, không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn, hãy tìm sự hỗ trợ từ chuyên gia y tế.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:28:12.467",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2006,
+                "name": "Rối Loạn Ốc Đảo (OCD)",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/c8ef0c9c-2fad-4d48-890e-ec8e7c1beede_file.jpg",
+                "totalDuration": 60,
+                "completedDuration": 0,
+                "description": "Mô-đun này hỗ trợ nếu bạn gặp khó khăn với suy nghĩ ám ảnh, hình ảnh hoặc hành vi cưỡng chế. Nó giúp nhận biết dấu hiệu và triệu chứng của rối loạn ám ảnh cưỡng chế (OCD), hiểu nguyên nhân và cách duy trì, đồng thời học kỹ thuật quản lý. Lưu ý: Mô-đun này chỉ mang tính thông tin và giáo dục, không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn, hãy tìm sự hỗ trợ từ chuyên gia y tế.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:29:23.57",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            },
+            {
+                "id": 2007,
+                "name": "Rối Loạn Stress Sau Chấn Thương (PTSD)",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus_dev/749d7d59-964d-4623-a91b-bac61fcd0aa9_file.jpg",
+                "totalDuration": 53,
+                "completedDuration": 0,
+                "description": "Mô-đun này hỗ trợ nếu bạn trải qua sự kiện chấn thương và gặp khó khăn trong việc đối phó sau đó. Nó giúp nhận biết dấu hiệu và triệu chứng của rối loạn stress sau chấn thương (PTSD), hiểu nguyên nhân và cách duy trì, đồng thời học kỹ thuật quản lý. Lưu ý: Mô-đun này chỉ mang tính thông tin và giáo dục, không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn, hãy tìm sự hỗ trợ từ chuyên gia y tế.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:30:10.363",
+                "wellnessCentreGroupModuleId": 2015,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 2044,
+        "name": "Sức Khỏe & Chăm Sóc Bản Thân",
+        "modules": [
+            {
+                "id": 2029,
+                "name": "9 mẹo phát triển kỹ năng đồng cảm",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/446ee84f-04a3-4246-8e3a-f37df0122001_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 15,
+                "description": "Nếu bạn muốn cải thiện kỹ năng đồng cảm hoặc lan tỏa sự tử tế, đây là lúc tốt để thực hành trong cuộc sống hàng ngày. Bài viết này sẽ giới thiệu các loại đồng cảm, lợi ích cho bạn và người xung quanh, cùng 9 mẹo nâng cao kỹ năng này.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-02-18T10:10:56.07",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2030,
+                "name": "Chánh niệm là gì, chính xác?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/8f144d40-f96a-43d0-a804-2106e17ab3d0_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 10,
+                "description": "Bạn đã bao giờ dừng lại để nhận biết điều xảy ra xung quanh và trong bạn chưa? Cuộc sống đầy phiền nhiễu khiến chúng ta dễ dàng lao qua ngày mà không tập trung. Tâm trí đầy ắp nhưng không có nghĩa là chánh niệm. Hãy cùng khám phá định nghĩa chánh niệm và cách thực hành trong đời sống.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-30T10:23:28.5",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2032,
+                "name": "Cách tăng cường lòng tự trọng: Mẹo để cảm thấy 100%",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/fbe5320a-7d5c-4ba8-8421-95273205d63e_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Bạn có thể nghĩ lòng tự trọng chỉ liên quan đến hình ảnh trong gương, nhưng nó còn hơn thế. Cách chúng ta nhìn nhận bản thân ảnh hưởng lớn đến sức khỏe tinh thần. Cải thiện tự trọng giúp vượt qua ngày tồi tệ và cảm thấy hạnh phúc hơn. Hãy thử 8 mẹo để nâng cao lòng tự trọng.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-27T11:58:55.683",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2031,
+                "name": "Hoàn hảo là gì và khi nào nó thành vấn đề?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/67d5d3c3-7ad0-4730-bcd7-58c99cd48e95_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Hầu hết mọi người đồng ý rằng đặt tiêu chuẩn cao và cố gắng hết mình là điều tốt. Một số tự gọi mình là 'hoàn hảo', nghĩa là phấn đấu cho sự xuất sắc. Tuy nhiên, hoàn hảo lâm sàng lại khác. Hãy đọc để biết cách giữ sự 'hoàn hảo' ở mức lành mạnh.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-28T15:20:21.783",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2033,
+                "name": "Tại sao bước đầu tiên khó nhất?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/4bf07797-3b28-43bc-bc04-360a8a5d0734_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "Bắt đầu điều mới, như dự án, mục tiêu cuộc sống hay thói quen, có thể rất khó. Bước đầu thường là thử thách lớn nhất. Nhiều người trì hoãn và khó tìm động lực. Hãy khám phá lý do và chiến lược vượt qua rào cản này.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-28T15:20:46.69",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            },
+            {
+                "id": 2034,
+                "name": "Tôi nội tâm, nhút nhát hay lo lắng xã hội?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/4b385687-9f37-4097-afe2-087f6d7127ef_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Dù sống trong thế giới đề cao ngoại hướng và giao tiếp liên tục, nhiều người nội tâm, nhút nhát hoặc lo lắng xã hội. Những thuật ngữ này thường bị nhầm lẫn. Hãy khám phá sự khác biệt giữa nội tâm, nhút nhát và lo lắng xã hội để hiểu nhu cầu và nuôi dưỡng sức khỏe bản thân.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-27T11:57:27.15",
+                "wellnessCentreGroupModuleId": 2044,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 2043,
+        "name": "Ngủ & Sức Khỏe",
+        "modules": [
+            {
+                "id": 2026,
+                "name": "Những điều cần thiết cho giấc ngủ ngon",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/169f4f04-f6a5-426e-adbb-0a9d35e86af9_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Nhiều người lo lắng về giấc ngủ, khả năng đối phó khi thiếu ngủ và ảnh hưởng đến sức khỏe. Hãy khám phá bí ẩn của giấc ngủ: tại sao cần, ngủ bao nhiêu là đủ, điều gì xảy ra khi ngủ, và một số mẹo để ngủ ngon hơn.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-20T16:41:10.84",
+                "wellnessCentreGroupModuleId": 2043,
+                "sections": []
+            },
+            {
+                "id": 2027,
+                "name": "Kỹ thuật thư giãn để ngủ ngon hơn",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/2ef4d0c8-07e2-4645-8118-41aa0a8150bf_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Stress và mất ngủ liên quan chặt chẽ. Điều này có thể do lo lắng trong tâm trí và hormone stress trong cơ thể. Kỹ thuật thư giãn kích hoạt phản ứng tự nhiên của cơ thể, giúp cải thiện giấc ngủ. Hãy thử thiền chánh niệm, thư giãn cơ bắp tiến triển và bài tập thở.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-21T08:00:15.377",
+                "wellnessCentreGroupModuleId": 2043,
+                "sections": []
+            },
+            {
+                "id": 2028,
+                "name": "Bài tập thở cho giấc ngủ yên bình",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/6df8cb4f-51ae-4833-9765-9e8da9a72b94_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "Bài tập thở là cách đơn giản để thư giãn, giảm stress và chuẩn bị ngủ. Chúng hữu ích nếu bạn cảm thấy bồn chồn hoặc lo lắng, giúp khôi phục sự bình tĩnh. Đây là những bài tập thở tốt nhất để thư giãn và ngủ nhanh.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-21T19:29:47.813",
+                "wellnessCentreGroupModuleId": 2043,
+                "sections": []
+            },
+            {
+                "id": 2022,
+                "name": "Mất ngủ: Làm gì khi không ngủ được",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/6a5097cb-1196-4600-b4ca-5a4e40e048e4_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "Không có gì thú vị khi mất ngủ. Chúng tôi đã hỏi cộng đồng TalkLife về trải nghiệm mất ngủ. Rose, Dany, Pradyumna, Winnie, Powder, và Raquel đã chia sẻ câu chuyện của họ.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-21T15:43:24.61",
+                "wellnessCentreGroupModuleId": 2043,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 2045,
+        "name": "Stress và Lo Lắng",
+        "modules": [
+            {
+                "id": 2035,
+                "name": "Lo Lắng 101",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_1c0f17e9b80844c984ae393742e38f22~mv2.jpg",
+                "totalDuration": 10,
+                "completedDuration": 10,
+                "description": "Lo lắng là điều ai cũng trải qua. Chúng ta đều gặp những khoảnh khắc bất an, sợ hãi hay lo âu. Khi tim đập nhanh, bạn cảm thấy nóng nực và khó thở, điều này có thể khó chịu và đôi khi dẫn đến hoảng loạn. Hãy cùng tìm hiểu lo lắng là gì và cách lấy lại kiểm soát.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2024-10-15T19:40:01.533",
+                "wellnessCentreGroupModuleId": 2045,
+                "sections": []
+            },
+            {
+                "id": 2036,
+                "name": "Quản Lý Stress: Hướng Dẫn Tìm Cân Bằng và Sức Bền",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_8705551147aa4c6c87eb5c110c612636~mv2.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "Ai cũng biết cảm giác khi áp lực cuộc sống dồn dập và stress bắt đầu kiểm soát. Stress là bình thường, nhưng biết cách quản lý để nó không lấn át cuộc sống là chìa khóa. Hãy khám phá ưu, nhược điểm của stress và mẹo thực tế để đối phó.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2024-10-15T19:46:52.053",
+                "wellnessCentreGroupModuleId": 2045,
+                "sections": []
+            },
+            {
+                "id": 2037,
+                "name": "Cảm thấy quá tải? Cách tìm bình yên trong hỗn loạn",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_075b189e19af4508818f5208b04b322f~mv2.jpg",
+                "totalDuration": 8,
+                "completedDuration": 0,
+                "description": "Cuộc sống bận rộn với công việc, học tập, gia đình có thể khiến bạn cảm thấy áp lực không ngừng. Stress quá mức dẫn đến cảm giác quá tải, đôi khi bất ngờ ập đến. Hãy thử 6 chiến lược đơn giản để lấy lại bình tĩnh khi cần, giúp bạn phục hồi nhanh chóng.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-09-21T13:08:29.087",
+                "wellnessCentreGroupModuleId": 2045,
+                "sections": []
+            },
+            {
+                "id": 2038,
+                "name": "Kỹ Thuật Thở, Thiền và Thư Giãn",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_f18f9ce37f0346d69d9792015b2b4c4c~mv2.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "Tìm bình yên trong thế giới bận rộn là thách thức, đặc biệt khi lo lắng chiếm tâm trí. Hãy khám phá sức mạnh của thở, thiền và kỹ thuật thư giãn để vượt qua lo lắng, giảm stress và nâng cao sức khỏe tổng thể.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-09-21T13:11:19.407",
+                "wellnessCentreGroupModuleId": 2045,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 2042,
+        "name": "Mối Quan Hệ",
+        "modules": [
+            {
+                "id": 2021,
+                "name": "Cách hòa thuận với anh em trong nhà",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/ac4275f8-6e7a-4726-bd3a-47ef4fb774e5_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 10,
+                "description": "Anh em trong nhà chia sẻ khoảng 50% gen, nhiều điểm chung nhưng cũng có khác biệt. Một số anh em rất hòa thuận, là bạn thân; số khác không hiểu sao cùng nhà. Nuôi dưỡng mối quan hệ tích cực ảnh hưởng lớn đến sức khỏe tương lai. Dưới đây là lời khuyên để gắn kết với anh em.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-14T14:22:38.787",
+                "wellnessCentreGroupModuleId": 2042,
+                "sections": []
+            },
+            {
+                "id": 2023,
+                "name": "Cách kết bạn (và giữ bạn)",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/c01c2024-bd04-47a4-b4b3-00248f3a93a0_file.jpg",
+                "totalDuration": 15,
+                "completedDuration": 0,
+                "description": "Gặp gỡ người mới khó, nhưng kết bạn đôi khi còn khó hơn hẹn hò, đặc biệt nếu thiếu tự tin. Vậy làm thế nào? Dưới đây là cách kết bạn mới và giữ mối quan hệ.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-14T13:53:49.1",
+                "wellnessCentreGroupModuleId": 2042,
+                "sections": []
+            },
+            {
+                "id": 2024,
+                "name": "Nói gì khi không biết nói gì?",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/0229c001-bb81-48bc-8b45-6f85c64ebc61_file.jpg",
+                "totalDuration": 8,
+                "completedDuration": 0,
+                "description": "Tìm lời phù hợp khi ai đó gặp khó khăn không dễ, đôi khi sợ nói sai nên chọn im lặng. Dưới đây là vài mẹo hỗ trợ khi thấy người khác gặp khó trên TalkLife hoặc bất kỳ đâu.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-14T14:20:32.173",
+                "wellnessCentreGroupModuleId": 2042,
+                "sections": []
+            },
+            {
+                "id": 2025,
+                "name": "Cách đối phó với người khiến bạn khó chịu",
+                "imageURL": "https://d37bukf1aia83y.cloudfront.net/wellness/plexus/0b23e9e4-8b7e-480c-86c7-e297407a88db_file.jpg",
+                "totalDuration": 10,
+                "completedDuration": 0,
+                "description": "Một số người có tài khiến bạn bực mình, dù họ nói gì. Những người khác chỉ thỉnh thoảng làm bạn khó chịu vì lặp lại hành vi. Vậy làm gì? Có nhiều cách, đây là vài mẹo đối phó với người gây khó chịu.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2023-06-14T13:54:48.1",
+                "wellnessCentreGroupModuleId": 2042,
+                "sections": []
+            }
+        ]
+    },
+    {
+        "id": 3000,
+        "name": "Giữ An Toàn",
+        "modules": [
+            {
+                "id": 3001,
+                "name": "Tự Hại: Mẹo Đối Phó",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_654316d461604fd395f140a6bf12b018~mv2.png",
+                "totalDuration": 20,
+                "completedDuration": 0,
+                "description": "Nội dung này đề cập đến tự hại, suy nghĩ tự tử và các vấn đề sức khỏe tinh thần, có thể gây kích thích. TalkLife không cung cấp và không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn hoặc tự hại, hỗ trợ trực tuyến có thể không phù hợp. Hãy tìm sự tư vấn từ bác sĩ hoặc chuyên gia y tế. Nếu bạn tự hại nghiêm trọng hoặc có ý định ngay lập tức, hãy gọi cấp cứu hoặc đến khoa cấp cứu gần nhất. Liên kết hỗ trợ khủng hoảng sức khỏe tinh thần có trong thanh bên.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T10:45:57.923",
+                "wellnessCentreGroupModuleId": 3000,
+                "sections": []
+            },
+            {
+                "id": 3002,
+                "name": "Suy Nghĩ Tự Tử: Cách Đối Phó",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_32a5f9bda8444a9cae9a12361ef6d92f~mv2.png",
+                "totalDuration": 20,
+                "completedDuration": 0,
+                "description": "Nội dung này đề cập đến suy nghĩ tự tử, có thể gây kích thích. TalkLife không cung cấp và không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn hoặc tự hại, hỗ trợ trực tuyến có thể không phù hợp. Hãy tìm sự tư vấn từ bác sĩ hoặc chuyên gia y tế. Nếu bạn tự hại nghiêm trọng hoặc có ý định ngay lập tức, hãy gọi cấp cứu hoặc đến khoa cấp cứu gần nhất. Liên kết hỗ trợ khủng hoảng sức khỏe tinh thần có trong thanh bên.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T14:25:31.47",
+                "wellnessCentreGroupModuleId": 3000,
+                "sections": []
+            },
+            {
+                "id": 3000,
+                "name": "Rối Loạn Ăn Uống: Thông Tin và Tài Nguyên",
+                "imageURL": "https://static.wixstatic.com/media/9cd339_6b37072066564609a2925effc38401c4~mv2.png",
+                "totalDuration": 20,
+                "completedDuration": 0,
+                "description": "Nội dung này đề cập đến rối loạn ăn uống, hành vi ăn uống, cân nặng và hình ảnh cơ thể, cũng như tự tử và tự hại, có thể gây kích thích. TalkLife không cung cấp và không thay thế lời khuyên, chẩn đoán hay điều trị chuyên môn. Nếu bạn gặp khó khăn với rối loạn ăn uống, hỗ trợ trực tuyến có thể không phù hợp. Hãy tìm sự tư vấn từ bác sĩ hoặc chuyên gia y tế. Liên kết hỗ trợ khủng hoảng sức khỏe tinh thần có trong thanh bên.",
+                "moduleColor1": "#020024",
+                "moduleColor2": "#8131ad",
+                "updatedAt": "2025-08-20T14:37:54.23",
+                "wellnessCentreGroupModuleId": 3000,
+                "sections": []
+            }
+        ]
+    }
+]
