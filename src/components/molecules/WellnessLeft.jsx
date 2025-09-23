@@ -18,7 +18,7 @@ const LearningStats = () => {
     }, [activeId]);
 
     return (
-        <div className="w-full max-w-md mx-auto h-[400px] overflow-y-auto snap-y snap-mandatory flex flex-col p-4 gap-4 scrollbar-none">
+        <div className="w-full max-w-md mx-auto h-[400px] overflow-y-auto snap-y snap-mandatory flex flex-col px-4 scrollbar-none">
             {data.map((item) => (
                 <Card
                     key={item.id}
@@ -142,7 +142,7 @@ const Dashboard = () => {
             </div>
 
             {/* Learning Hours */}
-            <div className="relative bg-purple-200 p-4 rounded-2xl overflow-hidden mb-3">
+            <div className="relative bg-purple-200 dark:bg-purple-300 p-4 rounded-2xl overflow-hidden mb-3">
                 <div className="flex items-center gap-2 mb-2">
                     <FaBookOpen className="text-purple-700" />
                     <p className="text-sm font-medium text-gray-700">Learnings today</p>

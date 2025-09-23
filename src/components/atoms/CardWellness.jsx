@@ -9,14 +9,13 @@ const Card = memo(
                 backgroundSize: "cover",
                 backgroundPosition: "center"
             }}
-            className={`relative bg-purple-100 rounded-3xl p-4 flex flex-col justify-between snap-center transition-all duration-300 ${isActive ? "scale-100 z-20 opacity-100 w-full" : "scale-90 z-10 opacity-60 w-11/12"
+            className={`relative bg-purple-100 rounded-3xl p-4 flex flex-col justify-between snap-center transition-all duration-300 ${isActive ? "scale-100 z-20 opacity-100 w-full brightness-125" : "scale-90 z-10 w-11/12 -mb-20 brightness-75  cursor-pointer"
                 }`}
             onClick={() => setActiveId(item.id)}
         >
-            <div className="absolute inset-0 bg-white/50" />
             <div className="relative z-10">
                 <h3 className="text-lg font-semibold text-gray-900 mb-8">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.places}</p>
+                <p className="text-sm text-gray-900">{item.places}</p>
                 <div className="flex mt-2">
                     {item.avatars.map((avt, idx) => (
                         <img

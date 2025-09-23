@@ -116,7 +116,7 @@ const PostCard = ({ post, onNavigateToChat, index, onShowComment, forceShowComme
       />
 
       {/* Vùng cuộn chung cho PostContent + bình luận */}
-      <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 flex flex-col gap-1">
+      <div className="flex-1 min-h-0 overflow-y-auto scrollbar-none flex flex-col gap-1">
         {/* Post Content */}
         <PostContent post={post} isSafeMode={isSafeMode} className=" dark:bg-gray-900 rounded-lg p-2" />
 

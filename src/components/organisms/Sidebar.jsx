@@ -52,7 +52,7 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
             initial={isFirstMount ? { x: -100, opacity: 0 } : false}
             animate={{ x: 0, opacity: 1, width: isCollapsed ? 80 : 320 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-screen fixed left-0 top-0 z-20"
+            className="h-screen fixed left-0 top-0 z-20 "
         >
             <div className="h-full backdrop-blur-xl dark:bg-gray-900 flex flex-col">
                 <div className="p-2 flex-shrink-0 relative">
@@ -116,7 +116,7 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
                     )}
                 </div>
 
-                <div className="flex-1 px-4 overflow-y-auto">
+                <div className="flex-1 px-4 overflow-y-auto scrollbar-none">
                     <div className="space-y-2">
                         {navigationItems.map((item, index) => {
                             const Icon = item.icon;

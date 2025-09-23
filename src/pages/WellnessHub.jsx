@@ -1,27 +1,29 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import LeftSection from '../components/molecules/WellnessLeft';
 import RightSection from '../components/molecules/WellnessRight';
 
 export default function WellnessHub() {
     return (
-        <div className="p-4 rounded-lg min-h-screen flex flex-col">
+        <motion.div
+            className="p-4 rounded-lg min-h-screen flex flex-col scrollbar-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+        >
             {/* Header Section */}
-            {/* <div className="flex items-center justify-between mb-4 p-4 bg-white rounded-lg shadow-md">
-                <h1 className="text-xl font-bold">Dashboard</h1>
-                <div className="flex space-x-2">
-                    <input
-                        className="p-2 border rounded-lg placeholder-gray-400"
-                        type="text"
-                        placeholder="Search"
-                    />
-                </div>
-            </div> */}
+            <div className="flex items-center justify-between mb-4">
+                <h1 className="text-3xl font-bold text-purple-700 dark:text-purple-300">
+                    Emo's care corner
+                </h1>
+
+            </div>
 
             {/* Body Section (2 parts left, 3 parts right) */}
             <div className="flex flex-1 gap-4 mt-4">
                 <LeftSection />
                 <RightSection />
             </div>
-        </div>
+        </motion.div>
     );
 }

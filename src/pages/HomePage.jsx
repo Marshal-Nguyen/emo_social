@@ -75,7 +75,7 @@ const HomePage = () => {
   return (
     <div className="flex h-screen flex-col md:flex-row">
       {/* Main content */}
-      <div className="flex-1 space-y-4 overflow-y-auto no-scrollbar z-20 px-2">
+      <div className="flex-1 space-y-4 overflow-y-auto scrollbar-none z-20 px-2">
         <div className="sticky top-0 z-30 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md pb-2 pt-2 mb-2 shadow-sm">
           {/* On mobile, FeedNav is above SearchBar */}
           {isMobile ? (
@@ -143,7 +143,7 @@ const HomePage = () => {
       </div>
       {/* Right section: Fixed width (320px), hidden on mobile, scrollable */}
       {!isMobile && (
-        <div className="w-80 flex flex-col h-full p-4 dark:from-neutral-800 dark:to-neutral-900 overflow-y-auto">
+        <div className="w-80 flex flex-col h-full p-4 dark:from-neutral-800 dark:to-neutral-900 overflow-y-auto scrollbar-none">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
