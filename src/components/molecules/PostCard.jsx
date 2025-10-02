@@ -46,7 +46,7 @@ const PostCard = ({
     if ((showComments || forceShowComments) && commentEndRef.current) {
       commentEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [showComments, forceShowComments, post.comments]);
+  }, [showComments, forceShowComments]);
 
   const handleShowComments = () => {
     setShowComments(true);
@@ -88,7 +88,7 @@ const PostCard = ({
             author: newComment.author?.displayName || user?.username || "Anonymous",
             avatar: newComment.author?.avatarUrl || user?.avatar || null,
             createdAt: newComment.createdAt,
-            likesCount: newComment.reactionCount || 0,
+            reactionCount: newComment.reactionCount || 0,
             replyCount: newComment.replyCount || 0,
             liked: false,
             replies: [],

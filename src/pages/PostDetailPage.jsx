@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import PostCard from "../components/molecules/PostCard";
+import { fetchPostsStart, fetchPostsSuccess, addComment } from "../store/postsSlice";
 
 const baseUrl = "https://api.emoease.vn/post-service";
 const token =
@@ -18,7 +20,7 @@ const mapPostFromApi = (postData, commentsData) => {
                 author: comment.author.displayName,
                 avatar: comment.author.avatarUrl || null,
                 createdAt: comment.createdAt,
-                likesCount: comment.reactionCount || 0,
+                reactionCount: comment.reactionCount || 0,
                 replyCount: comment.replyCount || 0,
                 liked: false,
                 replies: [],
@@ -63,23 +65,19 @@ const mapPostFromApi = (postData, commentsData) => {
 const PostDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [post, setPost] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const dispatch = useDispatch();
+    const post = useSelector((state) => state.posts.posts.find(p => p.id === id));
 
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                setLoading(true);
-
+                dispatch(fetchPostsStart());
                 const postResponse = await fetch(`${baseUrl}/v1/posts/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                if (!postResponse.ok) {
-                    throw new Error("Không thể tải bài viết");
-                }
+                if (!postResponse.ok) throw new Error("Không thể tải bài viết");
                 const postData = await postResponse.json();
 
                 const commentsResponse = await fetch(
@@ -90,26 +88,24 @@ const PostDetailPage = () => {
                         },
                     }
                 );
-                if (!commentsResponse.ok) {
-                    throw new Error("Không thể tải bình luận");
-                }
+                if (!commentsResponse.ok) throw new Error("Không thể tải bình luận");
                 const commentsData = await commentsResponse.json();
 
                 const mappedPost = mapPostFromApi(postData, commentsData);
-                setPost(mappedPost);
+                dispatch(fetchPostsSuccess({
+                    posts: [mappedPost],
+                    reset: true,
+                    page: 1,
+                    hasMore: false,
+                }));
             } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
+                console.error(err.message);
             }
         };
-
         fetchPostData();
-    }, [id]);
+    }, [dispatch, id]);
 
-    if (loading) return <div className="text-center py-8">Đang tải bài viết...</div>;
-    if (error) return <div className="text-center py-8 text-red-500">Lỗi: {error}</div>;
-    if (!post) return <div className="text-center py-8">Không tìm thấy bài viết.</div>;
+    if (!post) return <div className="text-center py-8">Đang tải bài viết...</div>;
 
     return (
         <div className="max-w-3xl mx-auto py-8">

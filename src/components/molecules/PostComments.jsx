@@ -6,7 +6,7 @@ import CommentForm from "./CommentForm";
 import { formatTimeAgo } from "../../utils/helpers";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchRepliesSuccess } from "../../store/postsSlice";
+import { addComment, fetchRepliesSuccess } from "../../store/postsSlice";
 
 const baseUrl = "https://api.emoease.vn/post-service";
 const token =
@@ -24,14 +24,37 @@ const PostComments = ({
   const { id: postId } = useParams();
   const dispatch = useDispatch();
   const [showReplyForm, setShowReplyForm] = useState({});
-  const [openReplies, setOpenReplies] = useState({});
+  const [openReplies, setOpenReplies] = useState(
+    comments.reduce((acc, comment) => ({
+      ...acc,
+      [comment.id]: !hideRepliesByDefault,
+    }), {})
+  );
   const commentEndRef = useRef(null);
 
   useEffect(() => {
     if (show && commentEndRef.current) {
       commentEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [show, comments]);
+    // Sync initial comments with Redux state
+    comments.forEach((comment) => {
+      dispatch(addComment({
+        postId,
+        comment: {
+          id: comment.id,
+          content: comment.content,
+          author: comment.author,
+          avatar: comment.avatar,
+          createdAt: comment.createdAt,
+          reactionCount: comment.reactionCount,
+          replyCount: comment.replyCount,
+          liked: comment.liked,
+          replies: comment.replies,
+        },
+        parentId: null,
+      }));
+    });
+  }, [show, comments, dispatch, postId]);
 
   const handleReplySubmit = async (commentId, content) => {
     try {
@@ -59,7 +82,7 @@ const PostComments = ({
         author: newComment.author?.displayName || "Anonymous",
         avatar: newComment.author?.avatarUrl || null,
         createdAt: newComment.createdAt,
-        likesCount: newComment.reactionCount || 0,
+        reactionCount: newComment.reactionCount || 0,
         replyCount: newComment.replyCount || 0,
         liked: false,
         replies: [],
@@ -93,7 +116,7 @@ const PostComments = ({
         }
         onReply(commentId, null, {
           liked: true,
-          likesCount: (comments.find((c) => c.id === commentId)?.likesCount || 0) + 1,
+          reactionCount: (comments.find((c) => c.id === commentId)?.reactionCount || 0) + 1,
         });
       } else {
         const response = await fetch(
@@ -112,7 +135,7 @@ const PostComments = ({
         }
         onReply(commentId, null, {
           liked: false,
-          likesCount: (comments.find((c) => c.id === commentId)?.likesCount || 0) - 1,
+          reactionCount: (comments.find((c) => c.id === commentId)?.reactionCount || 0) - 1,
         });
       }
     } catch (error) {
@@ -137,13 +160,14 @@ const PostComments = ({
       }
 
       const repliesData = await response.json();
+      console.log("Replies API response:", repliesData);
       const mappedReplies = repliesData.data.map((reply) => ({
         id: reply.id,
         content: reply.content,
         author: reply.author.displayName,
         avatar: reply.author.avatarUrl || null,
         createdAt: reply.createdAt,
-        likesCount: reply.reactionCount || 0,
+        reactionCount: reply.reactionCount || 0,
         replyCount: reply.replyCount || 0,
         liked: false,
         replies: [],
@@ -156,7 +180,12 @@ const PostComments = ({
           replies: mappedReplies,
         })
       );
-      setOpenReplies((prev) => ({ ...prev, [commentId]: true }));
+      console.log("Dispatched fetchRepliesSuccess:", { postId, parentId: commentId, replies: mappedReplies });
+      setOpenReplies((prev) => {
+        const newState = { ...prev, [commentId]: true };
+        console.log("Updated openReplies:", newState);
+        return newState;
+      });
     } catch (error) {
       console.error("Lỗi khi tải phản hồi:", error);
     }
@@ -170,10 +199,11 @@ const PostComments = ({
   };
 
   const toggleReplies = (commentId) => {
-    setOpenReplies((prev) => ({
-      ...prev,
-      [commentId]: !prev[commentId],
-    }));
+    setOpenReplies((prev) => {
+      const newState = { ...prev, [commentId]: !prev[commentId] };
+      console.log("Toggled openReplies:", newState);
+      return newState;
+    });
   };
 
   if (!show || !comments?.length) return null;
@@ -183,6 +213,7 @@ const PostComments = ({
       const hasReplies = (comment.replyCount || 0) > 0;
       const isOpen = openReplies[comment.id] ?? !hideRepliesByDefault;
       const areRepliesLoaded = comment.replies && comment.replies.length > 0;
+      console.log(`Comment ${comment.id}: hasReplies=${hasReplies}, isOpen=${isOpen}, areRepliesLoaded=${areRepliesLoaded}, replies=`, comment.replies);
 
       return (
         <motion.div
@@ -213,8 +244,8 @@ const PostComments = ({
               <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
                 <button
                   className={`flex items-center space-x-1 ${comment.liked
-                      ? "text-red-500 dark:text-red-500"
-                      : "hover:text-red-500"
+                    ? "text-red-500 dark:text-red-500"
+                    : "hover:text-red-500"
                     }`}
                   onClick={() => handleLikeComment(comment.id, comment.liked)}
                 >
@@ -222,7 +253,7 @@ const PostComments = ({
                     className="w-4 h-4"
                     fill={comment.liked ? "currentColor" : "none"}
                   />
-                  <span>{comment.likesCount}</span>
+                  <span>{comment.reactionCount}</span>
                 </button>
                 <button
                   className="hover:text-gray-700 dark:hover:text-gray-200"
@@ -274,6 +305,7 @@ const PostComments = ({
     });
   };
 
+  console.log("PostComments props.comments:", comments);
   return (
     <div className={`space-y-4 ${className}`}>
       {renderComments(comments.slice(0, maxVisible))}
