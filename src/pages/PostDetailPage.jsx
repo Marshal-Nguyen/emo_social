@@ -20,7 +20,7 @@ const mapPostFromApi = (postData, commentsData) => {
                 createdAt: comment.createdAt,
                 likesCount: comment.reactionCount || 0,
                 replyCount: comment.replyCount || 0,
-                liked: false, // Có thể kiểm tra từ API nếu cần
+                liked: false,
                 replies: [],
             };
         });
@@ -32,6 +32,7 @@ const mapPostFromApi = (postData, commentsData) => {
                 const parent = commentMap[comment.hierarchy.parentCommentId];
                 if (parent) {
                     parent.replies.push(commentMap[comment.id]);
+                    parent.replyCount = (parent.replyCount || 0) + 1;
                 }
             }
         });
@@ -51,7 +52,7 @@ const mapPostFromApi = (postData, commentsData) => {
         reactionCount: postData.reactionCount,
         commentCount: postData.commentCount,
         viewCount: postData.viewCount,
-        liked: false, // Có thể kiểm tra từ API nếu cần
+        liked: false,
         comments: commentsData ? buildCommentHierarchy(commentsData.data) : [],
         images: postData.mediaUrls || [],
         isEnhanced: false,

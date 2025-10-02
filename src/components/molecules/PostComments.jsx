@@ -5,6 +5,8 @@ import { Heart } from "lucide-react";
 import CommentForm from "./CommentForm";
 import { formatTimeAgo } from "../../utils/helpers";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { fetchRepliesSuccess } from "../../store/postsSlice";
 
 const baseUrl = "https://api.emoease.vn/post-service";
 const token =
@@ -20,6 +22,7 @@ const PostComments = ({
   hideRepliesByDefault = false,
 }) => {
   const { id: postId } = useParams();
+  const dispatch = useDispatch();
   const [showReplyForm, setShowReplyForm] = useState({});
   const [openReplies, setOpenReplies] = useState({});
   const commentEndRef = useRef(null);
@@ -90,7 +93,7 @@ const PostComments = ({
         }
         onReply(commentId, null, {
           liked: true,
-          likesCount: (comments.find(c => c.id === commentId)?.likesCount || 0) + 1
+          likesCount: (comments.find((c) => c.id === commentId)?.likesCount || 0) + 1,
         });
       } else {
         const response = await fetch(
@@ -109,11 +112,53 @@ const PostComments = ({
         }
         onReply(commentId, null, {
           liked: false,
-          likesCount: (comments.find(c => c.id === commentId)?.likesCount || 0) - 1
+          likesCount: (comments.find((c) => c.id === commentId)?.likesCount || 0) - 1,
         });
       }
     } catch (error) {
       console.error("Lỗi khi xử lý lượt thích bình luận:", error);
+    }
+  };
+
+  const handleFetchReplies = async (commentId) => {
+    try {
+      const response = await fetch(
+        `${baseUrl}/v1/comments/post/${postId}?PageIndex=1&PageSize=20&ParentCommentId=${commentId}&SortBy=CreatedAt&SortDescending=false`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Không thể tải phản hồi: ${errorText}`);
+      }
+
+      const repliesData = await response.json();
+      const mappedReplies = repliesData.data.map((reply) => ({
+        id: reply.id,
+        content: reply.content,
+        author: reply.author.displayName,
+        avatar: reply.author.avatarUrl || null,
+        createdAt: reply.createdAt,
+        likesCount: reply.reactionCount || 0,
+        replyCount: reply.replyCount || 0,
+        liked: false,
+        replies: [],
+      }));
+
+      dispatch(
+        fetchRepliesSuccess({
+          postId,
+          parentId: commentId,
+          replies: mappedReplies,
+        })
+      );
+      setOpenReplies((prev) => ({ ...prev, [commentId]: true }));
+    } catch (error) {
+      console.error("Lỗi khi tải phản hồi:", error);
     }
   };
 
@@ -135,8 +180,9 @@ const PostComments = ({
 
   const renderComments = (commentsList, level = 0) => {
     return commentsList.map((comment) => {
-      const hasReplies = comment.replies && comment.replies.length > 0;
+      const hasReplies = (comment.replyCount || 0) > 0;
       const isOpen = openReplies[comment.id] ?? !hideRepliesByDefault;
+      const areRepliesLoaded = comment.replies && comment.replies.length > 0;
 
       return (
         <motion.div
@@ -187,9 +233,15 @@ const PostComments = ({
                 {hasReplies && (
                   <button
                     className="hover:text-gray-700 dark:hover:text-gray-200"
-                    onClick={() => toggleReplies(comment.id)}
+                    onClick={() =>
+                      areRepliesLoaded
+                        ? toggleReplies(comment.id)
+                        : handleFetchReplies(comment.id)
+                    }
                   >
-                    {isOpen ? `Ẩn ${comment.replies.length} phản hồi` : `Xem ${comment.replies.length} phản hồi`}
+                    {isOpen && areRepliesLoaded
+                      ? `Ẩn ${comment.replyCount} phản hồi`
+                      : `Xem ${comment.replyCount} phản hồi`}
                   </button>
                 )}
               </div>
@@ -212,7 +264,7 @@ const PostComments = ({
               </AnimatePresence>
             </div>
           </div>
-          {hasReplies && isOpen && (
+          {hasReplies && isOpen && areRepliesLoaded && (
             <div className="mt-2">
               {renderComments(comment.replies, level + 1)}
             </div>

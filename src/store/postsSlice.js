@@ -58,17 +58,15 @@ const postsSlice = createSlice({
       if (!post.comments) post.comments = [];
 
       if (comment) {
-        // Thêm bình luận hoặc phản hồi mới
         if (!parentId) {
-          post.comments.unshift(comment); // Thêm vào đầu danh sách để hiển thị ngay
+          post.comments.unshift(comment);
           post.commentCount = (post.commentCount || 0) + 1;
         } else {
-          // Đệ quy tìm bình luận cha để thêm phản hồi
           const addReplyRecursive = (comments) => {
             for (let c of comments) {
               if (c.id === parentId) {
                 if (!c.replies) c.replies = [];
-                c.replies.unshift(comment); // Thêm vào đầu danh sách phản hồi
+                c.replies.unshift(comment);
                 c.replyCount = (c.replyCount || 0) + 1;
                 return true;
               }
@@ -82,7 +80,6 @@ const postsSlice = createSlice({
           post.commentCount = (post.commentCount || 0) + 1;
         }
       } else if (update && parentId) {
-        // Cập nhật bình luận hoặc phản hồi
         const updateRecursive = (comments) => {
           for (let c of comments) {
             if (c.id === parentId) {
@@ -118,6 +115,25 @@ const postsSlice = createSlice({
       };
       toggleLikeRecursive(post.comments);
     },
+    fetchRepliesSuccess: (state, action) => {
+      const { postId, parentId, replies } = action.payload;
+      const post = state.posts.find((post) => post.id === postId);
+      if (!post || !post.comments) return;
+
+      const addRepliesRecursive = (comments) => {
+        for (let c of comments) {
+          if (c.id === parentId) {
+            c.replies = replies;
+            return true;
+          }
+          if (c.replies && c.replies.length > 0) {
+            if (addRepliesRecursive(c.replies)) return true;
+          }
+        }
+        return false;
+      };
+      addRepliesRecursive(post.comments);
+    },
   },
 });
 
@@ -131,6 +147,7 @@ export const {
   likePost,
   addComment,
   likeComment,
+  fetchRepliesSuccess,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;
