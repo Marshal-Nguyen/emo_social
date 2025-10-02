@@ -340,7 +340,7 @@ const CreatePostForm = ({
     </div>
     <div className="space-y-4">
       {/* Title mới */}
-      <input
+      {/* <input
         type="text"
         placeholder="Tiêu đề bài viết (tùy chọn)"
         value={title}
@@ -348,7 +348,7 @@ const CreatePostForm = ({
         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         disabled={isPosting}
         maxLength={100}
-      />
+      /> */}
 
       <textarea
         placeholder="Chia sẻ cảm xúc của bạn..."
@@ -483,7 +483,7 @@ const CreatePost = () => {
     if (!content.trim() || isPosting) return;
     setIsPosting(true);
     try {
-      const sanitizedContent = sanitizeInput(content);
+      const sanitizedContent = sanitizeInput(content) || '';  // Fallback empty string
 
       // Build body động: Chỉ include fields không null/empty
       const body = {
@@ -507,20 +507,35 @@ const CreatePost = () => {
         },
       });
 
+      // Map response.data để match shape cũ (tránh bug undefined ở feed/PostContent)
+      const apiData = response.data || {};  // Fallback nếu response rỗng
       const newPost = {
-        ...response.data,  // { postId, title, content, ... } từ BE
-        author: { id: user?.id || "anonymous", username: user?.username || generateAnonymousName() },
-        likesCount: 0,
-        commentsCount: 0,
-        liked: false,
-        comments: [],
-        images: images.map(img => img.url || img),  // Preview URLs
+        // Shape cũ: id, content, author, createdAt, likesCount, commentsCount, liked, comments, images
+        id: apiData.postId || apiData.id || Date.now(),  // Ưu tiên postId từ BE, fallback cũ
+        content: apiData.content || sanitizedContent,  // Đảm bảo content luôn có (fix toLowerCase bug)
+        title: apiData.title || title.trim() || '',  // Thêm nếu BE trả
+        visibility: apiData.visibility || visibility,  // Thêm nếu cần
+        categoryTagId: apiData.categoryTagId || categoryTagId || '',  // Thêm nếu cần
+        emotionId: apiData.emotionId || emotionId || '',  // Thêm nếu cần
+        author: {
+          id: user?.id || "anonymous",
+          username: user?.username || generateAnonymousName(),
+          isOnline: true,  // Giữ như cũ
+        },
+        createdAt: apiData.createdAt || new Date().toISOString(),  // Ưu tiên BE
+        likesCount: apiData.likesCount || 0,  // 0 nếu BE chưa có
+        commentsCount: apiData.commentsCount || 0,  // 0 nếu BE chưa có
+        liked: apiData.liked || false,  // false nếu BE chưa có
+        comments: apiData.comments || [],  // [] nếu BE chưa có
+        images: images.map(img => img.url || img),  // Preview URLs như cũ (BE có thể có mediaUrls sau)
+        // Các field extra từ BE nếu có (không ảnh hưởng shape cũ)
+        ...apiData,  // Spread cuối để giữ data thật, nhưng override bằng shape cũ nếu conflict
       };
 
-      dispatch(addPost(newPost));  // Update Redux store
+      dispatch(addPost(newPost));  // Update Redux store (giờ shape khớp cũ)
 
       // toast.success("Bài viết đã được tạo!");  // Uncomment nếu có react-hot-toast
-      console.log("Bài viết đã được tạo!");  // Fallback
+      console.log("Bài viết đã được tạo!", newPost);  // Log để check shape
 
       // Reset form
       setTitle(""); setContent(""); setVisibility("Public"); setCategoryTagId(""); setEmotionId("");

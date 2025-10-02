@@ -15,9 +15,9 @@ export const authService = {
         success: true,
         token: "demo-emo-token-67890",
         user: {
-          id: "emo-user-001",
+          id: "b6a76f02-be77-4ef9-b8f9-ca5c88736cbf",
           email: "emo@gmail.com",
-          username: "EmoSocial User",
+          username: "Anonymous",
           avatar: null,
           createdAt: new Date().toISOString(),
         },

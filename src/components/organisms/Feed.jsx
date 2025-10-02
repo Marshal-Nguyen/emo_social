@@ -154,7 +154,9 @@ const Feed = ({ onNavigateToChat }) => {
               post={post}
               onNavigateToChat={onNavigateToChat}
               index={index}
-              onShowComment={() => navigate(`/post/${post.id}`)}
+              // onShowComment={() => navigate(`/post/9029ed4f-9ea0-4c32-aab9-5c287f427029`)}
+              onShowComment={() => navigate(`/post/8a1faaed-43b5-4b05-9e87-bd799cd60c7e`)}
+            // onShowComment={() => navigate(`/post/${post.id}`)}
             />
           </motion.div>
         ))}
