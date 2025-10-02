@@ -48,48 +48,61 @@ const postsSlice = createSlice({
       );
       if (post) {
         post.liked = action.payload.liked;
-        post.likesCount = action.payload.likesCount;
+        post.reactionCount = action.payload.reactionCount;
       }
     },
-    // Thêm comment hoặc reply nhiều tầng
     addComment: (state, action) => {
-      const { postId, comment, parentId } = action.payload;
+      const { postId, comment, parentId, update } = action.payload;
       const post = state.posts.find((post) => post.id === postId);
       if (!post) return;
       if (!post.comments) post.comments = [];
 
-      // Nếu không có parentId, thêm vào comment gốc
-      if (!parentId) {
-        post.comments.push(comment);
-        post.commentsCount = (post.commentsCount || 0) + 1;
-        return;
-      }
-
-      // Đệ quy tìm parent comment và thêm vào replies
-      const addReplyRecursive = (comments) => {
-        for (let c of comments) {
-          if (c.id === parentId) {
-            if (!c.replies) c.replies = [];
-            c.replies.push(comment);
-            return true;
-          }
-          if (c.replies && c.replies.length > 0) {
-            if (addReplyRecursive(c.replies)) return true;
-          }
+      if (comment) {
+        // Thêm bình luận hoặc phản hồi mới
+        if (!parentId) {
+          post.comments.unshift(comment); // Thêm vào đầu danh sách để hiển thị ngay
+          post.commentCount = (post.commentCount || 0) + 1;
+        } else {
+          // Đệ quy tìm bình luận cha để thêm phản hồi
+          const addReplyRecursive = (comments) => {
+            for (let c of comments) {
+              if (c.id === parentId) {
+                if (!c.replies) c.replies = [];
+                c.replies.unshift(comment); // Thêm vào đầu danh sách phản hồi
+                c.replyCount = (c.replyCount || 0) + 1;
+                return true;
+              }
+              if (c.replies && c.replies.length > 0) {
+                if (addReplyRecursive(c.replies)) return true;
+              }
+            }
+            return false;
+          };
+          addReplyRecursive(post.comments);
+          post.commentCount = (post.commentCount || 0) + 1;
         }
-        return false;
-      };
-      addReplyRecursive(post.comments);
-      post.commentsCount = (post.commentsCount || 0) + 1;
+      } else if (update && parentId) {
+        // Cập nhật bình luận hoặc phản hồi
+        const updateRecursive = (comments) => {
+          for (let c of comments) {
+            if (c.id === parentId) {
+              Object.assign(c, update);
+              return true;
+            }
+            if (c.replies && c.replies.length > 0) {
+              if (updateRecursive(c.replies)) return true;
+            }
+          }
+          return false;
+        };
+        updateRecursive(post.comments);
+      }
     },
-
-    // Like/unlike từng comment hoặc reply (nhiều tầng)
     likeComment: (state, action) => {
-      const { postId, commentId, parentId } = action.payload;
+      const { postId, commentId } = action.payload;
       const post = state.posts.find((post) => post.id === postId);
       if (!post || !post.comments) return;
 
-      // Đệ quy tìm comment cần like
       const toggleLikeRecursive = (comments) => {
         for (let c of comments) {
           if (c.id === commentId) {

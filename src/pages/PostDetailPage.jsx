@@ -1,38 +1,3 @@
-
-// import React from "react";
-// import { useParams, useNavigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import PostCard from "../components/molecules/PostCard";
-
-// const PostDetailPage = () => {
-//     const { id } = useParams();
-//     const posts = useSelector((state) => state.posts.posts);
-//     const post = posts.find((p) => String(p.id) === String(id));
-
-//     const navigate = useNavigate();
-//     if (!post) {
-//         return <div>Không tìm thấy bài viết.</div>;
-//     }
-
-//     // Trick: truyền prop index=0 để PostCard luôn mở khung comment (sẽ sửa PostCard nếu cần)
-//     return (
-//         <div className="max-w-3xl mx-auto py-8">
-//             <PostCard
-//                 post={post}
-//                 index={0}
-//                 showFullContent={true}
-//                 forceShowComments={true}
-//                 hideRepliesByDefault={true}
-//                 onBack={() => navigate(-1)}
-//                 onNavigateToChat={(conversationId) => {
-//                     navigate(`/chat?id=${conversationId}`);
-//                 }}
-//             />
-//         </div>
-//     );
-// };
-
-// export default PostDetailPage;
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PostCard from "../components/molecules/PostCard";
@@ -53,8 +18,9 @@ const mapPostFromApi = (postData, commentsData) => {
                 author: comment.author.displayName,
                 avatar: comment.author.avatarUrl || null,
                 createdAt: comment.createdAt,
-                likesCount: comment.reactionCount,
-                liked: false,
+                likesCount: comment.reactionCount || 0,
+                replyCount: comment.replyCount || 0,
+                liked: false, // Có thể kiểm tra từ API nếu cần
                 replies: [],
             };
         });
@@ -85,11 +51,11 @@ const mapPostFromApi = (postData, commentsData) => {
         reactionCount: postData.reactionCount,
         commentCount: postData.commentCount,
         viewCount: postData.viewCount,
-        liked: false,
+        liked: false, // Có thể kiểm tra từ API nếu cần
         comments: commentsData ? buildCommentHierarchy(commentsData.data) : [],
         images: postData.mediaUrls || [],
         isEnhanced: false,
-        type: "public",
+        type: postData.visibility.toLowerCase(),
     };
 };
 
