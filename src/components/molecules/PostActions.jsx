@@ -10,35 +10,9 @@ const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
   const token =
     "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZWVlZWY1NC0zNzQ1LTRkODAtYTc1OC02NWFlNWQ2YTFiODUiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0NzM3NTcsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.TXKohDzV54uglcDGzk-D9ySdEo_3tSKaLcssTOwZwJC9m8GRlKmlv9-vrfSLALpdw69KFFNyJep3AW5ZuYQCDf4NJmTcrusVo6m0EER17A6kFv7QAKOkjUxEvo5MCl3QhXy1Yh34534x6HeoxjQcc8nvR2Ngj-g27hUxZckPMogiAh9fIxyEyvyqPRlGV9wlm6fqWlvtxEzDxBiUiLzXV7JMVMBLhp6GpK4_-kKNPpGsn3ne1ytZJ9gjMgYsImMQhWP2AWEOelHkRbh7fG_C51hUxd-y_hsTgG70U4Qib71qTbxEky5VwBv9Ly__Dv1jY5-htT_LNgHWVYPWuFiFgQ";
 
-  useEffect(() => {
-    const checkIfLiked = async () => {
-      try {
-        const response = await fetch(
-          `${baseUrl}/v1/reactions?TargetType=Post&TargetId=${post.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          const userLiked = data.some(
-            (reaction) =>
-              reaction.reactionCode === "Like" &&
-              reaction.userId === "4c46a75a-3172-4447-9b69-4f5f07210f4a"
-          );
-          setLiked(userLiked);
-        } else {
-          console.warn("Không thể kiểm tra trạng thái thích:", response.status);
-        }
-      } catch (err) {
-        console.error("Lỗi khi kiểm tra trạng thái thích:", err);
-      }
-    };
-
-    checkIfLiked();
-  }, [post.id]);
+  // Removed initial reaction status fetch on mount to avoid triggering
+  // reactions API when entering the feed. We now rely on `post.liked`
+  // from the feed data and only call the API upon explicit user action.
 
   const handleLike = async () => {
     if (isLiking) return;
