@@ -9,12 +9,12 @@ const Avatar = ({
   className = "",
 }) => {
   const sizes = {
-    xs: "w-6 h-6 text-xs",
-    sm: "w-8 h-8 text-sm",
-    md: "w-10 h-10 text-base",
-    lg: "w-12 h-12 text-lg",
-    xl: "w-16 h-16 text-xl",
-    "2xl": "w-20 h-20 text-2xl",
+    xs: "w-5 h-5 sm:w-6 sm:h-6 text-xs",
+    sm: "w-7 h-7 sm:w-8 sm:h-8 text-xs sm:text-sm",
+    md: "w-9 h-9 sm:w-10 sm:h-10 text-sm sm:text-base",
+    lg: "w-11 h-11 sm:w-12 sm:h-12 text-base sm:text-lg",
+    xl: "w-14 h-14 sm:w-16 sm:h-16 text-lg sm:text-xl",
+    "2xl": "w-18 h-18 sm:w-20 sm:h-20 text-xl sm:text-2xl",
   };
 
   const baseClasses = `relative inline-flex items-center justify-center rounded-full bg-purple-500 text-white font-medium ${sizes[size]} ${className}`;
@@ -42,7 +42,7 @@ const Avatar = ({
       )}
 
       {online && (
-        <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-green-400 ring-2 ring-white dark:ring-gray-800"></span>
+        <span className="absolute bottom-0 right-0 block h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-green-400 ring-1 sm:ring-2 ring-white dark:ring-gray-800"></span>
       )}
     </div>
   );

@@ -67,25 +67,25 @@ const PostContent = ({ post, isSafeMode = false, className = "" }) => {
             transition={{ duration: 0.3 }}
           >
             <div>
-              <p className="text-gray-900 dark:text-white whitespace-pre-wrap leading-relaxed mb-2">
+              <p className="text-sm sm:text-base text-gray-900 dark:text-white whitespace-pre-wrap leading-relaxed mb-2">
                 {post.content}
               </p>
               {Array.isArray(images) && images.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3 relative">
+                <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 relative">
                   {images.slice(0, 3).map((img, idx) => (
                     <div
                       key={idx}
-                      className="relative cursor-pointer group"
+                      className="relative cursor-pointer group flex-1 min-w-0"
                       onClick={() => openImageModal(idx)}
                     >
                       <img
                         src={img}
                         alt={`post-img-${idx}`}
-                        className="max-h-60 rounded-lg border group-hover:opacity-80 transition"
+                        className="w-full max-h-48 sm:max-h-60 rounded-lg border group-hover:opacity-80 transition object-cover"
                       />
                       {idx === 2 && images.length > 3 && (
                         <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center rounded-lg">
-                          <span className="text-white text-2xl font-bold">
+                          <span className="text-white text-lg sm:text-2xl font-bold">
                             +{images.length - 3}
                           </span>
                         </div>
@@ -100,14 +100,14 @@ const PostContent = ({ post, isSafeMode = false, className = "" }) => {
                   onClick={closeModal}
                 >
                   <button
-                    className="absolute top-6 right-8 text-white text-3xl font-bold"
+                    className="absolute top-4 right-4 sm:top-6 sm:right-8 text-white text-2xl sm:text-3xl font-bold"
                     onClick={closeModal}
                     aria-label="Đóng"
                   >
                     &times;
                   </button>
                   <button
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold px-2 py-1 bg-black bg-opacity-40 rounded-full"
+                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-white text-2xl sm:text-3xl font-bold px-1 sm:px-2 py-1 bg-black bg-opacity-40 rounded-full"
                     onClick={prevImg}
                     aria-label="Trước"
                   >
@@ -116,17 +116,17 @@ const PostContent = ({ post, isSafeMode = false, className = "" }) => {
                   <img
                     src={images[modalIndex]}
                     alt={`modal-img-${modalIndex}`}
-                    className="max-h-[80vh] max-w-[90vw] rounded-xl shadow-2xl border-4 border-white"
+                    className="max-h-[70vh] sm:max-h-[80vh] max-w-[95vw] sm:max-w-[90vw] rounded-lg sm:rounded-xl shadow-2xl border-2 sm:border-4 border-white"
                     onClick={(e) => e.stopPropagation()}
                   />
                   <button
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl font-bold px-2 py-1 bg-black bg-opacity-40 rounded-full"
+                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-white text-2xl sm:text-3xl font-bold px-1 sm:px-2 py-1 bg-black bg-opacity-40 rounded-full"
                     onClick={nextImg}
                     aria-label="Sau"
                   >
                     &#8594;
                   </button>
-                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white text-sm bg-black bg-opacity-40 rounded-full px-4 py-1">
+                  <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 text-white text-xs sm:text-sm bg-black bg-opacity-40 rounded-full px-3 sm:px-4 py-1">
                     {modalIndex + 1} / {images.length}
                   </div>
                 </div>

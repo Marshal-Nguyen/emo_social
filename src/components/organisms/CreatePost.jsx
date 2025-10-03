@@ -596,52 +596,52 @@ const CreatePost = () => {
     <>
       {/* Mini input container */}
       <div
-        className="bg-[#F4F1F2]  dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl sm:rounded-2xl shadow-sm transition"
+        className="bg-[#F4F1F2] dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl shadow-sm transition"
         onClick={handleContainerClick}
       >
-        <div className=" p-4 sm:p-6 flex items-center space-x-3 ">
+        <div className="p-3 sm:p-4 sm:p-6 flex items-center space-x-2 sm:space-x-3">
           <Avatar
             username={user?.username || "You"}
             size="md"
-            className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0"
+            className="w-8 h-8 sm:w-10 sm:h-10 sm:w-12 sm:h-12 flex-shrink-0"
           />
           <input
-            className="w-full resize-none border-0 bg-white text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-0 text-base sm:text-lg leading-relaxed rounded-full px-4 py-2"
+            className="w-full resize-none border-0 bg-white text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-0 text-sm sm:text-base sm:text-lg leading-relaxed rounded-full px-3 sm:px-4 py-2"
             placeholder="Chia sẻ cảm xúc của bạn..."
             value={content}
             readOnly
             style={{ cursor: "pointer" }}
           />
         </div>
-        <div className=" flex items-center gap-2 px-4 pb-3 ">
+        <div className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 pb-3">
           <Button
             variant="ghost"
             size="sm"
-            className="text-[#000000] dark:text-white flex items-center space-x-2 px-3 py-2 text-sm   font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-            <Image className="w-4 h-4" />
-            <span>Ảnh</span>
+            className="text-[#000000] dark:text-white flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <Image className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Ảnh</span>
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            className="text-[#000000] dark:text-white flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-            <Smile className="w-4 h-4" />
-            <span>Cảm xúc</span>
+            className="text-[#000000] dark:text-white flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <Smile className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Cảm xúc</span>
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            className="text-[#000000] dark:text-white flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg">
-            <Hash className="w-4 h-4" />
-            <span>Tag</span>
+            className="text-[#000000] dark:text-white flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium rounded-lg">
+            <Hash className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Tag</span>
           </Button>
           <div className="flex-1" />
           <Button
             variant="primary"
             size="sm"
             onClick={handleContainerClick}
-            className="bg-gray-900  px-5 py-2 text-sm font-semibold rounded-full min-w-[80px] flex items-center justify-center space-x-2">
-            <Send className="w-4 h-4" />
+            className="bg-gray-900 px-3 sm:px-5 py-2 text-xs sm:text-sm font-semibold rounded-full min-w-[60px] sm:min-w-[80px] flex items-center justify-center space-x-1 sm:space-x-2">
+            <Send className="w-3 h-3 sm:w-4 sm:h-4" />
             <span>Chia sẻ</span>
           </Button>
         </div>
@@ -649,15 +649,15 @@ const CreatePost = () => {
 
       {/* Popup full form */}
       {showPopup && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-40">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-40 p-4">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl w-full max-w-xl p-6 relative"
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-2xl shadow-2xl w-full max-w-xl p-4 sm:p-6 relative max-h-[90vh] overflow-y-auto"
           >
             <button
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl"
+              className="absolute top-2 right-2 sm:top-3 sm:right-3 text-gray-400 hover:text-gray-700 text-xl sm:text-2xl"
               onClick={() => setShowPopup(false)}
               disabled={isPosting}
             >

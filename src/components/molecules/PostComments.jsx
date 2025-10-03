@@ -10,7 +10,7 @@ import { addComment, fetchRepliesSuccess } from "../../store/postsSlice";
 
 const baseUrl = "https://api.emoease.vn/post-service";
 const token =
-  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjMDJlMjFjMS1mM3NmLTQ2MzItYTdjYy0wOTRkMzc3YTY0ZTQiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0MTQzMjAsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.d2Z7_TykLgWLu9l0FFDHy01x1OicghQZYcxy7Mwme1KfefDPnbsVlviXQyiOlLyyYrzrzBnNBgeyl8HnBDEivDd5tOt93BuMnFXUmKKxhbVxqTUxItwLc1BvPGqsmSugwKCG-J_bGKcsOFO6VkhDKtz8YdHgE4YIihzEIPMHmdK3q5t6Lix5f8mJFYFFtestUhf-_cUXF8MCwPysRKTe-rvXB8RtO9Deiqo3ak4QH-P2bTdt6LQrjWnPK77q6Rb1BR8MfynVsNAkanXnDGJsWovw5L-i466Zm2pa2xl3I0WlGhONwPlvbqoCWTmRqRUTeLZu4TegulgG1GZ_1pcpgg";
+  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZWVlZWY1NC0zNzQ1LTRkODAtYTc1OC02NWFlNWQ2YTFiODUiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0NzM3NTcsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.TXKohDzV54uglcDGzk-D9ySdEo_3tSKaLcssTOwZwJC9m8GRlKmlv9-vrfSLALpdw69KFFNyJep3AW5ZuYQCDf4NJmTcrusVo6m0EER17A6kFv7QAKOkjUxEvo5MCl3QhXy1Yh34534x6HeoxjQcc8nvR2Ngj-g27hUxZckPMogiAh9fIxyEyvyqPRlGV9wlm6fqWlvtxEzDxBiUiLzXV7JMVMBLhp6GpK4_-kKNPpGsn3ne1ytZJ9gjMgYsImMQhWP2AWEOelHkRbh7fG_C51hUxd-y_hsTgG70U4Qib71qTbxEky5VwBv9Ly__Dv1jY5-htT_LNgHWVYPWuFiFgQ";
 
 const PostComments = ({
   comments = [],
@@ -221,27 +221,27 @@ const PostComments = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className={`relative ${level > 0 ? "ml-8" : ""}`}
+          className={`relative ${level > 0 ? "ml-4 sm:ml-8" : ""}`}
         >
-          <div className="flex space-x-3">
+          <div className="flex space-x-2 sm:space-x-3">
             <Avatar
               username={comment.author}
               avatarUrl={comment.avatar}
               size="sm"
             />
-            <div className="flex-1">
-              <div className="flex items-center space-x-2">
-                <span className="font-semibold text-gray-900 dark:text-white">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <span className="font-semibold text-xs sm:text-sm text-gray-900 dark:text-white truncate">
                   {comment.author}
                 </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
                   {formatTimeAgo(comment.createdAt)}
                 </span>
               </div>
-              <p className="mt-1 text-gray-900 dark:text-gray-200">
+              <p className="mt-1 text-sm sm:text-base text-gray-900 dark:text-gray-200 break-words">
                 {comment.content}
               </p>
-              <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center space-x-2 sm:space-x-4 mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                 <button
                   className={`flex items-center space-x-1 ${comment.liked
                     ? "text-red-500 dark:text-red-500"
@@ -250,7 +250,7 @@ const PostComments = ({
                   onClick={() => handleLikeComment(comment.id, comment.liked)}
                 >
                   <Heart
-                    className="w-4 h-4"
+                    className="w-3 h-3 sm:w-4 sm:h-4"
                     fill={comment.liked ? "currentColor" : "none"}
                   />
                   <span>{comment.reactionCount}</span>
@@ -311,7 +311,7 @@ const PostComments = ({
       {renderComments(comments.slice(0, maxVisible))}
       {comments.length > maxVisible && (
         <button
-          className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-sm"
+          className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm"
           onClick={onShowMore}
         >
           Xem thêm bình luận

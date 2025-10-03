@@ -28,7 +28,7 @@ const SearchBar = ({ onSearch, tags, search, setSearch, selectedFilter, setSelec
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl dark:bg-neutral-900"
+                        className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-2xl dark:bg-neutral-900 max-h-[90vh] overflow-y-auto"
                     >
                         <SearchInput
                             value={search}
@@ -40,7 +40,7 @@ const SearchBar = ({ onSearch, tags, search, setSearch, selectedFilter, setSelec
                         <FilterList options={filterOptions} selected={selectedFilter} onSelect={setSelectedFilter} />
                         <TagSuggestionList tags={tags} onSelect={setSearch} />
                         <button
-                            className="w-full p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 mt-2"
+                            className="w-full p-2 sm:p-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 mt-2 text-sm sm:text-base"
                             onClick={() => {
                                 onSearch(search, selectedFilter);
                                 setIsExpanded(false);
@@ -49,7 +49,7 @@ const SearchBar = ({ onSearch, tags, search, setSearch, selectedFilter, setSelec
                             Áp dụng
                         </button>
                         <button
-                            className="mt-2 w-full p-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+                            className="mt-2 w-full p-2 sm:p-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm sm:text-base"
                             onClick={() => setIsExpanded(false)}
                         >
                             Đóng

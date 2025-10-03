@@ -75,11 +75,11 @@ const HomePage = () => {
   return (
     <div className="flex h-screen flex-col md:flex-row">
       {/* Main content */}
-      <div className="flex-1 space-y-4 overflow-y-auto scrollbar-none z-20 px-2">
+      <div className="flex-1 space-y-3 sm:space-y-4 overflow-y-auto scrollbar-none z-20 px-1 sm:px-2">
         <div className="sticky top-0 z-30 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md pb-2 pt-2 mb-2 shadow-sm">
           {/* On mobile, FeedNav is above SearchBar */}
           {isMobile ? (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3 sm:gap-4">
               <FeedNav selected={selectedTab} onSelect={setSelectedTab} />
               <div className="w-full">
                 <SearchBar
@@ -122,7 +122,7 @@ const HomePage = () => {
           transition={{ duration: 0.5 }}
           className={isMobile ? "flex justify-center" : ""}
         >
-          <div className={isMobile ? "w-full max-w-md" : ""}>
+          <div className={isMobile ? "w-full max-w-sm sm:max-w-md" : ""}>
             <CreatePost />
           </div>
         </motion.div>
@@ -132,7 +132,7 @@ const HomePage = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className={isMobile ? "flex justify-center" : ""}
         >
-          <div className={isMobile ? "w-full max-w-md" : ""}>
+          <div className={isMobile ? "w-full max-w-sm sm:max-w-md" : ""}>
             <Feed
               onNavigateToChat={handleNavigateToChat}
               search={search}

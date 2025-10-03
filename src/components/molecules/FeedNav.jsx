@@ -9,14 +9,14 @@ const FEED_TABS = [
 ];
 
 const FeedNav = ({ selected, onSelect }) => (
-    <nav className="flex gap-2">
+    <nav className="flex gap-1 sm:gap-2 overflow-x-auto scrollbar-none">
         {FEED_TABS.map(tab => (
             <Button
                 key={tab.key}
                 variant={selected === tab.key ? "primary" : "secondary"}
                 size="sm"
                 onClick={() => onSelect(tab.key)}
-                className="rounded-full text-sm font-medium"
+                className="rounded-full text-xs sm:text-sm font-medium whitespace-nowrap flex-shrink-0"
             >
                 {tab.label}
             </Button>

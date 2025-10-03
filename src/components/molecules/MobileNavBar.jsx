@@ -44,7 +44,7 @@ const MobileNavBar = ({
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-40 md:hidden pb-safe-area-inset-bottom">
-      <div className="flex items-center justify-around px-4 py-2">
+      <div className="flex items-center justify-around px-2 sm:px-4 py-2">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -58,23 +58,24 @@ const MobileNavBar = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => onTabChange?.(item.id)}
-                className={`flex flex-col items-center space-y-1 p-2 min-w-[60px] ${isActive
+                className={`flex flex-col items-center space-y-1 p-1 sm:p-2 min-w-[50px] sm:min-w-[60px] ${isActive
                   ? "text-purple-600 dark:text-purple-400"
                   : "text-gray-500 dark:text-gray-400"
                   }`}>
                 <div className="relative">
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   {item.badge && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center text-[8px] sm:text-[10px]">
                       {item.badge > 9 ? "9+" : item.badge}
                     </span>
                   )}
                 </div>
+                <span className="text-[10px] sm:text-xs font-medium hidden sm:block">{item.label}</span>
               </Button>
               {isActive && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute top-0 left-0 right-0 mx-auto w-8 h-0.5 bg-purple-600 dark:bg-purple-400 rounded-full"
+                  className="absolute top-0 left-0 right-0 mx-auto w-6 sm:w-8 h-0.5 bg-purple-600 dark:bg-purple-400 rounded-full"
                 />
 
               )}

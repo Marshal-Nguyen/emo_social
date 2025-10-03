@@ -8,7 +8,7 @@ const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
   const [error, setError] = useState(null);
   const baseUrl = "https://api.emoease.vn/post-service";
   const token =
-    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjMDJlMjFjMS1mM3NmLTQ2MzItYTdjYy0wOTRkMzc3YTY0ZTQiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0MTQzMjAsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.d2Z7_TykLgWLu9l0FFDHy01x1OicghQZYcxy7Mwme1KfefDPnbsVlviXQyiOlLyyYrzrzBnNBgeyl8HnBDEivDd5tOt93BuMnFXUmKKxhbVxqTUxItwLc1BvPGqsmSugwKCG-J_bGKcsOFO6VkhDKtz8YdHgE4YIihzEIPMHmdK3q5t6Lix5f8mJFYFFtestUhf-_cUXF8MCwPysRKTe-rvXB8RtO9Deiqo3ak4QH-P2bTdt6LQrjWnPK77q6Rb1BR8MfynVsNAkanXnDGJsWovw5L-i466Zm2pa2xl3I0WlGhONwPlvbqoCWTmRqRUTeLZu4TegulgG1GZ_1pcpgg";
+    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZWVlZWY1NC0zNzQ1LTRkODAtYTc1OC02NWFlNWQ2YTFiODUiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0NzM3NTcsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.TXKohDzV54uglcDGzk-D9ySdEo_3tSKaLcssTOwZwJC9m8GRlKmlv9-vrfSLALpdw69KFFNyJep3AW5ZuYQCDf4NJmTcrusVo6m0EER17A6kFv7QAKOkjUxEvo5MCl3QhXy1Yh34534x6HeoxjQcc8nvR2Ngj-g27hUxZckPMogiAh9fIxyEyvyqPRlGV9wlm6fqWlvtxEzDxBiUiLzXV7JMVMBLhp6GpK4_-kKNPpGsn3ne1ytZJ9gjMgYsImMQhWP2AWEOelHkRbh7fG_C51hUxd-y_hsTgG70U4Qib71qTbxEky5VwBv9Ly__Dv1jY5-htT_LNgHWVYPWuFiFgQ";
 
   useEffect(() => {
     const checkIfLiked = async () => {
@@ -90,55 +90,55 @@ const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
   };
 
   return (
-    <div className={`flex items-center justify-end gap-3 ${className}`}>
+    <div className={`flex items-center justify-end gap-2 sm:gap-3 ${className}`}>
       <div className="flex items-center gap-1">
-        <span className="text-md text-gray-600 dark:text-gray-400">
+        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
           {reactionCount}
         </span>
         <Button
           variant="ghost"
-          size="icon"
-          className={`!rounded-full ${liked ? "text-red-500 dark:text-red-500" : "text-gray-500 hover:text-red-500"}`}
+          size="sm"
+          className={`!rounded-full !p-2 ${liked ? "text-red-500 dark:text-red-500" : "text-gray-500 hover:text-red-500"}`}
           title={liked ? "Bỏ thích" : "Thích"}
           onClick={handleLike}
           disabled={isLiking}
         >
-          <Heart className="w-5 h-5" fill={liked ? "currentColor" : "none"} />
+          <Heart className="w-4 h-4 sm:w-5 sm:h-5" fill={liked ? "currentColor" : "none"} />
         </Button>
       </div>
 
       <div className="flex items-center gap-1">
-        <span className="text-md text-gray-600 dark:text-gray-400">
+        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
           {post.commentCount || 0}
         </span>
         <Button
           variant="ghost"
-          size="icon"
-          className="!rounded-full"
+          size="sm"
+          className="!rounded-full !p-2"
           title="Bình luận"
           onClick={onComment}
         >
-          <MessageCircle className="w-5 h-5" />
+          <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
         </Button>
       </div>
 
       <div className="flex items-center gap-1">
-        <span className="text-md text-gray-600 dark:text-gray-400">
+        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
           {post.viewCount || 0}
         </span>
         <Button
           variant="ghost"
-          size="icon"
-          className="!rounded-full"
+          size="sm"
+          className="!rounded-full !p-2"
           title="Lượt xem"
           disabled
         >
-          <Eye className="w-5 h-5" />
+          <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
         </Button>
       </div>
 
       {error && (
-        <div className="text-red-500 text-sm mt-2">
+        <div className="text-red-500 text-xs sm:text-sm mt-2">
           {error}
         </div>
       )}
