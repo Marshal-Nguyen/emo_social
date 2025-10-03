@@ -117,7 +117,7 @@ const PostCard = ({
       } else {
         dispatch(removeComment({ postId: resolvedPostId, commentId: tempId }));
       }
-      commentEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      // Keep viewport stable; no auto scroll after submit
     } catch (error) {
       console.error("Lỗi khi thêm bình luận:", error);
       const resolvedPostId = post?.id || routePostId;

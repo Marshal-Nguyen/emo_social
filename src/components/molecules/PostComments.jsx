@@ -35,9 +35,6 @@ const PostComments = ({
   const syncedRef = useRef(false);
 
   useEffect(() => {
-    if (show && commentEndRef.current) {
-      commentEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
     // Only sync once per mount or when postId changes
     if (!syncedRef.current && postId && Array.isArray(comments)) {
       comments.forEach((comment) => {
@@ -238,9 +235,11 @@ const PostComments = ({
 
   const renderComments = (commentsList, level = 0) => {
     return commentsList.map((comment) => {
-      const hasReplies = (comment.replyCount || 0) > 0;
+      const totalReplyCount = comment.replyCount || 0;
+      const loadedReplies = Array.isArray(comment.replies) ? comment.replies.length : 0;
+      const hasReplies = totalReplyCount > 0;
       const isOpen = openReplies[comment.id] ?? !hideRepliesByDefault;
-      const areRepliesLoaded = comment.replies && comment.replies.length > 0;
+      const areRepliesLoaded = loadedReplies >= totalReplyCount && loadedReplies > 0;
       console.log(`Comment ${comment.id}: hasReplies=${hasReplies}, isOpen=${isOpen}, areRepliesLoaded=${areRepliesLoaded}, replies=`, comment.replies);
 
       return (
@@ -299,8 +298,8 @@ const PostComments = ({
                     }
                   >
                     {isOpen && areRepliesLoaded
-                      ? `Ẩn ${comment.replyCount} phản hồi`
-                      : `Xem ${comment.replyCount} phản hồi`}
+                      ? `Ẩn ${totalReplyCount} phản hồi`
+                      : `Xem ${totalReplyCount} phản hồi`}
                   </button>
                 )}
               </div>
