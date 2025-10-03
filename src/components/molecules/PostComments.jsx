@@ -30,6 +30,7 @@ const PostComments = ({
       [comment.id]: !hideRepliesByDefault,
     }), {})
   );
+  const [replyVisibleCount, setReplyVisibleCount] = useState({});
   const commentEndRef = useRef(null);
 
   const syncedRef = useRef(false);
@@ -76,6 +77,7 @@ const PostComments = ({
       onReply(commentId, optimistic);
       // Ensure the replies section opens when first reply is added
       setOpenReplies((prev) => ({ ...prev, [commentId]: true }));
+      setReplyVisibleCount((prev) => ({ ...prev, [commentId]: Math.max(prev[commentId] || 0, 5) }));
 
       const response = await fetch(`${baseUrl}/v1/comments`, {
         method: "POST",
@@ -224,6 +226,18 @@ const PostComments = ({
       // console.debug("Toggled openReplies:", newState);
       return newState;
     });
+    setReplyVisibleCount((prev) => ({
+      ...prev,
+      [commentId]: prev[commentId] || 5,
+    }));
+  };
+
+  const handleShowMoreReplies = (commentId, total) => {
+    setReplyVisibleCount((prev) => {
+      const current = prev[commentId] || 5;
+      const next = Math.min(current + 5, total || current + 5);
+      return { ...prev, [commentId]: next };
+    });
   };
 
   // Filter out invalid comments without id
@@ -326,7 +340,24 @@ const PostComments = ({
           </div>
           {shouldShowReplies && (
             <div className="mt-2">
-              {renderComments(comment.replies, level + 1)}
+              {(() => {
+                const total = Array.isArray(comment.replies) ? comment.replies.length : 0;
+                const visible = replyVisibleCount[comment.id] || 5;
+                const toRender = (comment.replies || []).slice(0, visible);
+                return (
+                  <>
+                    {renderComments(toRender, level + 1)}
+                    {total > visible && (
+                      <button
+                        className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm mt-1"
+                        onClick={() => handleShowMoreReplies(comment.id, total)}
+                      >
+                        Xem thêm phản hồi
+                      </button>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           )}
         </motion.div>
