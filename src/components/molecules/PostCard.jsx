@@ -9,7 +9,7 @@ import CommentForm from "./CommentForm";
 import Button from "../atoms/Button";
 import { MessageSquare } from "lucide-react";
 import JoinGroupButton from "./JoinGroupButton";
-import { addComment } from "../../store/postsSlice";
+import { addComment, finalizeComment, removeComment } from "../../store/postsSlice";
 import { addConversation } from "../../store/chatSlice";
 import { useParams } from "react-router-dom";
 
@@ -29,6 +29,10 @@ const PostCard = ({
   const { id: routePostId } = useParams();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const postFromStore = useSelector((state) =>
+    state.posts?.posts?.find((p) => p.id === post?.id)
+  );
+  const effectivePost = postFromStore || post;
   const [showComments, setShowComments] = useState(forceShowComments);
   const [maxVisibleComments, setMaxVisibleComments] = useState(3);
   const [isCommenting, setIsCommenting] = useState(false);
@@ -63,6 +67,25 @@ const PostCard = ({
 
     try {
       const resolvedPostId = post?.id || routePostId;
+      // Optimistic add
+      const tempId = `temp-${Date.now()}`;
+      const optimistic = {
+        id: tempId,
+        content,
+        author: user?.username || "Anonymous",
+        avatar: user?.avatar || null,
+        createdAt: new Date().toISOString(),
+        reactionCount: 0,
+        replyCount: 0,
+        liked: false,
+        replies: [],
+      };
+      dispatch(
+        addComment({
+          postId: resolvedPostId,
+          comment: optimistic,
+        })
+      );
       const response = await fetch(`${baseUrl}/v1/comments`, {
         method: "POST",
         headers: {
@@ -79,26 +102,26 @@ const PostCard = ({
         const errorText = await response.text();
         throw new Error(`Không thể thêm bình luận: ${errorText}`);
       }
-      const newComment = await response.json();
-      dispatch(
-        addComment({
-          postId: resolvedPostId,
-          comment: {
-            id: newComment.id,
-            content: newComment.content,
-            author: newComment.author?.displayName || user?.username || "Anonymous",
-            avatar: newComment.author?.avatarUrl || user?.avatar || null,
-            createdAt: newComment.createdAt,
-            reactionCount: newComment.reactionCount || 0,
-            replyCount: newComment.replyCount || 0,
-            liked: false,
-            replies: [],
-          },
-        })
-      );
+      const payload = await response.json();
+      const apiComment = payload?.data || payload || {};
+      const newId = apiComment.commentId || apiComment.id;
+      if (newId) {
+        // Only need to replace temp id with real id; keep optimistic fields
+        dispatch(
+          finalizeComment({
+            postId: resolvedPostId,
+            tempId,
+            newData: { id: newId },
+          })
+        );
+      } else {
+        dispatch(removeComment({ postId: resolvedPostId, commentId: tempId }));
+      }
       commentEndRef.current?.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       console.error("Lỗi khi thêm bình luận:", error);
+      const resolvedPostId = post?.id || routePostId;
+      dispatch(removeComment({ postId: resolvedPostId, commentId: tempId }));
     } finally {
       setIsCommenting(false);
     }
@@ -129,11 +152,11 @@ const PostCard = ({
       className={`rounded-lg sm:rounded-xl shadow-md p-3 sm:p-4 ${bgColors[index % bgColors.length]} border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow`}
     >
       <PostHeader
-        post={post}
+        post={effectivePost}
         showJoinedBadge={post.type === "group"}
         onBack={onBack}
       />
-      <PostContent post={post} isSafeMode={false} className="mt-4" />
+      <PostContent post={effectivePost} isSafeMode={false} className="mt-4" />
       {post.type === "group" && (
         <JoinGroupButton
           groupId={post.id}
@@ -143,7 +166,7 @@ const PostCard = ({
       )}
       <div className="flex items-center justify-between mt-3 sm:mt-4">
         <PostActions
-          post={post}
+          post={effectivePost}
           onComment={handleShowComments}
         />
         {post.author.id !== user?.id && (
@@ -159,12 +182,12 @@ const PostCard = ({
         )}
       </div>
       <PostComments
-        comments={post.comments}
+        comments={effectivePost?.comments}
         show={showComments || forceShowComments}
         maxVisible={maxVisibleComments}
         onShowMore={handleShowMoreComments}
         onReply={handleReply}
-        postId={post?.id || routePostId}
+        postId={effectivePost?.id || routePostId}
         hideRepliesByDefault={hideRepliesByDefault}
         className="mt-3 sm:mt-4"
       />

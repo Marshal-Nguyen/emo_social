@@ -138,6 +138,44 @@ const postsSlice = createSlice({
       };
       toggleLikeRecursive(post.comments);
     },
+    finalizeComment: (state, action) => {
+      const { postId, tempId, newData } = action.payload;
+      const post = state.posts.find((p) => p.id === postId);
+      if (!post || !post.comments) return;
+      const replaceRecursive = (comments) => {
+        for (let i = 0; i < comments.length; i++) {
+          const c = comments[i];
+          if (c.id === tempId) {
+            comments[i] = { ...c, ...newData };
+            return true;
+          }
+          if (c.replies && c.replies.length > 0) {
+            if (replaceRecursive(c.replies)) return true;
+          }
+        }
+        return false;
+      };
+      replaceRecursive(post.comments);
+    },
+    removeComment: (state, action) => {
+      const { postId, commentId } = action.payload;
+      const post = state.posts.find((p) => p.id === postId);
+      if (!post || !post.comments) return;
+      const removeRecursive = (comments) => {
+        const idx = comments.findIndex((c) => c.id === commentId);
+        if (idx !== -1) {
+          comments.splice(idx, 1);
+          return true;
+        }
+        for (let c of comments) {
+          if (c.replies && c.replies.length > 0) {
+            if (removeRecursive(c.replies)) return true;
+          }
+        }
+        return false;
+      };
+      removeRecursive(post.comments);
+    },
     fetchRepliesSuccess: (state, action) => {
       const { postId, parentId, replies } = action.payload;
       let post = state.posts.find((post) => post.id === postId);
@@ -179,6 +217,8 @@ export const {
   likePost,
   addComment,
   likeComment,
+  finalizeComment,
+  removeComment,
   fetchRepliesSuccess,
 } = postsSlice.actions;
 

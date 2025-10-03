@@ -124,10 +124,15 @@ export const generateAnonymousName = () => {
 };
 
 export const formatTimeAgo = (timestamp) => {
-  const now = new Date();
+  if (!timestamp) return "Vừa xong";
   const time = new Date(timestamp);
-  const diffInSeconds = Math.floor((now - time) / 1000);
+  if (isNaN(time.getTime())) return "Vừa xong";
 
+  const now = new Date();
+  const diffInSecondsRaw = (now.getTime() - time.getTime()) / 1000;
+  if (!isFinite(diffInSecondsRaw) || diffInSecondsRaw < 0) return "Vừa xong";
+
+  const diffInSeconds = Math.floor(diffInSecondsRaw);
   if (diffInSeconds < 60) {
     return "Vừa xong";
   } else if (diffInSeconds < 3600) {
@@ -182,9 +187,8 @@ export const getAvatarUrl = (userId) => {
   ];
   const color = colors[userId ? userId.length % colors.length : 0];
 
-  return `https://ui-avatars.com/api/?name=${
-    userId || "Anonymous"
-  }&background=${color.substring(1)}&color=fff&size=40&rounded=true`;
+  return `https://ui-avatars.com/api/?name=${userId || "Anonymous"
+    }&background=${color.substring(1)}&color=fff&size=40&rounded=true`;
 };
 
 export const validateEmail = (email) => {

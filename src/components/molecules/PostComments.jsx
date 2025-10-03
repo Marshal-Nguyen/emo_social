@@ -164,7 +164,7 @@ const PostComments = ({
       }
 
       const repliesData = await response.json();
-      console.log("Replies API response:", repliesData);
+      // console.debug("Replies API response:", repliesData);
       const mappedReplies = repliesData.data.map((reply) => ({
         id: reply.id,
         content: reply.content,
@@ -184,10 +184,10 @@ const PostComments = ({
           replies: mappedReplies,
         })
       );
-      console.log("Dispatched fetchRepliesSuccess:", { postId, parentId: commentId, replies: mappedReplies });
+      // console.debug("Dispatched fetchRepliesSuccess:", { postId, parentId: commentId, replies: mappedReplies });
       setOpenReplies((prev) => {
         const newState = { ...prev, [commentId]: true };
-        console.log("Updated openReplies:", newState);
+        // console.debug("Updated openReplies:", newState);
         return newState;
       });
     } catch (error) {
@@ -205,12 +205,17 @@ const PostComments = ({
   const toggleReplies = (commentId) => {
     setOpenReplies((prev) => {
       const newState = { ...prev, [commentId]: !prev[commentId] };
-      console.log("Toggled openReplies:", newState);
+      // console.debug("Toggled openReplies:", newState);
       return newState;
     });
   };
 
-  if (!show || !comments?.length) return null;
+  // Filter out invalid comments without id
+  const validComments = Array.isArray(comments)
+    ? comments.filter((c) => c && c.id)
+    : [];
+
+  if (!show || validComments.length === 0) return null;
 
   const renderComments = (commentsList, level = 0) => {
     return commentsList.map((comment) => {
@@ -309,11 +314,11 @@ const PostComments = ({
     });
   };
 
-  console.log("PostComments props.comments:", comments);
+  // console.debug("PostComments props.comments:", comments);
   return (
     <div className={`space-y-4 ${className}`}>
-      {renderComments(comments.slice(0, maxVisible))}
-      {comments.length > maxVisible && (
+      {renderComments(validComments.slice(0, maxVisible))}
+      {validComments.length > maxVisible && (
         <button
           className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm"
           onClick={onShowMore}
