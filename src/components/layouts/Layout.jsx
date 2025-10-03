@@ -80,7 +80,7 @@ const Layout = () => {
                     onCollapseChange={handleCollapseChange}
                 />
                 <div className={`flex-1 ${!isMobile ? (isSidebarCollapsed ? "ml-20" : "ml-80") : ""} relative z-20 transition-all duration-300`}>
-                    <div className="mx-auto">
+                    <div className="w-full">
                         <Outlet context={{ handleNavigateToChat: (id) => navigate(`/chat${id ? `?id=${id}` : ""}`) }} />
                     </div>
                 </div>
