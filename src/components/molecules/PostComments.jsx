@@ -4,7 +4,7 @@ import Avatar from "../atoms/Avatar";
 import { Heart } from "lucide-react";
 import CommentForm from "./CommentForm";
 import { formatTimeAgo } from "../../utils/helpers";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addComment, fetchRepliesSuccess, finalizeComment, removeComment } from "../../store/postsSlice";
 
 const baseUrl = "https://api.emoease.vn/post-service";
@@ -22,6 +22,7 @@ const PostComments = ({
   postId,
 }) => {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const [showReplyForm, setShowReplyForm] = useState({});
   const [openReplies, setOpenReplies] = useState(
     comments.reduce((acc, comment) => ({
@@ -67,8 +68,8 @@ const PostComments = ({
       const optimistic = {
         id: tempId,
         content,
-        author: "Anonymous",
-        avatar: null,
+        author: user?.username || "Anonymous",
+        avatar: user?.avatar || null,
         createdAt: new Date().toISOString(),
         reactionCount: 0,
         replyCount: 0,
@@ -76,6 +77,8 @@ const PostComments = ({
         replies: [],
       };
       onReply(commentId, optimistic);
+      // Ensure the replies section opens when first reply is added
+      setOpenReplies((prev) => ({ ...prev, [commentId]: true }));
 
       const response = await fetch(`${baseUrl}/v1/comments`, {
         method: "POST",
@@ -106,7 +109,7 @@ const PostComments = ({
         dispatch(removeComment({ postId, commentId: tempId }));
       }
       setShowReplyForm((prev) => ({ ...prev, [commentId]: false }));
-      commentEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      // Do not auto scroll to keep viewport stable per UX request
     } catch (error) {
       console.error("Lỗi khi thêm phản hồi:", error);
       // rollback optimistic if failed
