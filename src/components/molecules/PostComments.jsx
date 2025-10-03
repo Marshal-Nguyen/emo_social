@@ -4,7 +4,6 @@ import Avatar from "../atoms/Avatar";
 import { Heart } from "lucide-react";
 import CommentForm from "./CommentForm";
 import { formatTimeAgo } from "../../utils/helpers";
-import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addComment, fetchRepliesSuccess } from "../../store/postsSlice";
 
@@ -20,8 +19,8 @@ const PostComments = ({
   className = "",
   onReply,
   hideRepliesByDefault = false,
+  postId,
 }) => {
-  const { id: postId } = useParams();
   const dispatch = useDispatch();
   const [showReplyForm, setShowReplyForm] = useState({});
   const [openReplies, setOpenReplies] = useState(
@@ -32,28 +31,33 @@ const PostComments = ({
   );
   const commentEndRef = useRef(null);
 
+  const syncedRef = useRef(false);
+
   useEffect(() => {
     if (show && commentEndRef.current) {
       commentEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-    // Sync initial comments with Redux state
-    comments.forEach((comment) => {
-      dispatch(addComment({
-        postId,
-        comment: {
-          id: comment.id,
-          content: comment.content,
-          author: comment.author,
-          avatar: comment.avatar,
-          createdAt: comment.createdAt,
-          reactionCount: comment.reactionCount,
-          replyCount: comment.replyCount,
-          liked: comment.liked,
-          replies: comment.replies,
-        },
-        parentId: null,
-      }));
-    });
+    // Only sync once per mount or when postId changes
+    if (!syncedRef.current && postId && Array.isArray(comments)) {
+      comments.forEach((comment) => {
+        dispatch(addComment({
+          postId,
+          comment: {
+            id: comment.id,
+            content: comment.content,
+            author: comment.author,
+            avatar: comment.avatar,
+            createdAt: comment.createdAt,
+            reactionCount: comment.reactionCount,
+            replyCount: comment.replyCount,
+            liked: comment.liked,
+            replies: comment.replies,
+          },
+          parentId: null,
+        }));
+      });
+      syncedRef.current = true;
+    }
   }, [show, comments, dispatch, postId]);
 
   const handleReplySubmit = async (commentId, content) => {

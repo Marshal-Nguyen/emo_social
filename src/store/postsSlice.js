@@ -62,15 +62,26 @@ const postsSlice = createSlice({
 
       if (comment) {
         if (!parentId) {
-          post.comments.unshift(comment);
-          post.commentCount = (post.commentCount || 0) + 1;
+          const existsIndex = post.comments.findIndex((c) => c.id === comment.id);
+          if (existsIndex === -1) {
+            post.comments.unshift(comment);
+            post.commentCount = (post.commentCount || 0) + 1;
+          } else {
+            // Merge/update existing to avoid duplicates
+            post.comments[existsIndex] = { ...post.comments[existsIndex], ...comment };
+          }
         } else {
           const addReplyRecursive = (comments) => {
             for (let c of comments) {
               if (c.id === parentId) {
                 if (!c.replies) c.replies = [];
-                c.replies.unshift(comment);
-                c.replyCount = (c.replyCount || 0) + 1;
+                const existsReplyIndex = c.replies.findIndex((r) => r.id === comment.id);
+                if (existsReplyIndex === -1) {
+                  c.replies.unshift(comment);
+                  c.replyCount = (c.replyCount || 0) + 1;
+                } else {
+                  c.replies[existsReplyIndex] = { ...c.replies[existsReplyIndex], ...comment };
+                }
                 console.log(`Added reply to comment ${parentId}:`, comment);
                 return true;
               }
@@ -82,7 +93,7 @@ const postsSlice = createSlice({
             return false;
           };
           addReplyRecursive(post.comments);
-          post.commentCount = (post.commentCount || 0) + 1;
+          // Only increment total count when a new comment/reply was actually inserted
         }
       } else if (update && parentId) {
         const updateRecursive = (comments) => {

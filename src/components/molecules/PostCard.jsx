@@ -26,7 +26,7 @@ const PostCard = ({
   onBack,
   hideRepliesByDefault = false,
 }) => {
-  const { id: postId } = useParams();
+  const { id: routePostId } = useParams();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [showComments, setShowComments] = useState(forceShowComments);
@@ -62,6 +62,7 @@ const PostCard = ({
     setIsCommenting(true);
 
     try {
+      const resolvedPostId = post?.id || routePostId;
       const response = await fetch(`${baseUrl}/v1/comments`, {
         method: "POST",
         headers: {
@@ -69,7 +70,7 @@ const PostCard = ({
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          postId,
+          postId: resolvedPostId,
           content,
         }),
       });
@@ -81,7 +82,7 @@ const PostCard = ({
       const newComment = await response.json();
       dispatch(
         addComment({
-          postId,
+          postId: resolvedPostId,
           comment: {
             id: newComment.id,
             content: newComment.content,
@@ -106,7 +107,7 @@ const PostCard = ({
   const handleReply = (parentId, comment, update) => {
     dispatch(
       addComment({
-        postId,
+        postId: post?.id || routePostId,
         comment,
         parentId,
         update,
@@ -163,6 +164,7 @@ const PostCard = ({
         maxVisible={maxVisibleComments}
         onShowMore={handleShowMoreComments}
         onReply={handleReply}
+        postId={post?.id || routePostId}
         hideRepliesByDefault={hideRepliesByDefault}
         className="mt-3 sm:mt-4"
       />

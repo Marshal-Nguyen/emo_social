@@ -8,11 +8,11 @@ import i18n from "./i18n/index.js";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <I18nextProvider i18n={i18n}>
-      <LanguageProvider>
-        <App />
-      </LanguageProvider>
-    </I18nextProvider>
-  </StrictMode>
+  // <StrictMode>
+  <I18nextProvider i18n={i18n}>
+    <LanguageProvider>
+      <App />
+    </LanguageProvider>
+  </I18nextProvider>
+  // </StrictMode>
 );
