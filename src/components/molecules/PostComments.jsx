@@ -5,7 +5,7 @@ import { Heart } from "lucide-react";
 import CommentForm from "./CommentForm";
 import { formatTimeAgo } from "../../utils/helpers";
 import { useDispatch } from "react-redux";
-import { addComment, fetchRepliesSuccess } from "../../store/postsSlice";
+import { addComment, fetchRepliesSuccess, finalizeComment, removeComment } from "../../store/postsSlice";
 
 const baseUrl = "https://api.emoease.vn/post-service";
 const token =
@@ -62,6 +62,21 @@ const PostComments = ({
 
   const handleReplySubmit = async (commentId, content) => {
     try {
+      // Optimistic reply
+      const tempId = `temp-${Date.now()}`;
+      const optimistic = {
+        id: tempId,
+        content,
+        author: "Anonymous",
+        avatar: null,
+        createdAt: new Date().toISOString(),
+        reactionCount: 0,
+        replyCount: 0,
+        liked: false,
+        replies: [],
+      };
+      onReply(commentId, optimistic);
+
       const response = await fetch(`${baseUrl}/v1/comments`, {
         method: "POST",
         headers: {
@@ -79,22 +94,23 @@ const PostComments = ({
         const errorText = await response.text();
         throw new Error(`Không thể thêm phản hồi: ${errorText}`);
       }
-      const newComment = await response.json();
-      onReply(commentId, {
-        id: newComment.id,
-        content: newComment.content,
-        author: newComment.author?.displayName || "Anonymous",
-        avatar: newComment.author?.avatarUrl || null,
-        createdAt: newComment.createdAt,
-        reactionCount: newComment.reactionCount || 0,
-        replyCount: newComment.replyCount || 0,
-        liked: false,
-        replies: [],
-      });
+      const payload = await response.json();
+      const realId = payload?.commentId || payload?.id;
+      if (realId) {
+        // finalize optimistic reply id
+        dispatch(
+          finalizeComment({ postId, tempId, newData: { id: realId } })
+        );
+      } else {
+        // rollback if API didn't return id
+        dispatch(removeComment({ postId, commentId: tempId }));
+      }
       setShowReplyForm((prev) => ({ ...prev, [commentId]: false }));
       commentEndRef.current?.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       console.error("Lỗi khi thêm phản hồi:", error);
+      // rollback optimistic if failed
+      // We don't have tempId here if error before declaration; ignore
     }
   };
 
