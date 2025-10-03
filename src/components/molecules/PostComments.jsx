@@ -105,7 +105,7 @@ const PostComments = ({
         // rollback if API didn't return id
         dispatch(removeComment({ postId, commentId: tempId }));
       }
-      setShowReplyForm((prev) => ({ ...prev, [commentId]: false }));
+      // setShowReplyForm((prev) => ({ ...prev, [commentId]: false }));
       // Do not auto scroll to keep viewport stable per UX request
     } catch (error) {
       console.error("Lỗi khi thêm phản hồi:", error);
@@ -240,6 +240,8 @@ const PostComments = ({
       const hasReplies = totalReplyCount > 0;
       const isOpen = openReplies[comment.id] ?? !hideRepliesByDefault;
       const areRepliesLoaded = loadedReplies >= totalReplyCount && loadedReplies > 0;
+      const hasLoadedAny = loadedReplies > 0;
+      const shouldShowReplies = isOpen && (hasLoadedAny || areRepliesLoaded);
       console.log(`Comment ${comment.id}: hasReplies=${hasReplies}, isOpen=${isOpen}, areRepliesLoaded=${areRepliesLoaded}, replies=`, comment.replies);
 
       return (
@@ -322,7 +324,7 @@ const PostComments = ({
               </AnimatePresence>
             </div>
           </div>
-          {hasReplies && isOpen && areRepliesLoaded && (
+          {shouldShowReplies && (
             <div className="mt-2">
               {renderComments(comment.replies, level + 1)}
             </div>
