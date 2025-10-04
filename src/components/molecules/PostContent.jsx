@@ -8,7 +8,7 @@ const PostContent = ({ post, isSafeMode = false, className = "" }) => {
   const [isBlurred, setIsBlurred] = useState(true);
   const isSensitive = isContentSensitive(post.content);
   const shouldBlur = isSafeMode && isSensitive && isBlurred;
-  const images = post.mediaUrls || [];
+  const images = post.mediaUrls || post.medias || [];
   const isEnhanced = post.isEnhanced ?? false;
 
   const [showModal, setShowModal] = useState(false);

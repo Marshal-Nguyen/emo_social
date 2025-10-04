@@ -139,8 +139,8 @@ const PostCard = ({
   };
 
   const handleDirectMessage = () => {
-    const conversationId = `${user.id}-${post.author.id}`;
-    dispatch(addConversation({ id: conversationId, recipient: post.author }));
+    const conversationId = `${user.id}-${effectivePost.author.id}`;
+    dispatch(addConversation({ id: conversationId, recipient: effectivePost.author }));
     onNavigateToChat(conversationId);
   };
 
@@ -169,7 +169,7 @@ const PostCard = ({
           post={effectivePost}
           onComment={handleShowComments}
         />
-        {post.author.id !== user?.id && (
+        {effectivePost.author.id !== user?.id && (
           <Button
             variant="ghost"
             size="sm"

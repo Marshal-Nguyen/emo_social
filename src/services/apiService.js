@@ -49,10 +49,25 @@ export const authService = {
 };
 
 export const postsService = {
-  // Lấy danh sách posts
-  getPosts: async (page = 1, limit = 10) => {
-    const response = await api.get(`/posts?page=${page}&limit=${limit}`);
-    return response.data;
+  // Lấy danh sách posts từ API thực tế
+  getPosts: async (pageIndex = 1, pageSize = 10, sortBy = "CreatedAt", sortDescending = true) => {
+    const baseUrl = "https://api.emoease.vn/post-service";
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwYjFkYTIzMi0wYjcyLTQ0ZjUtYWQyMy1jNzhmYjZlNmNmM2EiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk1NDAyNzcsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.QuB4RasK160OgdAjeDAtjFJO31kqZhBL0BACaXToURDrA_6twcUNJqWqXZhEprM0_AWt5omLzwYLZ4N06ujKPp09vSvIr-nvA0uzvXArvW2wrp8RULevVRQMrcdjW5cnrjp9CPMqHxHtsE2tIOxhsCfeRJu6JodkBYuPUMfMNm9bYZtYZp9Rnb6_g4bMqUd_g4586VWkkBGm03ZDrACqPQ9IBcq5v-GuOBnRN9fheRHjCzn4AiBAFus6fzNlVv_-ZnX1kv4-nNshbxnz0rEJ14oBfemdyqiMBXIV6Hdt4vvJr9gm-pR24eH-rJ6XDpBEEFGnqZpseDWQ1B_5Tc2b-Q";
+
+    const response = await fetch(`${baseUrl}/v1/posts?PageIndex=${pageIndex}&PageSize=${pageSize}&SortBy=${sortBy}&SortDescending=${sortDescending}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
   },
 
   // Tạo post mới

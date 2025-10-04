@@ -3,8 +3,8 @@ import Button from "../atoms/Button";
 import { Heart, MessageCircle, Eye } from "lucide-react";
 
 const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
-  const [liked, setLiked] = useState(post.liked || false);
-  const [reactionCount, setReactionCount] = useState(post.reactionCount || 0);
+  const [liked, setLiked] = useState(post.liked || post.isReactedByCurrentUser || false);
+  const [reactionCount, setReactionCount] = useState(post.reactionCount || post.likesCount || 0);
   const [error, setError] = useState(null);
   const baseUrl = "https://api.emoease.vn/post-service";
   const token =
@@ -83,7 +83,7 @@ const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
 
       <div className="flex items-center gap-1">
         <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-          {post.commentCount || 0}
+          {post.commentCount || post.commentsCount || 0}
         </span>
         <Button
           variant="ghost"

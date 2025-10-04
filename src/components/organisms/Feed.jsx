@@ -5,7 +5,8 @@ import PostCard from "../molecules/PostCard";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../atoms/LoadingSpinner";
 import Button from "../atoms/Button";
-import { fetchPostsSuccess } from "../../store/postsSlice";
+import { fetchPostsSuccess, fetchPostsStart, fetchPostsFailure } from "../../store/postsSlice";
+import { postsService } from "../../services/apiService";
 import { image } from "framer-motion/client";
 
 // Mock data for demo
@@ -99,21 +100,93 @@ const Feed = ({ onNavigateToChat }) => {
   );
 
   useEffect(() => {
-    // Initialize with mock data for demo
-    if (posts.length === 0) {
-      dispatch(
-        fetchPostsSuccess({
-          posts: mockPosts,
-          page: 1,
-          hasMore: true,
-          reset: true,
-        })
-      );
-    }
+    // Load posts from API
+    const loadPosts = async () => {
+      if (posts.length === 0) {
+        dispatch(fetchPostsStart());
+        try {
+          const response = await postsService.getPosts(1, 10);
+          const apiPosts = response.posts?.data || [];
+
+          // Transform API data to match our component structure
+          const transformedPosts = apiPosts.map(post => ({
+            id: post.id,
+            content: post.content,
+            author: {
+              id: post.author.aliasId,
+              username: post.author.displayName,
+              isOnline: false, // API doesn't provide this info
+            },
+            createdAt: post.publishedAt,
+            likesCount: post.reactionCount,
+            commentsCount: post.commentCount,
+            liked: post.isReactedByCurrentUser,
+            comments: [], // Will be loaded separately if needed
+            images: post.medias || [],
+            hasMedia: post.hasMedia,
+            viewCount: post.viewCount,
+            visibility: post.visibility,
+          }));
+
+          dispatch(
+            fetchPostsSuccess({
+              posts: transformedPosts,
+              page: response.posts?.pageIndex || 1,
+              hasMore: response.posts?.hasNextPage || false,
+              reset: true,
+            })
+          );
+        } catch (error) {
+          console.error("Error loading posts:", error);
+          dispatch(fetchPostsFailure(error.message));
+        }
+      }
+    };
+
+    loadPosts();
   }, [dispatch, posts.length]);
 
-  const handleLoadMore = () => {
-    // ...existing code...
+  const handleLoadMore = async () => {
+    if (loading || !hasMore) return;
+
+    dispatch(fetchPostsStart());
+    try {
+      const nextPage = Math.floor(posts.length / 10) + 1;
+      const response = await postsService.getPosts(nextPage, 10);
+      const apiPosts = response.posts?.data || [];
+
+      // Transform API data to match our component structure
+      const transformedPosts = apiPosts.map(post => ({
+        id: post.id,
+        content: post.content,
+        author: {
+          id: post.author.aliasId,
+          username: post.author.displayName,
+          isOnline: false,
+        },
+        createdAt: post.publishedAt,
+        likesCount: post.reactionCount,
+        commentsCount: post.commentCount,
+        liked: post.isReactedByCurrentUser,
+        comments: [],
+        images: post.medias || [],
+        hasMedia: post.hasMedia,
+        viewCount: post.viewCount,
+        visibility: post.visibility,
+      }));
+
+      dispatch(
+        fetchPostsSuccess({
+          posts: transformedPosts,
+          page: response.posts?.pageIndex || nextPage,
+          hasMore: response.posts?.hasNextPage || false,
+          reset: false,
+        })
+      );
+    } catch (error) {
+      console.error("Error loading more posts:", error);
+      dispatch(fetchPostsFailure(error.message));
+    }
   };
 
   if (loading && posts.length === 0) {
@@ -154,9 +227,7 @@ const Feed = ({ onNavigateToChat }) => {
               post={post}
               onNavigateToChat={onNavigateToChat}
               index={index}
-              // onShowComment={() => navigate(`/post/9029ed4f-9ea0-4c32-aab9-5c287f427029`)}
-              onShowComment={() => navigate(`/post/8a1faaed-43b5-4b05-9e87-bd799cd60c7e`)}
-            // onShowComment={() => navigate(`/post/${post.id}`)}
+              onShowComment={() => navigate(`/post/${post.id}`)}
             />
           </motion.div>
         ))}

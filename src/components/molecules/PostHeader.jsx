@@ -14,7 +14,7 @@ const PostHeader = ({
   onBack,
 }) => {
   const author = {
-    username: post.author?.displayName || "Anonymous",
+    username: post.author?.displayName || post.author?.username || "Anonymous",
     isOnline: post.author?.isOnline ?? false,
   };
 
