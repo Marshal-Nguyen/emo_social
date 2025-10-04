@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Clock, MoreHorizontal, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import Avatar from "../atoms/Avatar";
 import IconButton from "../atoms/IconButton";
 import Badge from "../atoms/Badge";
 import { formatTimeAgo } from "../../utils/helpers";
+import { getEmotionTagsByIds, getUnicodeEmoji } from "../../utils/tagHelpers";
 
 const PostHeader = ({
   post,
@@ -17,6 +18,20 @@ const PostHeader = ({
     username: post.author?.displayName || post.author?.username || "Anonymous",
     isOnline: post.author?.isOnline ?? false,
   };
+
+  // Lấy emotion tags từ post (xử lý cả emotionTagIds và emotionId)
+  const emotionTagIds = post.emotionTagIds || post.emotionId || [];
+  const [emotionTags, setEmotionTags] = useState([]);
+
+
+  // Load emotion tags
+  useEffect(() => {
+    const loadEmotionTags = async () => {
+      const tags = await getEmotionTagsByIds(emotionTagIds);
+      setEmotionTags(tags);
+    };
+    loadEmotionTags();
+  }, [emotionTagIds]);
 
   return (
     <div className={`flex items-start justify-between ${className}`}>
@@ -40,6 +55,22 @@ const PostHeader = ({
             <h4 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white truncate">
               {author.username}
             </h4>
+            {emotionTags.length > 0 && (
+              <div className="flex items-center space-x-1">
+                <span className="text-xs text-gray-500 dark:text-gray-400">đang cảm thấy</span>
+                {emotionTags.map((emotion, index) => (
+                  <div key={emotion.id} className="flex items-center space-x-1">
+                    <span className="text-sm">{getUnicodeEmoji(emotion.unicodeCodepoint)}</span>
+                    <span className="text-xs text-purple-600 dark:text-purple-400 font-medium">
+                      {emotion.displayName}
+                    </span>
+                    {index < emotionTags.length - 1 && (
+                      <span className="text-xs text-gray-400">,</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
             {showJoinedBadge && (
               <Badge variant="success" size="sm">
                 ✓ Đã tham gia

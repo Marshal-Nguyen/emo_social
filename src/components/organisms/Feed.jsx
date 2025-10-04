@@ -20,6 +20,25 @@ import { image } from "framer-motion/client";
 // Mock data for demo
 const mockPosts = [
   {
+    id: "test-post",
+    images: [],
+    content: "testsss",
+    author: {
+      id: "test-user",
+      username: "RoseWolf33",
+      isOnline: true,
+    },
+    createdAt: new Date().toISOString(),
+    likesCount: 0,
+    commentsCount: 0,
+    liked: false,
+    categoryTagIds: ["bbd7a59d-6922-4127-b0cc-06386e8d5153"], // Education
+    emotionTagIds: ["8e0ca545-6e1d-4896-8a53-143781432229"], // Amazed
+    categoryTagId: "bbd7a59d-6922-4127-b0cc-06386e8d5153", // Education
+    emotionId: "8e0ca545-6e1d-4896-8a53-143781432229", // Amazed
+    comments: [],
+  },
+  {
     id: 1,
     images: ["https://chus.vn/images/Blog/CH%E1%BB%AEA%20L%C3%80NH%20B%E1%BA%A2N%20TH%C3%82N%20L%C3%80%20G%C3%8C/%E1%BA%A2nh%2001.%20Ch%E1%BB%AFa%20l%C3%A0nh%20b%E1%BA%A3n%20th%C3%A2n%2C%20ch%E1%BB%AFa%20l%C3%A0nh%2C%20xu%20h%C6%B0%E1%BB%9Bng%20ch%E1%BB%AFa%20l%C3%A0nh.png?1721633950094"],
     content:
@@ -33,6 +52,10 @@ const mockPosts = [
     likesCount: 12,
     commentsCount: 3,
     liked: false,
+    categoryTagIds: ["e332c23f-d32b-4cd5-b80c-b05e7a3b4ac8"], // Relationships
+    emotionTagIds: ["fb30d818-d83e-47ff-a662-7f98e8684562"], // Afraid
+    categoryTagId: "e332c23f-d32b-4cd5-b80c-b05e7a3b4ac8", // Relationships
+    emotionId: "fb30d818-d83e-47ff-a662-7f98e8684562", // Afraid
     comments: [
       {
         id: 1,
@@ -56,6 +79,10 @@ const mockPosts = [
     likesCount: 28,
     commentsCount: 7,
     liked: true,
+    categoryTagIds: ["64b41630-6224-4ad4-aaab-e16f31c15db7"], // Family
+    emotionTagIds: ["8e0ca545-6e1d-4896-8a53-143781432229"], // Amazed
+    categoryTagId: "64b41630-6224-4ad4-aaab-e16f31c15db7", // Family
+    emotionId: "8e0ca545-6e1d-4896-8a53-143781432229", // Amazed
     comments: [],
   },
   {
@@ -72,6 +99,10 @@ const mockPosts = [
     likesCount: 15,
     commentsCount: 12,
     liked: false,
+    categoryTagIds: ["bbd7a59d-6922-4127-b0cc-06386e8d5153"], // Education
+    emotionTagIds: [], // No emotion
+    categoryTagId: "bbd7a59d-6922-4127-b0cc-06386e8d5153", // Education
+    emotionId: "", // No emotion
     comments: [],
   },
   {
@@ -88,6 +119,10 @@ const mockPosts = [
     likesCount: 8,
     commentsCount: 15,
     liked: false,
+    categoryTagIds: ["e332c23f-d32b-4cd5-b80c-b05e7a3b4ac8"], // Relationships
+    emotionTagIds: ["fb30d818-d83e-47ff-a662-7f98e8684562"], // Afraid
+    categoryTagId: "e332c23f-d32b-4cd5-b80c-b05e7a3b4ac8", // Relationships
+    emotionId: "fb30d818-d83e-47ff-a662-7f98e8684562", // Afraid
     comments: [
       {
         id: 2,

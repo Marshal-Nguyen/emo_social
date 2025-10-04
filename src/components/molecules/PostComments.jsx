@@ -138,7 +138,6 @@ const PostComments = forwardRef(({
   // Sync local comments with props (only if localComments is empty)
   useEffect(() => {
     if (comments && comments.length > 0 && localComments.length === 0) {
-      console.log("Loading comments from props:", comments[0]);
       setLocalComments(comments);
     }
   }, [comments, localComments.length]);
@@ -209,7 +208,6 @@ const PostComments = forwardRef(({
         );
 
 
-        console.log("Loading comments from API:", sortedComments[0]);
         setLocalComments(sortedComments);
         setCommentsLoaded(true);
       }

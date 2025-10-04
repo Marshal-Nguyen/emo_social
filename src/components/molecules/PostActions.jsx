@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from "react";
 import Button from "../atoms/Button";
-import { Heart, MessageCircle, Eye } from "lucide-react";
+import { Heart, MessageCircle, Eye, Hash } from "lucide-react";
 import { postsService } from "../../services/apiService";
+import { getCategoryTagsByIds, getUnicodeEmoji } from "../../utils/tagHelpers";
 
 const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
   const [liked, setLiked] = useState(post.liked || post.isReactedByCurrentUser || false);
   const [reactionCount, setReactionCount] = useState(post.reactionCount || post.likesCount || 0);
   const [error, setError] = useState(null);
   const baseUrl = "https://api.emoease.vn/post-service";
+
+  // Lấy category tags từ post (xử lý cả categoryTagIds và categoryTagId)
+  const categoryTagIds = post.categoryTagIds || post.categoryTagId || [];
+  const [categoryTags, setCategoryTags] = useState([]);
+
+
+  // Load category tags
+  useEffect(() => {
+    const loadCategoryTags = async () => {
+      const tags = await getCategoryTagsByIds(categoryTagIds);
+      setCategoryTags(tags);
+    };
+    loadCategoryTags();
+  }, [categoryTagIds]);
 
   // Removed initial reaction status fetch on mount to avoid triggering
   // reactions API when entering the feed. We now rely on `post.liked`
@@ -34,52 +49,73 @@ const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
   };
 
   return (
-    <div className={`flex items-center justify-end gap-2 sm:gap-3 ${className}`}>
-      <div className="flex items-center gap-1">
-        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-          {reactionCount}
-        </span>
-        <Button
-          variant="ghost"
-          size="sm"
-          className={`!rounded-full !p-2 ${liked ? "text-red-500 dark:text-red-500" : "text-gray-500 hover:text-red-500"}`}
-          title={liked ? "Bỏ thích" : "Thích"}
-          onClick={handleLike}
-          disabled={isLiking}
-        >
-          <Heart className="w-4 h-4 sm:w-5 sm:h-5" fill={liked ? "currentColor" : "none"} />
-        </Button>
+    <div className={`flex items-center justify-between ${className}`}>
+      {/* Action Buttons */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1">
+          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            {reactionCount}
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            className={`!rounded-full !p-2 ${liked ? "text-red-500 dark:text-red-500" : "text-gray-500 hover:text-red-500"}`}
+            title={liked ? "Bỏ thích" : "Thích"}
+            onClick={handleLike}
+            disabled={isLiking}
+          >
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5" fill={liked ? "currentColor" : "none"} />
+          </Button>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            {post.commentCount || post.commentsCount || 0}
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="!rounded-full !p-2"
+            title="Bình luận"
+            onClick={onComment}
+          >
+            <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+          </Button>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            {post.viewCount || 0}
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="!rounded-full !p-2"
+            title="Lượt xem"
+            disabled
+          >
+            <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+          </Button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-1">
-        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-          {post.commentCount || post.commentsCount || 0}
-        </span>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="!rounded-full !p-2"
-          title="Bình luận"
-          onClick={onComment}
-        >
-          <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-        </Button>
-      </div>
-
-      <div className="flex items-center gap-1">
-        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-          {post.viewCount || 0}
-        </span>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="!rounded-full !p-2"
-          title="Lượt xem"
-          disabled
-        >
-          <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
-        </Button>
-      </div>
+      {/* Category Tags - Cuối hàng, bên phải */}
+      {categoryTags.length > 0 && (
+        <div className="flex items-center space-x-2">
+          {categoryTags.map((category) => (
+            <div
+              key={category.id}
+              className="flex items-center space-x-1 px-2 py-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-full"
+            >
+              <Hash className="w-3 h-3 text-blue-600 dark:text-blue-400" />
+              <span className="text-xs text-blue-700 dark:text-blue-300 font-medium">
+                {category.displayName}
+              </span>
+              <span className="text-sm">{getUnicodeEmoji(category.unicodeCodepoint)}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {error && (
         <div className="text-red-500 text-xs sm:text-sm mt-2">

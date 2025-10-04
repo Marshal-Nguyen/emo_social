@@ -14,6 +14,7 @@ import LoadingSpinner from "../components/atoms/LoadingSpinner";
 import NotificationSystem from "../components/organisms/NotificationSystem";
 import WellnessHub from "../pages/WellnessHub";
 import CommunityRulesPage from "../pages/CommunityRulesPage";
+import TagDemoPage from "../pages/TagDemoPage";
 import { useAutoTheme, useTheme } from "../hooks/useTheme";
 
 function AppRouter() {
@@ -70,6 +71,10 @@ function AppRouter() {
                     <Route
                         path="/community-rules"
                         element={isAuthenticated ? <CommunityRulesPage /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/tag-demo"
+                        element={isAuthenticated ? <TagDemoPage /> : <Navigate to="/auth" />}
                     />
                     <Route
                         path="/"

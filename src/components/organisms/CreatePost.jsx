@@ -57,7 +57,7 @@ const CreatePostForm = ({
 }) => (
     <>
         <div className="flex items-center space-x-3 mb-4">
-            <Avatar username={user?.username || "Bạn"} size="md" className="w-10 h-10 flex-shrink-0" />
+            <Avatar username={user?.displayName || user?.username || "Bạn"} size="md" className="w-10 h-10 flex-shrink-0" />
             <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2">
                     <span className="text-gray-800 dark:text-gray-200 text-sm font-medium">Công khai</span>
@@ -384,6 +384,7 @@ const CreatePost = () => {
     const selectedCategory = categoryTags.find(tag => tag.id === categoryTagId);
     const selectedEmotion = emotionTags.find(emo => emo.id === emotionId);
 
+
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
         if (!content.trim() || isPosting) return;
@@ -460,7 +461,7 @@ const CreatePost = () => {
                 <div className="flex items-start p-4 space-x-3">
                     {/* Avatar */}
                     <Avatar
-                        username={user?.username || "Bạn"}
+                        username={user?.displayName || user?.username || "Bạn"}
                         size="md"
                         className="w-10 h-10 flex-shrink-0"
                     />
@@ -470,7 +471,7 @@ const CreatePost = () => {
                         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-1">
                             <span className="flex items-center space-x-1">
                                 <span className="font-medium text-gray-700 dark:text-gray-300">
-                                    {user?.username || "Bạn"}
+                                    {user?.displayName || user?.username || "Bạn"}
                                 </span>
                                 <span>•</span>
                                 <span className="text-green-500">Công khai</span>
