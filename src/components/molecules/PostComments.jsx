@@ -51,16 +51,28 @@ const PostComments = forwardRef(({
   const handleCommentUpdate = useCallback((type, data) => {
     switch (type) {
       case 'newComment':
-        setLocalComments(prev => [data, ...prev]);
+        // Map WebSocket data to local format
+        const mappedComment = {
+          ...data,
+          author: data.author?.displayName || data.author || "Unknown",
+          avatar: data.author?.avatarUrl || data.avatar || null,
+        };
+        setLocalComments(prev => [mappedComment, ...prev]);
         break;
       case 'newReply':
         setLocalComments(prev => {
           const addReplyToComment = (comments) => {
             return comments.map(comment => {
               if (comment.id === data.parentId) {
+                // Map WebSocket reply data to local format
+                const mappedReply = {
+                  ...data.reply,
+                  author: data.reply.author?.displayName || data.reply.author || "Unknown",
+                  avatar: data.reply.author?.avatarUrl || data.reply.avatar || null,
+                };
                 return {
                   ...comment,
-                  replies: [data.reply, ...(comment.replies || [])],
+                  replies: [mappedReply, ...(comment.replies || [])],
                   replyCount: (comment.replyCount || 0) + 1
                 };
               }
@@ -125,10 +137,13 @@ const PostComments = forwardRef(({
 
   const { sendComment, sendReply, sendLike, isConnected } = useWebSocket(postId, show, handleCommentUpdate);
 
-  // Sync local comments with props
+  // Sync local comments with props (only if localComments is empty)
   useEffect(() => {
-    setLocalComments(comments);
-  }, [comments]);
+    if (comments && comments.length > 0 && localComments.length === 0) {
+      console.log("Loading comments from props:", comments[0]);
+      setLocalComments(comments);
+    }
+  }, [comments, localComments.length]);
 
   // Load comments when component mounts or postId changes (only if autoLoadComments is true)
   useEffect(() => {
@@ -194,6 +209,9 @@ const PostComments = forwardRef(({
         const sortedComments = mappedComments.sort((a, b) =>
           new Date(b.createdAt) - new Date(a.createdAt)
         );
+
+
+        console.log("Loading comments from API:", sortedComments[0]);
         setLocalComments(sortedComments);
         setCommentsLoaded(true);
       }
@@ -213,7 +231,7 @@ const PostComments = forwardRef(({
       const optimistic = {
         id: tempId,
         content,
-        author: user?.username || user?.displayName || "Anonymous",
+        author: user?.displayName || user?.username || "Anonymous",
         avatar: user?.avatar || user?.avatarUrl || null,
         createdAt: new Date().toISOString(),
         reactionCount: 0,
@@ -642,8 +660,8 @@ const PostComments = forwardRef(({
             />
             <div className="flex-1 min-w-0">
               <div className="flex items-center space-x-1 sm:space-x-2">
-                <span className="font-semibold text-xs sm:text-sm text-gray-900 dark:text-white truncate">
-                  {comment.author}
+                <span className="font-semibold text-xs sm:text-sm text-gray-900 dark:text-white">
+                  {comment.author || "Unknown"}
                 </span>
                 <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
                   {formatTimeAgo(comment.createdAt)}
