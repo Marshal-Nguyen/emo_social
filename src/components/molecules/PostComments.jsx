@@ -84,21 +84,7 @@ const PostComments = ({
       const realId = response?.commentId || response?.id;
 
       if (realId) {
-        // Update comment count by incrementing (to match feed behavior)
-        const { posts } = useSelector((state) => state.posts);
-        const currentPost = posts.find((post) => post.id === postId);
-        if (currentPost) {
-          dispatch(
-            addComment({
-              postId,
-              comment: null,
-              update: {
-                commentCount: (currentPost.commentCount || 0) + 1,
-                commentsCount: (currentPost.commentCount || 0) + 1,
-              }
-            })
-          );
-        }
+        // Comment count will be automatically updated by Redux addComment action
 
         // finalize optimistic reply id
         dispatch(

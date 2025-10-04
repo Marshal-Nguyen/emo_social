@@ -90,17 +90,7 @@ const PostCard = ({
       const response = await postsService.addComment(resolvedPostId, content);
       const newId = response?.commentId || response?.id;
       if (newId) {
-        // Update comment count by incrementing (to match feed behavior)
-        dispatch(
-          addComment({
-            postId: resolvedPostId,
-            comment: null,
-            update: {
-              commentCount: (post.commentCount || 0) + 1,
-              commentsCount: (post.commentCount || 0) + 1,
-            }
-          })
-        );
+        // Comment count will be automatically updated by Redux addComment action
 
         // Replace temp id with real id
         dispatch(
