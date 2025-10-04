@@ -225,7 +225,7 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
                     <div className={`backdrop-blur-xl bg-white/60 dark:bg-gray-700/60 border border-white/30 dark:border-gray-600/30 rounded-xl p-4 ${isCollapsed ? "flex flex-col items-center space-y-2" : ""}`}>
                         <div className={isCollapsed ? "flex flex-col items-center" : "flex items-center space-x-3"}>
                             <div className="relative">
-                                <Avatar username={user?.fullName || user?.username || "Anonymous"} size={isCollapsed ? "sm" : "md"} />
+                                <Avatar username={user?.aliasLabel || user?.fullName || user?.username || "Anonymous"} size={isCollapsed ? "sm" : "md"} />
                                 <motion.div
                                     key={`online-indicator-${isCollapsed}`}
                                     className={`absolute -bottom-0.5 -right-0.5 w-${isCollapsed ? "3" : "4"} h-${isCollapsed ? "3" : "4"} bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-white dark:border-gray-800`}
@@ -236,7 +236,7 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
                             </div>
                             {!isCollapsed && (
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user?.fullName || user?.username || "Anonymous User"}</p>
+                                    <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user?.aliasLabel || user?.fullName || user?.username || "Anonymous User"}</p>
                                     <motion.p
                                         initial={isFirstMount ? { opacity: 0 } : false}
                                         animate={isFirstMount ? { opacity: 1 } : false}

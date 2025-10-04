@@ -527,3 +527,97 @@ export const notificationService = {
         return response.data;
     },
 };
+
+export const aliasService = {
+    // Kiểm tra trạng thái alias của user
+    checkAliasStatus: async () => {
+        const baseUrl = "https://api.emoease.vn/auth-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/Auth/v2/me/status`, {
+            method: 'GET',
+            headers: createApiHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    },
+
+    // Lấy thông tin alias hiện tại của user
+    getCurrentAlias: async () => {
+        const baseUrl = "https://api.emoease.vn/alias-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/v1/me/alias`, {
+            method: 'GET',
+            headers: createApiHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    },
+
+    // Lấy danh sách alias gợi ý
+    getAliasSuggestions: async (ttl = 20, pageIndex = 1, pageSize = 5) => {
+        const baseUrl = "https://api.emoease.vn/alias-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/v1/aliases/suggest?Ttl=${ttl}&PageIndex=${pageIndex}&PageSize=${pageSize}`, {
+            method: 'GET',
+            headers: createApiHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    },
+
+    // Tạo alias mới từ gợi ý
+    issueAlias: async (label, reservationToken) => {
+        const baseUrl = "https://api.emoease.vn/alias-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/v1/me/aliases/issue`, {
+            method: 'POST',
+            headers: createApiHeaders(),
+            body: JSON.stringify({
+                label,
+                reservationToken
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    },
+};

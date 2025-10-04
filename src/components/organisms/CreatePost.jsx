@@ -53,11 +53,12 @@ const CreatePostForm = ({
     emotionSearch, setEmotionSearch,
     showCategoryModal, setShowCategoryModal,
     showEmotionModal, setShowEmotionModal,
-    selectedCategory, selectedEmotion
+    selectedCategory, selectedEmotion,
+    fetchTags
 }) => (
     <>
         <div className="flex items-center space-x-3 mb-4">
-            <Avatar username={user?.displayName || user?.username || "Bạn"} size="md" className="w-10 h-10 flex-shrink-0" />
+            <Avatar username={user?.aliasLabel || user?.displayName || user?.username || "Bạn"} size="md" className="w-10 h-10 flex-shrink-0" />
             <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2">
                     <span className="text-gray-800 dark:text-gray-200 text-sm font-medium">Công khai</span>
@@ -87,7 +88,10 @@ const CreatePostForm = ({
 
                 <div className="grid grid-cols-2 gap-3">
                     <button
-                        onClick={() => setShowCategoryModal(true)}
+                        onClick={() => {
+                            fetchTags();
+                            setShowCategoryModal(true);
+                        }}
                         className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${categoryTagId
                             ? "bg-purple-100 dark:bg-purple-900/30 border-2 border-purple-300 dark:border-purple-600"
                             : "bg-white dark:bg-gray-700 hover:bg-purple-50 dark:hover:bg-purple-900/20 border border-purple-200 dark:border-purple-600 shadow-sm hover:shadow-md"
@@ -107,7 +111,10 @@ const CreatePostForm = ({
                         </div>
                     </button>
                     <button
-                        onClick={() => setShowEmotionModal(true)}
+                        onClick={() => {
+                            fetchTags();
+                            setShowEmotionModal(true);
+                        }}
                         className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${emotionId
                             ? "bg-purple-100 dark:bg-purple-900/30 border-2 border-purple-300 dark:border-purple-600"
                             : "bg-white dark:bg-gray-700 hover:bg-purple-50 dark:hover:bg-purple-900/20 border border-purple-200 dark:border-purple-600 shadow-sm hover:shadow-md"
@@ -191,30 +198,39 @@ const CreatePostForm = ({
                     </div>
 
                     <div className="p-4">
-                        <div className="grid grid-cols-4 gap-2 max-h-64 overflow-y-auto">
-                            {categoryTags?.filter(tag =>
-                                !categorySearch || tag.displayName.toLowerCase().includes(categorySearch.toLowerCase())
-                            ).map(tag => {
-                                if (!tag || !tag.id || !tag.displayName) return null;
-                                const isSelected = categoryTagId === tag.id;
-                                return (
-                                    <button
-                                        key={tag.id}
-                                        onClick={() => {
-                                            setCategoryTagId(isSelected ? "" : tag.id);
-                                            setShowCategoryModal(false);
-                                        }}
-                                        className={`flex flex-col items-center space-y-1 px-2 py-3 rounded-xl text-xs font-medium transition-all duration-200 ${isSelected
-                                            ? "bg-purple-500 text-white shadow-lg transform scale-105"
-                                            : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 hover:shadow-md border border-purple-200 dark:border-purple-600"
-                                            }`}
-                                    >
-                                        <span className="text-lg">{getUnicodeEmoji(tag.unicodeCodepoint)}</span>
-                                        <span className="text-center leading-tight text-xs">{tag.displayName}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
+                        {loadingTags ? (
+                            <div className="flex items-center justify-center py-8">
+                                <div className="text-center">
+                                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-500 border-t-transparent mx-auto mb-4"></div>
+                                    <p className="text-gray-600 dark:text-gray-400">Đang tải danh mục...</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-4 gap-2 max-h-64 overflow-y-auto">
+                                {categoryTags?.filter(tag =>
+                                    !categorySearch || tag.displayName.toLowerCase().includes(categorySearch.toLowerCase())
+                                ).map(tag => {
+                                    if (!tag || !tag.id || !tag.displayName) return null;
+                                    const isSelected = categoryTagId === tag.id;
+                                    return (
+                                        <button
+                                            key={tag.id}
+                                            onClick={() => {
+                                                setCategoryTagId(isSelected ? "" : tag.id);
+                                                setShowCategoryModal(false);
+                                            }}
+                                            className={`flex flex-col items-center space-y-1 px-2 py-3 rounded-xl text-xs font-medium transition-all duration-200 ${isSelected
+                                                ? "bg-purple-500 text-white shadow-lg transform scale-105"
+                                                : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 hover:shadow-md border border-purple-200 dark:border-purple-600"
+                                                }`}
+                                        >
+                                            <span className="text-lg">{getUnicodeEmoji(tag.unicodeCodepoint)}</span>
+                                            <span className="text-center leading-tight text-xs">{tag.displayName}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -261,30 +277,39 @@ const CreatePostForm = ({
                     </div>
 
                     <div className="p-4">
-                        <div className="grid grid-cols-4 gap-2 max-h-64 overflow-y-auto">
-                            {emotionTags?.filter(emo =>
-                                !emotionSearch || emo.displayName.toLowerCase().includes(emotionSearch.toLowerCase())
-                            ).map(emo => {
-                                if (!emo || !emo.id || !emo.displayName) return null;
-                                const isSelected = emotionId === emo.id;
-                                return (
-                                    <button
-                                        key={emo.id}
-                                        onClick={() => {
-                                            setEmotionId(isSelected ? "" : emo.id);
-                                            setShowEmotionModal(false);
-                                        }}
-                                        className={`flex flex-col items-center space-y-1 px-2 py-3 rounded-xl text-xs font-medium transition-all duration-200 ${isSelected
-                                            ? "bg-purple-500 text-white shadow-lg transform scale-105"
-                                            : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 hover:shadow-md border border-purple-200 dark:border-purple-600"
-                                            }`}
-                                    >
-                                        <span className="text-lg">{getUnicodeEmoji(emo.unicodeCodepoint)}</span>
-                                        <span className="text-center leading-tight text-xs">{emo.displayName}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
+                        {loadingTags ? (
+                            <div className="flex items-center justify-center py-8">
+                                <div className="text-center">
+                                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-500 border-t-transparent mx-auto mb-4"></div>
+                                    <p className="text-gray-600 dark:text-gray-400">Đang tải cảm xúc...</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-4 gap-2 max-h-64 overflow-y-auto">
+                                {emotionTags?.filter(emo =>
+                                    !emotionSearch || emo.displayName.toLowerCase().includes(emotionSearch.toLowerCase())
+                                ).map(emo => {
+                                    if (!emo || !emo.id || !emo.displayName) return null;
+                                    const isSelected = emotionId === emo.id;
+                                    return (
+                                        <button
+                                            key={emo.id}
+                                            onClick={() => {
+                                                setEmotionId(isSelected ? "" : emo.id);
+                                                setShowEmotionModal(false);
+                                            }}
+                                            className={`flex flex-col items-center space-y-1 px-2 py-3 rounded-xl text-xs font-medium transition-all duration-200 ${isSelected
+                                                ? "bg-purple-500 text-white shadow-lg transform scale-105"
+                                                : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 hover:text-purple-600 dark:hover:text-purple-400 hover:shadow-md border border-purple-200 dark:border-purple-600"
+                                                }`}
+                                        >
+                                            <span className="text-lg">{getUnicodeEmoji(emo.unicodeCodepoint)}</span>
+                                            <span className="text-center leading-tight text-xs">{emo.displayName}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -352,33 +377,33 @@ const CreatePost = () => {
     const [emotionSearch, setEmotionSearch] = useState("");
 
     // Fetch tags/emotions từ API
-    useEffect(() => {
-        const fetchTags = async () => {
-            setLoadingTags(true);
-            try {
-                const [categoryData, emotionData] = await Promise.all([
-                    tagService.getCategoryTags(),
-                    tagService.getEmotionTags()
-                ]);
+    const fetchTags = async () => {
+        console.log('🔄 Fetching tags...', { categoryTags: categoryTags.length, emotionTags: emotionTags.length });
 
-                const categories = Array.isArray(categoryData?.categoryTags) ? categoryData.categoryTags : [];
-                const emotions = Array.isArray(emotionData?.emotionTags) ? emotionData.emotionTags : [];
+        setLoadingTags(true);
+        try {
+            console.log('📡 Calling APIs...');
+            const [categoryData, emotionData] = await Promise.all([
+                tagService.getCategoryTags(),
+                tagService.getEmotionTags()
+            ]);
 
-                setCategoryTags(categories);
-                setEmotionTags(emotions);
-            } catch (error) {
-                console.error("Failed to fetch tags:", error);
-                setCategoryTags([]);
-                setEmotionTags([]);
-            } finally {
-                setLoadingTags(false);
-            }
-        };
+            console.log('📦 API Responses:', { categoryData, emotionData });
 
-        if (user?.id) {
-            fetchTags();
+            const categories = Array.isArray(categoryData?.categoryTags) ? categoryData.categoryTags : [];
+            const emotions = Array.isArray(emotionData?.emotionTags) ? emotionData.emotionTags : [];
+
+            console.log('✅ Setting tags:', { categories: categories.length, emotions: emotions.length });
+            setCategoryTags(categories);
+            setEmotionTags(emotions);
+        } catch (error) {
+            console.error("❌ Failed to fetch tags:", error);
+            setCategoryTags([]);
+            setEmotionTags([]);
+        } finally {
+            setLoadingTags(false);
         }
-    }, [user?.id]);
+    };
 
     // Lấy thông tin danh mục và cảm xúc đã chọn
     const selectedCategory = categoryTags.find(tag => tag.id === categoryTagId);
@@ -414,8 +439,8 @@ const CreatePost = () => {
                 categoryTagId: responseData.categoryTagId || categoryTagId || '',
                 emotionId: responseData.emotionId || emotionId || '',
                 author: {
-                    id: user?.id || "anonymous",
-                    username: user?.username || generateAnonymousName(),
+                    id: user?.aliasId || user?.id || "anonymous",
+                    username: user?.aliasLabel || user?.displayName || user?.username || generateAnonymousName(),
                     isOnline: true,
                 },
                 createdAt: apiData.createdAt || new Date().toISOString(),
@@ -461,7 +486,7 @@ const CreatePost = () => {
                 <div className="flex items-start p-4 space-x-3">
                     {/* Avatar */}
                     <Avatar
-                        username={user?.displayName || user?.username || "Bạn"}
+                        username={user?.aliasLabel || user?.displayName || user?.username || "Bạn"}
                         size="md"
                         className="w-10 h-10 flex-shrink-0"
                     />
@@ -471,7 +496,7 @@ const CreatePost = () => {
                         <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-1">
                             <span className="flex items-center space-x-1">
                                 <span className="font-medium text-gray-700 dark:text-gray-300">
-                                    {user?.displayName || user?.username || "Bạn"}
+                                    {user?.aliasLabel || user?.displayName || user?.username || "Bạn"}
                                 </span>
                                 <span>•</span>
                                 <span className="text-green-500">Công khai</span>
@@ -541,6 +566,7 @@ const CreatePost = () => {
                                 showEmotionModal={showEmotionModal} setShowEmotionModal={setShowEmotionModal}
                                 selectedCategory={selectedCategory}
                                 selectedEmotion={selectedEmotion}
+                                fetchTags={fetchTags}
                             />
                         </div>
                     </div>

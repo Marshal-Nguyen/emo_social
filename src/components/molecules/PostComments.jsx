@@ -227,7 +227,7 @@ const PostComments = forwardRef(({
       const optimistic = {
         id: tempId,
         content,
-        author: user?.displayName || user?.username || "Anonymous",
+        author: user?.aliasLabel || user?.displayName || user?.username || "Anonymous",
         avatar: user?.avatar || user?.avatarUrl || null,
         createdAt: new Date().toISOString(),
         reactionCount: 0,

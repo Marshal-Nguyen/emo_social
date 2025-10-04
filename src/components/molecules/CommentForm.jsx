@@ -24,7 +24,7 @@ const CommentForm = ({
   };
 
   const userAvatar = (
-    <Avatar username={user?.username || "Anonymous"} size="sm" />
+    <Avatar username={user?.aliasLabel || user?.username || "Anonymous"} size="sm" />
   );
 
   return (

@@ -106,6 +106,7 @@ export const initializeAuth = () => {
         console.log("Authentication initialized from localStorage:", {
             userId: userData.id,
             email: userData.email,
+            aliasLabel: userData.aliasLabel || "No alias",
             tokenExpiry: decoded?.exp ? new Date(decoded.exp * 1000).toLocaleString() : "No expiration"
         });
 

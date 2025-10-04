@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess, loginFailure, logout } from "../store/authSlice";
 import { clearAuth } from "../services/authInit";
+import { aliasService } from "../services/apiService";
+import AliasSelection from "../components/organisms/AliasSelection";
 
 // Inline Google icon to avoid external deps
 const GoogleIcon = ({ className = "w-5 h-5" }) => (
@@ -136,6 +138,8 @@ const LogIn = () => {
   const [demoMode, setDemoMode] = useState(false);
   const [apiStatus, setApiStatus] = useState("checking"); // "checking", "available", "unavailable"
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [showAliasSelection, setShowAliasSelection] = useState(false);
+  const [isCheckingAlias, setIsCheckingAlias] = useState(false);
 
   // Axios instance with token attachment and refresh flow
   const isRefreshingRef = useRef(false);
@@ -348,6 +352,70 @@ const LogIn = () => {
         token: data.token
       }));
 
+      // Check alias status after successful login
+      await checkAliasStatus();
+
+    } catch (error) {
+      console.error("Error saving auth data:", error);
+      dispatch(loginFailure("Lỗi lưu thông tin đăng nhập"));
+    }
+  };
+
+  // Check alias status and handle accordingly
+  const checkAliasStatus = async () => {
+    try {
+      setIsCheckingAlias(true);
+      const aliasStatus = await aliasService.checkAliasStatus();
+
+      if (aliasStatus.aliasIssued) {
+        // User already has an alias, get the current alias info
+        const aliasInfo = await aliasService.getCurrentAlias();
+        await updateUserWithAlias(aliasInfo);
+      } else {
+        // User needs to select an alias
+        setShowAliasSelection(true);
+      }
+    } catch (error) {
+      console.error("Error checking alias status:", error);
+      // If alias check fails, proceed without alias
+      try {
+        window.dispatchEvent(
+          new CustomEvent("app:toast", { detail: { type: "success", message: "Đăng nhập thành công" } })
+        );
+      } catch { }
+      navigate("/");
+    } finally {
+      setIsCheckingAlias(false);
+    }
+  };
+
+  // Update user data with alias information
+  const updateUserWithAlias = async (aliasInfo) => {
+    try {
+      // Get current user data from localStorage
+      const currentUserStr = localStorage.getItem("auth_user");
+      if (currentUserStr) {
+        const currentUser = JSON.parse(currentUserStr);
+        const updatedUser = {
+          ...currentUser,
+          aliasId: aliasInfo.aliasId,
+          aliasLabel: aliasInfo.label,
+          avatarUrl: aliasInfo.avatarUrl,
+          followers: aliasInfo.followers,
+          followings: aliasInfo.followings,
+          posts: aliasInfo.posts,
+          aliasCreatedAt: aliasInfo.createdAt
+        };
+
+        // Update localStorage
+        localStorage.setItem("auth_user", JSON.stringify(updatedUser));
+
+        // Update Redux store
+        dispatch(loginSuccess({
+          user: updatedUser,
+          token: localStorage.getItem("access_token")
+        }));
+      }
 
       // Show success message
       try {
@@ -359,9 +427,29 @@ const LogIn = () => {
       // Navigate to home
       navigate("/");
     } catch (error) {
-      console.error("Error saving auth data:", error);
-      dispatch(loginFailure("Lỗi lưu thông tin đăng nhập"));
+      console.error("Error updating user with alias:", error);
+      // Fallback: navigate to home even if alias update fails
+      navigate("/");
     }
+  };
+
+  // Handle alias selection completion
+  const handleAliasSelected = async (aliasInfo) => {
+    setShowAliasSelection(false);
+    await updateUserWithAlias(aliasInfo);
+  };
+
+  // Handle alias selection error
+  const handleAliasError = (error) => {
+    console.error("Alias selection error:", error);
+    setShowAliasSelection(false);
+    // Proceed without alias
+    try {
+      window.dispatchEvent(
+        new CustomEvent("app:toast", { detail: { type: "success", message: "Đăng nhập thành công" } })
+      );
+    } catch { }
+    navigate("/");
   };
 
   const revokeGoogleAndClearSession = async () => {
@@ -682,6 +770,28 @@ const LogIn = () => {
         <div className="text-center">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent mx-auto mb-4"></div>
           <p className="text-slate-600">Đang kiểm tra đăng nhập...</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Show alias selection screen
+  if (showAliasSelection) {
+    return (
+      <AliasSelection
+        onAliasSelected={handleAliasSelected}
+        onError={handleAliasError}
+      />
+    );
+  }
+
+  // Show loading screen while checking alias status
+  if (isCheckingAlias) {
+    return (
+      <section className="relative overflow-hidden w-full min-h-screen py-10 md:py-16 flex items-center justify-center">
+        <div className="text-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent mx-auto mb-4"></div>
+          <p className="text-slate-600">Đang kiểm tra thông tin tài khoản...</p>
         </div>
       </section>
     );
