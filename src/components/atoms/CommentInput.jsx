@@ -21,6 +21,14 @@ const CommentInput = ({
     }
   };
 
+  const handleKeyDown = (e) => {
+    // Allow Shift+Enter for new lines
+    if (e.key === "Enter" && e.shiftKey) {
+      // Let the default behavior happen (add new line)
+      return;
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (onSubmit && value.trim()) {
@@ -37,6 +45,7 @@ const CommentInput = ({
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
           onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
           maxLength={maxLength}

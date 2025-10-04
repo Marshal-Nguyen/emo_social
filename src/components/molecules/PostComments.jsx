@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import Avatar from "../atoms/Avatar";
 import { Heart } from "lucide-react";
 import CommentForm from "./CommentForm";
+import FormattedComment from "../atoms/FormattedComment";
 import { formatTimeAgo } from "../../utils/helpers";
 import { postsService } from "../../services/apiService";
 import { useWebSocket } from "../../hooks/useWebSocket";
@@ -13,7 +14,7 @@ const baseUrl = "https://api.emoease.vn/post-service";
 const token =
   "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZWVlZWY1NC0zNzQ1LTRkODAtYTc1OC02NWFlNWQ2YTFiODUiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0NzM3NTcsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.TXKohDzV54uglcDGzk-D9ySdEo_3tSKaLcssTOwZwJC9m8GRlKmlv9-vrfSLALpdw69KFFNyJep3AW5ZuYQCDf4NJmTcrusVo6m0EER17A6kFv7QAKOkjUxEvo5MCl3QhXy1Yh34534x6HeoxjQcc8nvR2Ngj-g27hUxZckPMogiAh9fIxyEyvyqPRlGV9wlm6fqWlvtxEzDxBiUiLzXV7JMVMBLhp6GpK4_-kKNPpGsn3ne1ytZJ9gjMgYsImMQhWP2AWEOelHkRbh7fG_C51hUxd-y_hsTgG70U4Qib71qTbxEky5VwBv9Ly__Dv1jY5-htT_LNgHWVYPWuFiFgQ";
 
-const PostComments = ({
+const PostComments = forwardRef(({
   comments = [],
   show = false,
   maxVisible = 3,
@@ -23,7 +24,7 @@ const PostComments = ({
   hideRepliesByDefault = false,
   postId,
   autoLoadComments = false,
-}) => {
+}, ref) => {
   // Get user info from Redux
   const user = useSelector((state) => state.auth.user);
 
@@ -36,6 +37,15 @@ const PostComments = ({
   const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [fetchingReplies, setFetchingReplies] = useState(new Set());
   const commentEndRef = useRef(null);
+
+  // Expose refreshComments function to parent
+  useImperativeHandle(ref, () => ({
+    refreshComments: () => {
+      if (postId) {
+        loadComments();
+      }
+    }
+  }));
 
   // WebSocket hook with callback for real-time updates
   const handleCommentUpdate = useCallback((type, data) => {
@@ -140,7 +150,6 @@ const PostComments = ({
       // const wsUrl = `wss://api.emoease.vn/ws?postId=${postId}&token=${token}`;
       // websocketService.connect(wsUrl);
 
-      console.log('🔌 WebSocket disabled - using API fallback only');
 
       return () => {
         // websocketService.disconnect();
@@ -181,69 +190,20 @@ const PostComments = ({
           })) : [],
         }));
 
-        setLocalComments(mappedComments);
+        // Sort comments from newest to oldest (newest first)
+        const sortedComments = mappedComments.sort((a, b) =>
+          new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setLocalComments(sortedComments);
         setCommentsLoaded(true);
       }
     } catch (error) {
-      console.error("Error loading comments:", error);
     }
   };
 
-  // Handle comment submission for post
-  const handleCommentSubmit = async (content) => {
-    if (!postId) {
-      console.warn("Cannot submit comment without postId");
-      return;
-    }
-
-    if (!content.trim()) return;
-
-    try {
-      // Optimistic update
-      const optimisticComment = {
-        id: `temp-${Date.now()}`,
-        content: content.trim(),
-        author: user?.username || user?.displayName || "Anonymous",
-        avatar: user?.avatar || user?.avatarUrl || null,
-        createdAt: new Date().toISOString(),
-        reactionCount: 0,
-        replyCount: 0,
-        isReactedByCurrentUser: false,
-        replies: [],
-      };
-
-      // Add optimistic comment to local state
-      setLocalComments(prev => [optimisticComment, ...prev]);
-
-      // Send via WebSocket if connected, otherwise use API
-      if (isConnected) {
-        sendComment(content);
-      } else {
-        // API fallback
-        const response = await postsService.addComment(postId, content, null);
-        console.log("Comment created via API:", response);
-
-        // Update optimistic comment with real ID from API
-        if (response.commentId) {
-          setLocalComments(prev =>
-            prev.map(comment =>
-              comment.id === optimisticComment.id
-                ? { ...comment, id: response.commentId }
-                : comment
-            )
-          );
-        }
-      }
-    } catch (error) {
-      console.error("Error creating comment:", error);
-      // Revert optimistic update on error
-      setLocalComments(prev => prev.filter(comment => comment.id !== optimisticComment.id));
-    }
-  };
 
   const handleReplySubmit = async (commentId, content) => {
     if (!postId) {
-      console.warn("Cannot submit reply without postId");
       return;
     }
 
@@ -351,7 +311,6 @@ const PostComments = ({
         }
       }
     } catch (error) {
-      console.error("Lỗi khi thêm phản hồi:", error);
       // Remove optimistic reply on error
       setLocalComments(prev => {
         const removeReply = (comments) => {
@@ -379,7 +338,6 @@ const PostComments = ({
 
   const handleLikeComment = async (commentId, isReacted) => {
     if (!postId) {
-      console.warn("Cannot like comment without postId");
       return;
     }
 
@@ -472,24 +430,18 @@ const PostComments = ({
         }
       }
     } catch (error) {
-      console.error("Lỗi khi xử lý lượt thích bình luận:", error);
     }
   };
 
   const handleFetchReplies = async (commentId) => {
     if (!postId) {
-      console.warn("Cannot fetch replies without postId");
       return;
     }
 
     // Prevent duplicate API calls
     if (fetchingReplies.has(commentId)) {
-      console.log(`⏳ Already fetching replies for comment ${commentId}, skipping...`);
       return;
     }
-
-
-    console.log(`🔄 Fetching replies for comment ${commentId}`);
 
     try {
       setFetchingReplies(prev => new Set([...prev, commentId]));
@@ -514,23 +466,18 @@ const PostComments = ({
       const existingRepliesCount = currentComment?.replies?.length || 0;
       const pageIndex = Math.floor(existingRepliesCount / 20) + 1;
 
-      console.log(`📊 Comment ${commentId}: existingReplies=${existingRepliesCount}, pageIndex=${pageIndex}, totalReplyCount=${currentComment?.replyCount}`);
-
       // Chỉ gọi API nếu có replyCount > 0
       if (!currentComment?.replyCount || currentComment.replyCount === 0) {
-        console.log(`❌ Comment ${commentId} không có replies (replyCount=0), không gọi API`);
         return;
       }
 
       // Nếu đã load hết replies thì không gọi API
       if (existingRepliesCount >= currentComment.replyCount) {
-        console.log(`✅ Comment ${commentId} đã load hết replies (${existingRepliesCount}/${currentComment.replyCount}), không gọi API`);
         return;
       }
 
       // Gọi API riêng cho replies của comment
       const responseData = await postsService.getCommentReplies(commentId, pageIndex, 20);
-      console.log(`📡 API Response for ${commentId}:`, responseData);
 
       if (responseData.comments && responseData.comments.data) {
         const mappedReplies = responseData.comments.data.map((reply) => ({
@@ -548,10 +495,6 @@ const PostComments = ({
         // Filter chỉ lấy replies mới (chưa có trong existingReplies)
         const existingReplyIds = new Set(currentComment?.replies?.map(r => r.id) || []);
         const newReplies = mappedReplies.filter(reply => !existingReplyIds.has(reply.id));
-
-        console.log(`✅ Mapped replies for ${commentId}:`, mappedReplies);
-        console.log(`🔍 Existing reply IDs:`, Array.from(existingReplyIds));
-        console.log(`🆕 New replies after filtering:`, newReplies);
 
         // Update local state with new replies
         if (newReplies.length > 0) {
@@ -577,7 +520,6 @@ const PostComments = ({
           });
 
         } else {
-          console.log(`⚠️ No new replies to add for comment ${commentId}`);
           setOpenReplies((prev) => {
             const newState = { ...prev, [commentId]: true };
             return newState;
@@ -588,7 +530,6 @@ const PostComments = ({
         if (existingRepliesCount === 0) {
           setOpenReplies((prev) => {
             const newState = { ...prev, [commentId]: true };
-            console.log(`🔓 Opening replies for ${commentId}:`, newState);
             return newState;
           });
           // Set initial visible count to 3 (social media style)
@@ -597,11 +538,8 @@ const PostComments = ({
             [commentId]: 3,
           }));
         }
-      } else {
-        console.warn(`⚠️ No replies data for comment ${commentId}`);
       }
     } catch (error) {
-      console.error(`❌ Error fetching replies for ${commentId}:`, error);
     } finally {
       setFetchingReplies(prev => {
         const newSet = new Set(prev);
@@ -617,7 +555,6 @@ const PostComments = ({
       // Close all other reply forms first
       const newState = {};
       newState[commentId] = !prev[commentId];
-      console.log(`🔄 Toggle reply form for ${commentId}:`, newState);
       return newState;
     });
   };
@@ -688,10 +625,6 @@ const PostComments = ({
       // Giới hạn chiều sâu comment chỉ có 5 level
       const isMaxDepth = level >= 5;
 
-      // Debug log chi tiết
-      if (hasReplies) {
-        console.log(`🔍 Comment ${comment.id} (level ${level}): total=${totalReplyCount}, loaded=${loadedReplies}, hasMore=${hasMoreReplies}, isOpen=${isOpen}`);
-      }
 
       return (
         <motion.div
@@ -716,9 +649,12 @@ const PostComments = ({
                   {formatTimeAgo(comment.createdAt)}
                 </span>
               </div>
-              <p className="mt-1 text-sm sm:text-base text-gray-900 dark:text-gray-200 break-words">
-                {comment.content}
-              </p>
+              <div className="mt-1 text-sm sm:text-base text-gray-900 dark:text-gray-200 break-words">
+                <FormattedComment
+                  content={comment.content}
+                  className="leading-relaxed"
+                />
+              </div>
               <div className="flex items-center space-x-2 sm:space-x-4 mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                 <button
                   className={`flex items-center space-x-1 ${comment.isReactedByCurrentUser
@@ -829,26 +765,7 @@ const PostComments = ({
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {/* WebSocket status indicator */}
-      {postId && (
-        <div className="flex items-center space-x-2 text-xs">
-          <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-          <span className="text-gray-500 dark:text-gray-400">
-            {isConnected ? 'Kết nối real-time' : 'Chế độ offline'}
-          </span>
-        </div>
-      )}
 
-      {/* Comment form for post */}
-      {postId && (
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-          <CommentForm
-            onSubmit={handleCommentSubmit}
-            placeholder="Viết bình luận..."
-            isSubmitting={false}
-          />
-        </div>
-      )}
 
 
       {renderComments(validComments.slice(0, maxVisible))}
@@ -864,6 +781,6 @@ const PostComments = ({
       <div ref={commentEndRef} />
     </div>
   );
-};
+});
 
 export default PostComments;

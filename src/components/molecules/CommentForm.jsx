@@ -6,7 +6,7 @@ import Avatar from "../atoms/Avatar";
 const CommentForm = ({
   onSubmit,
   isSubmitting = false,
-  placeholder = "Viết bình luận...",
+  placeholder = "Viết bình luận...\n(Shift+Enter để xuống dòng)",
   className = "",
 }) => {
   const [comment, setComment] = useState("");

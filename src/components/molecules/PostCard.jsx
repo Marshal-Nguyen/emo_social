@@ -38,6 +38,7 @@ const PostCard = ({
   const [maxVisibleComments, setMaxVisibleComments] = useState(3);
   const [isCommenting, setIsCommenting] = useState(false);
   const commentEndRef = useRef(null);
+  const postCommentsRef = useRef(null);
 
   const bgColors = [
     "bg-white dark:bg-gray-800",
@@ -62,15 +63,26 @@ const PostCard = ({
     setMaxVisibleComments((prev) => prev + 5);
   };
 
-  // Comment submission is now handled by PostComments component
+  // Comment submission for post
   const handleCommentSubmit = async (content) => {
-    // This function is kept for compatibility but PostComments handles comments
-    console.log("Comment submission handled by PostComments component");
+    if (!content.trim()) return;
+
+    setIsCommenting(true);
+    try {
+      const response = await postsService.addComment(effectivePost.id, content, null);
+
+      // Refresh comments in PostComments
+      if (postCommentsRef.current?.refreshComments) {
+        postCommentsRef.current.refreshComments();
+      }
+    } catch (error) {
+    } finally {
+      setIsCommenting(false);
+    }
   };
 
   // Reply handling is now done by PostComments component
   const handleReply = (parentId, comment, update) => {
-    console.log("Reply handling done by PostComments component");
   };
 
   const handleDirectMessage = () => {
@@ -117,6 +129,7 @@ const PostCard = ({
         )}
       </div>
       <PostComments
+        ref={postCommentsRef}
         comments={effectivePost?.comments}
         show={showComments || forceShowComments}
         maxVisible={maxVisibleComments}
