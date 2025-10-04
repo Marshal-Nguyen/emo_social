@@ -11,8 +11,6 @@ import { useWebSocket } from "../../hooks/useWebSocket";
 import websocketService from "../../services/websocketService";
 
 const baseUrl = "https://api.emoease.vn/post-service";
-const token =
-  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZWVlZWY1NC0zNzQ1LTRkODAtYTc1OC02NWFlNWQ2YTFiODUiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0NzM3NTcsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.TXKohDzV54uglcDGzk-D9ySdEo_3tSKaLcssTOwZwJC9m8GRlKmlv9-vrfSLALpdw69KFFNyJep3AW5ZuYQCDf4NJmTcrusVo6m0EER17A6kFv7QAKOkjUxEvo5MCl3QhXy1Yh34534x6HeoxjQcc8nvR2Ngj-g27hUxZckPMogiAh9fIxyEyvyqPRlGV9wlm6fqWlvtxEzDxBiUiLzXV7JMVMBLhp6GpK4_-kKNPpGsn3ne1ytZJ9gjMgYsImMQhWP2AWEOelHkRbh7fG_C51hUxd-y_hsTgG70U4Qib71qTbxEky5VwBv9Ly__Dv1jY5-htT_LNgHWVYPWuFiFgQ";
 
 const PostComments = forwardRef(({
   comments = [],
@@ -367,23 +365,7 @@ const PostComments = forwardRef(({
       } else {
         // Fallback to API
         if (!isReacted) {
-          const response = await fetch(`${baseUrl}/v1/reactions`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              targetType: "Comment",
-              targetId: commentId,
-              reactionCode: "Like",
-            }),
-          });
-
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Không thể thích bình luận: ${errorText}`);
-          }
+          const response = await postsService.likeComment(commentId);
 
           // Update local state
           setLocalComments(prev => {
@@ -408,20 +390,7 @@ const PostComments = forwardRef(({
             return updateLike(prev);
           });
         } else {
-          const response = await fetch(
-            `${baseUrl}/v1/reactions?TargetType=Comment&TargetId=${commentId}`,
-            {
-              method: "DELETE",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Không thể bỏ thích bình luận: ${errorText}`);
-          }
+          await postsService.unlikeComment(commentId);
 
           // Update local state
           setLocalComments(prev => {

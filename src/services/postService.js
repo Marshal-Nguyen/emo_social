@@ -71,4 +71,36 @@ export const postService = {
         const response = await api.post(`https://api.emoease.vn/post-service/v1/posts/${postId}/like`);
         return response.data;
     },
+
+    // Like post
+    likePost: async (postId) => {
+        const response = await api.post("https://api.emoease.vn/post-service/v1/reactions", {
+            targetType: "Post",
+            targetId: postId,
+            reactionCode: "Like",
+        });
+        return response.data;
+    },
+
+    // Unlike post
+    unlikePost: async (postId) => {
+        const response = await api.delete(`https://api.emoease.vn/post-service/v1/reactions?TargetType=Post&TargetId=${postId}`);
+        return response.data;
+    },
+
+    // Like comment
+    likeComment: async (commentId) => {
+        const response = await api.post("https://api.emoease.vn/post-service/v1/reactions", {
+            targetType: "Comment",
+            targetId: commentId,
+            reactionCode: "Like",
+        });
+        return response.data;
+    },
+
+    // Unlike comment
+    unlikeComment: async (commentId) => {
+        const response = await api.delete(`https://api.emoease.vn/post-service/v1/reactions?TargetType=Comment&TargetId=${commentId}`);
+        return response.data;
+    },
 };

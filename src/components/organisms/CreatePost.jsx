@@ -473,9 +473,8 @@ const CreatePost = () => {
 
   // Fetch tags/emotions nếu cần (useEffect)
   useEffect(() => {
-    // Ví dụ: GET /v1/tags hoặc /v1/emotions với axios tương tự
-    // axios.get(`${BASE_URL}/v1/tags`, { headers: { Authorization: `Bearer ${FIXED_TOKEN}` } }).then(res => setTAGS(res.data));
-    // Hiện hardcode
+    // TODO: Implement API calls for tags and emotions
+    // Example: GET /v1/tags and /v1/emotions
   }, []);
 
   const handleSubmit = async (e) => {

@@ -748,7 +748,7 @@ const LogIn = () => {
                 <div className="flex items-center gap-2">
                   {[
                     { key: "login", label: "Đăng nhập" },
-                    { key: "register", label: "Đăng ký" },
+                    // { key: "register", label: "Đăng ký" },
                   ].map((t) => (
                     <button
                       key={t.key}
@@ -938,7 +938,7 @@ const LogIn = () => {
                   </Button>
                 </form>
 
-                <p className="mt-4 text-sm text-slate-600">
+                {/* <p className="mt-4 text-sm text-slate-600">
                   {mode === "login" ? (
                     <>
                       Chưa có tài khoản?{" "}
@@ -964,7 +964,7 @@ const LogIn = () => {
                       </button>
                     </>
                   )}
-                </p>
+                </p> */}
 
               </div>
 

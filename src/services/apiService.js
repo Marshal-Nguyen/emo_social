@@ -243,6 +243,104 @@ export const postsService = {
         const response = await api.delete(`/posts/${postId}`);
         return response.data;
     },
+
+    // Like post
+    likePost: async (postId) => {
+        const baseUrl = "https://api.emoease.vn/post-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/v1/reactions`, {
+            method: "POST",
+            headers: createApiHeaders(),
+            body: JSON.stringify({
+                targetType: "Post",
+                targetId: postId,
+                reactionCode: "Like",
+            }),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Không thể thích bài viết: ${errorText}`);
+        }
+
+        return await response.json();
+    },
+
+    // Unlike post
+    unlikePost: async (postId) => {
+        const baseUrl = "https://api.emoease.vn/post-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/v1/reactions?TargetType=Post&TargetId=${postId}`, {
+            method: "DELETE",
+            headers: createApiHeaders(),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Không thể bỏ thích bài viết: ${errorText}`);
+        }
+
+        return await response.json();
+    },
+
+    // Like comment
+    likeComment: async (commentId) => {
+        const baseUrl = "https://api.emoease.vn/post-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/v1/reactions`, {
+            method: "POST",
+            headers: createApiHeaders(),
+            body: JSON.stringify({
+                targetType: "Comment",
+                targetId: commentId,
+                reactionCode: "Like",
+            }),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Không thể thích bình luận: ${errorText}`);
+        }
+
+        return await response.json();
+    },
+
+    // Unlike comment
+    unlikeComment: async (commentId) => {
+        const baseUrl = "https://api.emoease.vn/post-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/v1/reactions?TargetType=Comment&TargetId=${commentId}`, {
+            method: "DELETE",
+            headers: createApiHeaders(),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Không thể bỏ thích bình luận: ${errorText}`);
+        }
+
+        return await response.json();
+    },
 };
 
 export const chatService = {
