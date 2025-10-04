@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSelector } from "react-redux";
 import Avatar from "../atoms/Avatar";
 import { Heart } from "lucide-react";
 import CommentForm from "./CommentForm";
@@ -23,6 +24,9 @@ const PostComments = ({
   postId,
   autoLoadComments = false,
 }) => {
+  // Get user info from Redux
+  const user = useSelector((state) => state.auth.user);
+
   // Local state management (no Redux needed with WebSocket)
   const [localComments, setLocalComments] = useState(comments);
   const [showReplyForm, setShowReplyForm] = useState({});
@@ -31,7 +35,6 @@ const PostComments = ({
   const [loadingReplies, setLoadingReplies] = useState({});
   const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [fetchingReplies, setFetchingReplies] = useState(new Set());
-  const [loadedAllReplies, setLoadedAllReplies] = useState(new Set());
   const commentEndRef = useRef(null);
 
   // WebSocket hook with callback for real-time updates
@@ -124,10 +127,10 @@ const PostComments = ({
     }
   }, [postId, commentsLoaded, autoLoadComments]);
 
-  // Reset loadedAllReplies when postId changes
+  // Reset state when postId changes
   useEffect(() => {
-    setLoadedAllReplies(new Set());
     setFetchingReplies(new Set());
+    setShowReplyForm({}); // Close all reply forms when postId changes
   }, [postId]);
 
   // Initialize WebSocket connection (disabled for now due to connection issues)
@@ -186,6 +189,58 @@ const PostComments = ({
     }
   };
 
+  // Handle comment submission for post
+  const handleCommentSubmit = async (content) => {
+    if (!postId) {
+      console.warn("Cannot submit comment without postId");
+      return;
+    }
+
+    if (!content.trim()) return;
+
+    try {
+      // Optimistic update
+      const optimisticComment = {
+        id: `temp-${Date.now()}`,
+        content: content.trim(),
+        author: user?.username || user?.displayName || "Anonymous",
+        avatar: user?.avatar || user?.avatarUrl || null,
+        createdAt: new Date().toISOString(),
+        reactionCount: 0,
+        replyCount: 0,
+        isReactedByCurrentUser: false,
+        replies: [],
+      };
+
+      // Add optimistic comment to local state
+      setLocalComments(prev => [optimisticComment, ...prev]);
+
+      // Send via WebSocket if connected, otherwise use API
+      if (isConnected) {
+        sendComment(content);
+      } else {
+        // API fallback
+        const response = await postsService.addComment(postId, content, null);
+        console.log("Comment created via API:", response);
+
+        // Update optimistic comment with real ID from API
+        if (response.commentId) {
+          setLocalComments(prev =>
+            prev.map(comment =>
+              comment.id === optimisticComment.id
+                ? { ...comment, id: response.commentId }
+                : comment
+            )
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error creating comment:", error);
+      // Revert optimistic update on error
+      setLocalComments(prev => prev.filter(comment => comment.id !== optimisticComment.id));
+    }
+  };
+
   const handleReplySubmit = async (commentId, content) => {
     if (!postId) {
       console.warn("Cannot submit reply without postId");
@@ -198,8 +253,8 @@ const PostComments = ({
       const optimistic = {
         id: tempId,
         content,
-        author: "Anonymous", // You can get this from auth context
-        avatar: null,
+        author: user?.username || user?.displayName || "Anonymous",
+        avatar: user?.avatar || user?.avatarUrl || null,
         createdAt: new Date().toISOString(),
         reactionCount: 0,
         replyCount: 0,
@@ -233,6 +288,9 @@ const PostComments = ({
       // Ensure the replies section opens when first reply is added
       setOpenReplies((prev) => ({ ...prev, [commentId]: true }));
       setReplyVisibleCount((prev) => ({ ...prev, [commentId]: Math.max(prev[commentId] || 0, 3) }));
+
+      // Close the reply form after submitting
+      setShowReplyForm((prev) => ({ ...prev, [commentId]: false }));
 
       // Send via WebSocket if connected, otherwise fallback to API
       if (isConnected) {
@@ -430,11 +488,6 @@ const PostComments = ({
       return;
     }
 
-    // Prevent API calls if already loaded all replies
-    if (loadedAllReplies.has(commentId)) {
-      console.log(`✅ Comment ${commentId} đã load hết replies, skipping...`);
-      return;
-    }
 
     console.log(`🔄 Fetching replies for comment ${commentId}`);
 
@@ -463,17 +516,24 @@ const PostComments = ({
 
       console.log(`📊 Comment ${commentId}: existingReplies=${existingRepliesCount}, pageIndex=${pageIndex}, totalReplyCount=${currentComment?.replyCount}`);
 
-      // Nếu đã load hết replies thì không gọi API nữa
-      if (existingRepliesCount >= (currentComment?.replyCount || 0)) {
-        console.log(`✅ Comment ${commentId} đã load hết replies, không cần gọi API`);
+      // Chỉ gọi API nếu có replyCount > 0
+      if (!currentComment?.replyCount || currentComment.replyCount === 0) {
+        console.log(`❌ Comment ${commentId} không có replies (replyCount=0), không gọi API`);
         return;
       }
 
-      const response = await postsService.getComments(postId, pageIndex, 20, commentId);
-      console.log(`📡 API Response for ${commentId}:`, response);
+      // Nếu đã load hết replies thì không gọi API
+      if (existingRepliesCount >= currentComment.replyCount) {
+        console.log(`✅ Comment ${commentId} đã load hết replies (${existingRepliesCount}/${currentComment.replyCount}), không gọi API`);
+        return;
+      }
 
-      if (response.comments && response.comments.data) {
-        const mappedReplies = response.comments.data.map((reply) => ({
+      // Gọi API riêng cho replies của comment
+      const responseData = await postsService.getCommentReplies(commentId, pageIndex, 20);
+      console.log(`📡 API Response for ${commentId}:`, responseData);
+
+      if (responseData.comments && responseData.comments.data) {
+        const mappedReplies = responseData.comments.data.map((reply) => ({
           id: reply.id,
           content: reply.content,
           author: reply.author.displayName,
@@ -490,6 +550,7 @@ const PostComments = ({
         const newReplies = mappedReplies.filter(reply => !existingReplyIds.has(reply.id));
 
         console.log(`✅ Mapped replies for ${commentId}:`, mappedReplies);
+        console.log(`🔍 Existing reply IDs:`, Array.from(existingReplyIds));
         console.log(`🆕 New replies after filtering:`, newReplies);
 
         // Update local state with new replies
@@ -515,16 +576,8 @@ const PostComments = ({
             return addRepliesToComment(prev);
           });
 
-          // Kiểm tra xem đã load hết chưa
-          const totalRepliesAfterLoad = existingRepliesCount + newReplies.length;
-          if (totalRepliesAfterLoad >= (currentComment?.replyCount || 0)) {
-            setLoadedAllReplies(prev => new Set([...prev, commentId]));
-            console.log(`🎯 Comment ${commentId} đã load hết tất cả replies`);
-          }
         } else {
           console.log(`⚠️ No new replies to add for comment ${commentId}`);
-          // Nếu không có replies mới, đánh dấu đã load hết
-          setLoadedAllReplies(prev => new Set([...prev, commentId]));
           setOpenReplies((prev) => {
             const newState = { ...prev, [commentId]: true };
             return newState;
@@ -560,10 +613,13 @@ const PostComments = ({
   };
 
   const toggleReplyForm = (commentId) => {
-    setShowReplyForm((prev) => ({
-      ...prev,
-      [commentId]: !prev[commentId],
-    }));
+    setShowReplyForm((prev) => {
+      // Close all other reply forms first
+      const newState = {};
+      newState[commentId] = !prev[commentId];
+      console.log(`🔄 Toggle reply form for ${commentId}:`, newState);
+      return newState;
+    });
   };
 
   const toggleReplies = (commentId) => {
@@ -624,19 +680,17 @@ const PostComments = ({
       const isOpen = openReplies[comment.id] ?? false;
       const areRepliesLoaded = loadedReplies >= totalReplyCount && loadedReplies > 0;
       const hasLoadedAny = loadedReplies > 0;
-      const shouldShowReplies = isOpen && (hasLoadedAny || areRepliesLoaded);
+      const shouldShowReplies = isOpen;
       const isLoading = loadingReplies[comment.id] || false;
-      const hasMoreReplies = totalReplyCount > loadedReplies && loadedReplies > 0 && !isLoading && !loadedAllReplies.has(comment.id);
+      // Hiển thị nút nếu có replyCount > loadedReplies và không đang loading
+      const hasMoreReplies = totalReplyCount > loadedReplies && !isLoading;
 
-      // Debug log for each comment (only when state changes) - reduce noise
-      if (hasReplies && (comment.id === '9ecbdb95-9976-4e75-858a-d1a5d46864c6' || comment.id === '0ba7d257-be4d-4e82-b68d-c7ad9e2c4cdc')) {
-        // Only log when there's a significant change
-        const prevLoaded = window.lastLoadedReplies?.[comment.id] || 0;
-        if (prevLoaded !== loadedReplies) {
-          console.log(`🔍 Comment ${comment.id}: total=${totalReplyCount}, loaded=${loadedReplies}, isOpen=${isOpen}, hasMore=${hasMoreReplies}, loadedAll=${loadedAllReplies.has(comment.id)}`);
-          if (!window.lastLoadedReplies) window.lastLoadedReplies = {};
-          window.lastLoadedReplies[comment.id] = loadedReplies;
-        }
+      // Giới hạn chiều sâu comment chỉ có 5 level
+      const isMaxDepth = level >= 5;
+
+      // Debug log chi tiết
+      if (hasReplies) {
+        console.log(`🔍 Comment ${comment.id} (level ${level}): total=${totalReplyCount}, loaded=${loadedReplies}, hasMore=${hasMoreReplies}, isOpen=${isOpen}`);
       }
 
       return (
@@ -679,12 +733,14 @@ const PostComments = ({
                   />
                   <span>{comment.reactionCount}</span>
                 </button>
-                <button
-                  className="hover:text-gray-700 dark:hover:text-gray-200"
-                  onClick={() => toggleReplyForm(comment.id)}
-                >
-                  Trả lời
-                </button>
+                {!isMaxDepth && (
+                  <button
+                    className="hover:text-gray-700 dark:hover:text-gray-200"
+                    onClick={() => toggleReplyForm(comment.id)}
+                  >
+                    Trả lời
+                  </button>
+                )}
                 {hasReplies && (
                   <button
                     className="hover:text-gray-700 dark:hover:text-gray-200 flex items-center space-x-1"
@@ -693,52 +749,53 @@ const PostComments = ({
                         // Đang loading -> Không làm gì
                         return;
                       }
-                      if (isOpen && areRepliesLoaded) {
-                        // Đã mở và load hết -> Ẩn
+                      if (isOpen) {
+                        // Đã mở -> Ẩn
                         toggleReplies(comment.id);
-                      } else if (!hasLoadedAny) {
-                        // Chưa load gì -> Load từ API
-                        handleFetchReplies(comment.id);
                       } else {
-                        // Đã có replies sẵn -> Toggle hiển thị
-                        toggleReplies(comment.id);
+                        // Chưa mở -> Load từ API nếu cần, rồi mở
+                        if (!hasLoadedAny) {
+                          handleFetchReplies(comment.id);
+                        } else {
+                          toggleReplies(comment.id);
+                        }
                       }
                     }}
                     disabled={loadingReplies[comment.id]}
                   >
                     {loadingReplies[comment.id] ? (
                       <span>Đang tải...</span>
-                    ) : isOpen && areRepliesLoaded ? (
+                    ) : isOpen ? (
                       <span>Ẩn phản hồi</span>
-                    ) : hasLoadedAny ? (
-                      <span>Xem phản hồi ({loadedReplies}/{totalReplyCount})</span>
                     ) : (
-                      <span>Xem {totalReplyCount} phản hồi</span>
+                      <span>Xem thêm phản hồi</span>
                     )}
                   </button>
                 )}
               </div>
-              <AnimatePresence>
-                {showReplyForm[comment.id] && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-2"
-                  >
-                    <CommentForm
-                      onSubmit={(content) => handleReplySubmit(comment.id, content)}
-                      placeholder={`Trả lời ${comment.author}...`}
-                      isSubmitting={false}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {!isMaxDepth && (
+                <AnimatePresence>
+                  {showReplyForm[comment.id] && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mt-2"
+                    >
+                      <CommentForm
+                        onSubmit={(content) => handleReplySubmit(comment.id, content)}
+                        placeholder={`Trả lời ${comment.author}...`}
+                        isSubmitting={false}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              )}
             </div>
           </div>
-          {/* Show replies when opened (social media style) */}
-          {shouldShowReplies && comment.replies && comment.replies.length > 0 && (
+          {/* Show replies when opened (social media style) - only if not at max depth */}
+          {!isMaxDepth && shouldShowReplies && comment.replies && comment.replies.length > 0 && (
             <div className="mt-2">
               {(() => {
                 const total = comment.replies.length;
@@ -750,12 +807,12 @@ const PostComments = ({
                 return (
                   <>
                     {renderComments(toRender, level + 1)}
-                    {remaining > 0 && (
+                    {remaining > 0 && !hasMoreReplies && (
                       <button
                         className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm mt-1 font-medium"
                         onClick={() => handleShowMoreReplies(comment.id, total)}
                       >
-                        Xem thêm {remaining} phản hồi
+                        Xem thêm phản hồi
                       </button>
                     )}
                   </>
@@ -764,27 +821,7 @@ const PostComments = ({
             </div>
           )}
 
-          {/* Show "Xem thêm phản hồi" button when there are more replies to load (social media style) */}
-          {hasMoreReplies && (
-            <div className="mt-2">
-              <button
-                className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm font-medium"
-                onClick={() => {
-                  if (!isLoading) {
-                    console.log(`🔄 Fetching more replies for comment ${comment.id} (level ${level})`);
-                    handleFetchReplies(comment.id);
-                  }
-                }}
-                disabled={loadingReplies[comment.id]}
-              >
-                {loadingReplies[comment.id] ? (
-                  "Đang tải..."
-                ) : (
-                  `Xem thêm ${totalReplyCount - loadedReplies} phản hồi`
-                )}
-              </button>
-            </div>
-          )}
+
         </motion.div>
       );
     });
@@ -802,12 +839,17 @@ const PostComments = ({
         </div>
       )}
 
-      {/* Comment count header (social media style) */}
-      {validComments.length > 0 && (
-        <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-          {validComments.length} bình luận
+      {/* Comment form for post */}
+      {postId && (
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+          <CommentForm
+            onSubmit={handleCommentSubmit}
+            placeholder="Viết bình luận..."
+            isSubmitting={false}
+          />
         </div>
       )}
+
 
       {renderComments(validComments.slice(0, maxVisible))}
 
