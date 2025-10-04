@@ -81,7 +81,7 @@ const HomePage = () => {
           {isMobile ? (
             <div className="flex flex-col gap-3 sm:gap-4">
               <FeedNav selected={selectedTab} onSelect={setSelectedTab} />
-              <div className="w-full">
+              {/* <div className="w-full">
                 <SearchBar
                   onSearch={(searchValue, filterValue) => {
                     setSearch(searchValue);
@@ -93,12 +93,12 @@ const HomePage = () => {
                   selectedFilter={selectedFilters}
                   setSelectedFilter={setSelectedFilters}
                 />
-              </div>
+              </div> */}
             </div>
           ) : (
             <div className="flex items-center gap-4">
               <FeedNav selected={selectedTab} onSelect={setSelectedTab} />
-              <div className="flex-1 flex justify-end">
+              {/* <div className="flex-1 flex justify-end">
                 <div className="w-full max-w-xs">
                   <SearchBar
                     onSearch={(searchValue, filterValue) => {
@@ -112,7 +112,7 @@ const HomePage = () => {
                     setSelectedFilter={setSelectedFilters}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
         </div>

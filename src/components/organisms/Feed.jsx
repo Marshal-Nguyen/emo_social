@@ -344,7 +344,7 @@ const Feed = ({ onNavigateToChat }) => {
         <div className="text-center py-8">
           <div className="inline-flex items-center space-x-2 text-gray-500 dark:text-gray-400">
             <div className="w-8 h-px bg-gray-300 dark:bg-gray-600"></div>
-            <span className="text-sm">Bạn đã xem hết tất cả bài viết</span>
+            <span className="text-sm">Bạn đã xem hết tất cả bài viết rồi, bạn muốn chia sẻ cảm xúc và câu chuyện của bạn với cộng đồng?</span>
             <div className="w-8 h-px bg-gray-300 dark:bg-gray-600"></div>
           </div>
         </div>

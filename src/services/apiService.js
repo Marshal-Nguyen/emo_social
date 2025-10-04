@@ -14,6 +14,7 @@ export const authService = {
       return {
         success: true,
         token: "demo-emo-token-67890",
+        refreshToken: "demo-refresh-token-67890",
         user: {
           id: "b6a76f02-be77-4ef9-b8f9-ca5c88736cbf",
           email: "emo@gmail.com",
