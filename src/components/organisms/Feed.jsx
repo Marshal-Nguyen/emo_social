@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import PostCard from "../molecules/PostCard";
@@ -107,13 +107,89 @@ const Feed = ({ onNavigateToChat }) => {
     (state) => state.posts
   );
 
+  // Refs for infinite scroll
+  const observerRef = useRef();
+  const loadingRef = useRef();
+
+  // Load more posts function
+  const loadMorePosts = useCallback(async () => {
+    if (loading || !hasMore) return;
+
+    dispatch(fetchFeedStart());
+    try {
+      // Get next batch of feed items using cursor
+      const feedResponse = await postsService.getFeed(20, nextCursor);
+      const newFeedItems = feedResponse.items || [];
+
+      if (newFeedItems.length === 0) {
+        // No more items
+        dispatch(fetchFeedSuccess({
+          feedItems: [],
+          nextCursor: null,
+          hasMore: false,
+          totalCount: totalCount,
+          reset: false,
+        }));
+        return;
+      }
+
+      // Update feed items in state
+      dispatch(fetchFeedSuccess({
+        feedItems: newFeedItems,
+        nextCursor: feedResponse.nextCursor,
+        hasMore: feedResponse.hasMore,
+        totalCount: feedResponse.totalCount,
+        reset: false,
+      }));
+
+      // Get post details for the new batch
+      const postIds = newFeedItems.map(item => item.postId);
+      const postsResponse = await postsService.getPostsByIds(postIds, 1, 20);
+      const apiPosts = postsResponse.posts?.data || [];
+
+      // Transform API data to match our component structure
+      const transformedPosts = apiPosts.map(post => ({
+        id: post.id,
+        title: post.title,
+        content: post.content,
+        author: {
+          id: post.author.aliasId,
+          username: post.author.displayName,
+          avatar: post.author.avatarUrl,
+          isOnline: false, // API doesn't provide this info
+        },
+        createdAt: post.publishedAt,
+        editedAt: post.editedAt,
+        likesCount: post.reactionCount,
+        commentCount: post.commentCount,
+        commentsCount: post.commentCount, // Sync with PostActions display
+        liked: post.isReactedByCurrentUser,
+        comments: [], // Will be loaded separately if needed
+        images: post.medias || [],
+        hasMedia: post.hasMedia,
+        viewCount: post.viewCount,
+        visibility: post.visibility,
+        categoryTagIds: post.categoryTagIds || [],
+        emotionTagIds: post.emotionTagIds || [],
+      }));
+
+      dispatch(fetchPostsFromFeedSuccess({
+        posts: transformedPosts,
+        reset: false,
+      }));
+    } catch (error) {
+      console.error("Error loading more posts:", error);
+      dispatch(fetchFeedFailure(error.message));
+    }
+  }, [dispatch, loading, hasMore, nextCursor, totalCount]);
+
+  // Initial load
   useEffect(() => {
-    // Load feed using new logic: get feed items first, then fetch post details
-    const loadFeed = async () => {
+    const loadInitialFeed = async () => {
       dispatch(fetchFeedStart());
       try {
-        // Step 1: Get feed items
-        const feedResponse = await postsService.getFeed(624);
+        // Get initial feed items
+        const feedResponse = await postsService.getFeed(20);
         const feedItems = feedResponse.items || [];
 
         dispatch(fetchFeedSuccess({
@@ -124,10 +200,10 @@ const Feed = ({ onNavigateToChat }) => {
           reset: true,
         }));
 
-        // Step 2: Get post details for the first batch
+        // Get post details for the first batch
         if (feedItems.length > 0) {
-          const postIds = feedItems.slice(0, 10).map(item => item.postId);
-          const postsResponse = await postsService.getPostsByIds(postIds, 1, 10);
+          const postIds = feedItems.map(item => item.postId);
+          const postsResponse = await postsService.getPostsByIds(postIds, 1, 20);
           const apiPosts = postsResponse.posts?.data || [];
 
           // Transform API data to match our component structure
@@ -162,101 +238,41 @@ const Feed = ({ onNavigateToChat }) => {
           }));
         }
       } catch (error) {
-        console.error("Error loading feed:", error);
+        console.error("Error loading initial feed:", error);
         dispatch(fetchFeedFailure(error.message));
       }
     };
 
-    loadFeed();
+    loadInitialFeed();
   }, [dispatch]);
 
-  const handleLoadMore = async () => {
-    if (loading || !hasMore) return;
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
 
-    dispatch(fetchFeedStart());
-    try {
-      // Calculate how many more posts we need to load
-      const currentLoadedCount = posts.length;
-      const nextBatchSize = 10;
-      const startIndex = currentLoadedCount;
-      const endIndex = Math.min(startIndex + nextBatchSize, feedItems.length);
-
-      if (startIndex >= feedItems.length) {
-        // No more feed items to load
-        dispatch(fetchFeedSuccess({
-          feedItems: [],
-          nextCursor: null,
-          hasMore: false,
-          totalCount: totalCount,
-          reset: false,
-        }));
-        return;
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadMorePosts();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '100px',
       }
+    );
 
-      // Get the next batch of post IDs from feed items
-      const nextBatchIds = feedItems.slice(startIndex, endIndex).map(item => item.postId);
-
-      if (nextBatchIds.length === 0) {
-        dispatch(fetchFeedSuccess({
-          feedItems: [],
-          nextCursor: null,
-          hasMore: false,
-          totalCount: totalCount,
-          reset: false,
-        }));
-        return;
-      }
-
-      // Fetch post details for the next batch
-      const postsResponse = await postsService.getPostsByIds(nextBatchIds, 1, nextBatchSize);
-      const apiPosts = postsResponse.posts?.data || [];
-
-      // Transform API data to match our component structure
-      const transformedPosts = apiPosts.map(post => ({
-        id: post.id,
-        title: post.title,
-        content: post.content,
-        author: {
-          id: post.author.aliasId,
-          username: post.author.displayName,
-          avatar: post.author.avatarUrl,
-          isOnline: false,
-        },
-        createdAt: post.publishedAt,
-        editedAt: post.editedAt,
-        likesCount: post.reactionCount,
-        commentCount: post.commentCount,
-        commentsCount: post.commentCount, // Sync with PostActions display
-        liked: post.isReactedByCurrentUser,
-        comments: [],
-        images: post.medias || [],
-        hasMedia: post.hasMedia,
-        viewCount: post.viewCount,
-        visibility: post.visibility,
-        categoryTagIds: post.categoryTagIds || [],
-        emotionTagIds: post.emotionTagIds || [],
-      }));
-
-      dispatch(fetchPostsFromFeedSuccess({
-        posts: transformedPosts,
-        reset: false,
-      }));
-
-      // Check if we've loaded all available posts
-      const newLoadedCount = currentLoadedCount + transformedPosts.length;
-      if (newLoadedCount >= feedItems.length) {
-        dispatch(fetchFeedSuccess({
-          feedItems: [],
-          nextCursor: null,
-          hasMore: false,
-          totalCount: totalCount,
-          reset: false,
-        }));
-      }
-    } catch (error) {
-      console.error("Error loading more posts:", error);
-      dispatch(fetchFeedFailure(error.message));
+    if (loadingRef.current) {
+      observerRef.current.observe(loadingRef.current);
     }
+
+    return () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    };
+  }, [loadMorePosts, hasMore, loading]);
+
+  const handleLoadMore = () => {
+    loadMorePosts();
   };
 
   if (loading && posts.length === 0) {
@@ -303,20 +319,23 @@ const Feed = ({ onNavigateToChat }) => {
         ))}
       </AnimatePresence>
 
-      {/* Load More Button */}
+      {/* Infinite Scroll Loading Indicator */}
       {hasMore && (
+        <div ref={loadingRef} className="text-center py-6">
+          <LoadingSpinner size="md" text="Đang tải thêm..." />
+        </div>
+      )}
+
+      {/* Manual Load More Button (fallback) */}
+      {hasMore && !loading && (
         <div className="text-center py-6">
-          {loading ? (
-            <LoadingSpinner size="md" text="Đang tải thêm..." />
-          ) : (
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={handleLoadMore}
-              className="px-8">
-              Xem thêm bài viết
-            </Button>
-          )}
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={handleLoadMore}
+            className="px-8">
+            Xem thêm bài viết
+          </Button>
         </div>
       )}
 

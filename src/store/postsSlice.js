@@ -329,6 +329,7 @@ const postsSlice = createSlice({
         state.feedItems = feedItems;
         state.posts = [];
       } else {
+        // Append new feed items to existing ones
         state.feedItems = [...state.feedItems, ...feedItems];
       }
 
