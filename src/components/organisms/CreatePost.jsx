@@ -289,6 +289,7 @@ import { generateAnonymousName, sanitizeInput } from "../../utils/helpers";
 import { motion } from "framer-motion";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import { postService } from "../../services/postService";
 // import toast from "react-hot-toast";  // Comment nếu chưa install, dùng console thay thế
 
 // Hardcode tạm cho pickers (thay bằng fetch API sau nếu cần)
@@ -305,8 +306,7 @@ const EMOTIONS = [
   // Fetch thật: GET /v1/emotions (hoặc /profile-service/v1/emotions)
 ];
 
-// Fixed token (hardcode theo yêu cầu)
-const FIXED_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNWZhZTI2OC03YThhLTQ1ZWMtYTMyYi1mMzVlMDkzNDEwN2EiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTkzODE1NTQsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.QQiuhb2SeBZIiHI1mXT0KAxfOqxFOQLLTnGDfILupcxF73q3vTaUdEVWNB-ZXB3_8BkF_mDZ8PoXKvJgCp54xjOg8z58I2ET95PM8tf13UfPIIhqlZAFAjwtMSw6PrZkOA-_6pSWNufX1WvX9RFeSNiAj-zsPWq3HlSUWx3H8eyhcmWwPc7EDIdk_x8JhgQNhL-tri7KxWE9LULifhQNDajcglnLuvu70Y4nenaQPHk8IJT7G4OwmZgmnafNN1cywBTpG-il4DZYSn-_PN2u7IQ9HpBinVX4BLjBhL2hXLbIj3JhhlQA83Eco7LJK1LgyNbfZHgHpAEyhc0f1zfM8w";
+// Token sẽ được lấy từ Redux store thông qua getCurrentToken()
 
 // Mock upload media → Trả UUID (thay bằng MediaService thật sau)
 const uploadMedia = async (files) => {
@@ -497,26 +497,19 @@ const CreatePost = () => {
       if (categoryTagId) body.categoryTagId = categoryTagId;
       if (emotionId) body.emotionId = emotionId;
 
-      // Gọi API thật với axios trực tiếp (hardcode token và baseUrl)
-      const response = await axios.post("https://api.emoease.vn/post-service/v1/posts", body, {
-        headers: {
-          "Authorization": `Bearer ${FIXED_TOKEN}`,
-          "Idempotency-Key": uuidv4(),  // Random UUID mỗi lần
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-      });
+      // Gọi API thật với postService (có auto token handling)
+      const apiData = await postService.createPost(body);
 
-      // Map response.data để match shape cũ (tránh bug undefined ở feed/PostContent)
-      const apiData = response.data || {};  // Fallback nếu response rỗng
+      // Map apiData để match shape cũ (tránh bug undefined ở feed/PostContent)
+      const responseData = apiData || {};  // Fallback nếu response rỗng
       const newPost = {
         // Shape cũ: id, content, author, createdAt, likesCount, commentsCount, liked, comments, images
-        id: apiData.postId || apiData.id || Date.now(),  // Ưu tiên postId từ BE, fallback cũ
-        content: apiData.content || sanitizedContent,  // Đảm bảo content luôn có (fix toLowerCase bug)
-        title: apiData.title || title.trim() || '',  // Thêm nếu BE trả
-        visibility: apiData.visibility || visibility,  // Thêm nếu cần
-        categoryTagId: apiData.categoryTagId || categoryTagId || '',  // Thêm nếu cần
-        emotionId: apiData.emotionId || emotionId || '',  // Thêm nếu cần
+        id: responseData.postId || responseData.id || Date.now(),  // Ưu tiên postId từ BE, fallback cũ
+        content: responseData.content || sanitizedContent,  // Đảm bảo content luôn có (fix toLowerCase bug)
+        title: responseData.title || title.trim() || '',  // Thêm nếu BE trả
+        visibility: responseData.visibility || visibility,  // Thêm nếu cần
+        categoryTagId: responseData.categoryTagId || categoryTagId || '',  // Thêm nếu cần
+        emotionId: responseData.emotionId || emotionId || '',  // Thêm nếu cần
         author: {
           id: user?.id || "anonymous",
           username: user?.username || generateAnonymousName(),

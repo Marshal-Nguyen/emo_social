@@ -1,6 +1,5 @@
 import api from "./api";
 import { getCurrentToken, createApiHeaders } from "./tokenService";
-import { postService } from "./postService";
 
 export const authService = {
     // Đăng ký
