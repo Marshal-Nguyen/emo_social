@@ -6,6 +6,9 @@ const initialState = {
   error: null,
   currentPage: 1,
   hasMore: true,
+  feedItems: [], // Lưu trữ feed items từ API feed
+  nextCursor: null, // Cursor cho pagination feed
+  totalCount: 0, // Tổng số items trong feed
 };
 
 const postsSlice = createSlice({
@@ -312,6 +315,40 @@ const postsSlice = createSlice({
       // Không cập nhật commentCount ở đây vì nó đã được set từ API post detail
       // post.commentCount = mappedComments.length;
     },
+
+    // Feed-specific actions
+    fetchFeedStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchFeedSuccess: (state, action) => {
+      state.loading = false;
+      const { feedItems, nextCursor, hasMore, totalCount, reset = false } = action.payload;
+
+      if (reset) {
+        state.feedItems = feedItems;
+        state.posts = [];
+      } else {
+        state.feedItems = [...state.feedItems, ...feedItems];
+      }
+
+      state.nextCursor = nextCursor;
+      state.hasMore = hasMore;
+      state.totalCount = totalCount;
+    },
+    fetchFeedFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    fetchPostsFromFeedSuccess: (state, action) => {
+      const { posts, reset = false } = action.payload;
+
+      if (reset) {
+        state.posts = posts;
+      } else {
+        state.posts = [...state.posts, ...posts];
+      }
+    },
   },
 });
 
@@ -329,6 +366,10 @@ export const {
   removeComment,
   fetchRepliesSuccess,
   setComments,
+  fetchFeedStart,
+  fetchFeedSuccess,
+  fetchFeedFailure,
+  fetchPostsFromFeedSuccess,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;

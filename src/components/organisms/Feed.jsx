@@ -5,7 +5,15 @@ import PostCard from "../molecules/PostCard";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../atoms/LoadingSpinner";
 import Button from "../atoms/Button";
-import { fetchPostsSuccess, fetchPostsStart, fetchPostsFailure } from "../../store/postsSlice";
+import {
+  fetchPostsSuccess,
+  fetchPostsStart,
+  fetchPostsFailure,
+  fetchFeedStart,
+  fetchFeedSuccess,
+  fetchFeedFailure,
+  fetchPostsFromFeedSuccess
+} from "../../store/postsSlice";
 import { postsService } from "../../services/apiService";
 import { image } from "framer-motion/client";
 
@@ -95,69 +103,113 @@ const mockPosts = [
 const Feed = ({ onNavigateToChat }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { posts, loading, error, hasMore } = useSelector(
+  const { posts, loading, error, hasMore, feedItems, nextCursor, totalCount } = useSelector(
     (state) => state.posts
   );
 
   useEffect(() => {
-    // Load posts from API
-    const loadPosts = async () => {
-      dispatch(fetchPostsStart());
+    // Load feed using new logic: get feed items first, then fetch post details
+    const loadFeed = async () => {
+      dispatch(fetchFeedStart());
       try {
-        const response = await postsService.getPosts(1, 10);
-        const apiPosts = response.posts?.data || [];
+        // Step 1: Get feed items
+        const feedResponse = await postsService.getFeed(624);
+        const feedItems = feedResponse.items || [];
 
-        // Transform API data to match our component structure
-        const transformedPosts = apiPosts.map(post => ({
-          id: post.id,
-          title: post.title,
-          content: post.content,
-          author: {
-            id: post.author.aliasId,
-            username: post.author.displayName,
-            avatar: post.author.avatarUrl,
-            isOnline: false, // API doesn't provide this info
-          },
-          createdAt: post.publishedAt,
-          editedAt: post.editedAt,
-          likesCount: post.reactionCount,
-          commentCount: post.commentCount,
-          commentsCount: post.commentCount, // Sync with PostActions display
-          liked: post.isReactedByCurrentUser,
-          comments: [], // Will be loaded separately if needed
-          images: post.medias || [],
-          hasMedia: post.hasMedia,
-          viewCount: post.viewCount,
-          visibility: post.visibility,
-          categoryTagIds: post.categoryTagIds || [],
-          emotionTagIds: post.emotionTagIds || [],
+        dispatch(fetchFeedSuccess({
+          feedItems,
+          nextCursor: feedResponse.nextCursor,
+          hasMore: feedResponse.hasMore,
+          totalCount: feedResponse.totalCount,
+          reset: true,
         }));
 
-        dispatch(
-          fetchPostsSuccess({
+        // Step 2: Get post details for the first batch
+        if (feedItems.length > 0) {
+          const postIds = feedItems.slice(0, 10).map(item => item.postId);
+          const postsResponse = await postsService.getPostsByIds(postIds, 1, 10);
+          const apiPosts = postsResponse.posts?.data || [];
+
+          // Transform API data to match our component structure
+          const transformedPosts = apiPosts.map(post => ({
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            author: {
+              id: post.author.aliasId,
+              username: post.author.displayName,
+              avatar: post.author.avatarUrl,
+              isOnline: false, // API doesn't provide this info
+            },
+            createdAt: post.publishedAt,
+            editedAt: post.editedAt,
+            likesCount: post.reactionCount,
+            commentCount: post.commentCount,
+            commentsCount: post.commentCount, // Sync with PostActions display
+            liked: post.isReactedByCurrentUser,
+            comments: [], // Will be loaded separately if needed
+            images: post.medias || [],
+            hasMedia: post.hasMedia,
+            viewCount: post.viewCount,
+            visibility: post.visibility,
+            categoryTagIds: post.categoryTagIds || [],
+            emotionTagIds: post.emotionTagIds || [],
+          }));
+
+          dispatch(fetchPostsFromFeedSuccess({
             posts: transformedPosts,
-            page: response.posts?.pageIndex || 1,
-            hasMore: response.posts?.hasNextPage || false,
             reset: true,
-          })
-        );
+          }));
+        }
       } catch (error) {
-        console.error("Error loading posts:", error);
-        dispatch(fetchPostsFailure(error.message));
+        console.error("Error loading feed:", error);
+        dispatch(fetchFeedFailure(error.message));
       }
     };
 
-    loadPosts();
+    loadFeed();
   }, [dispatch]);
 
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
 
-    dispatch(fetchPostsStart());
+    dispatch(fetchFeedStart());
     try {
-      const nextPage = Math.floor(posts.length / 10) + 1;
-      const response = await postsService.getPosts(nextPage, 10);
-      const apiPosts = response.posts?.data || [];
+      // Calculate how many more posts we need to load
+      const currentLoadedCount = posts.length;
+      const nextBatchSize = 10;
+      const startIndex = currentLoadedCount;
+      const endIndex = Math.min(startIndex + nextBatchSize, feedItems.length);
+
+      if (startIndex >= feedItems.length) {
+        // No more feed items to load
+        dispatch(fetchFeedSuccess({
+          feedItems: [],
+          nextCursor: null,
+          hasMore: false,
+          totalCount: totalCount,
+          reset: false,
+        }));
+        return;
+      }
+
+      // Get the next batch of post IDs from feed items
+      const nextBatchIds = feedItems.slice(startIndex, endIndex).map(item => item.postId);
+
+      if (nextBatchIds.length === 0) {
+        dispatch(fetchFeedSuccess({
+          feedItems: [],
+          nextCursor: null,
+          hasMore: false,
+          totalCount: totalCount,
+          reset: false,
+        }));
+        return;
+      }
+
+      // Fetch post details for the next batch
+      const postsResponse = await postsService.getPostsByIds(nextBatchIds, 1, nextBatchSize);
+      const apiPosts = postsResponse.posts?.data || [];
 
       // Transform API data to match our component structure
       const transformedPosts = apiPosts.map(post => ({
@@ -185,17 +237,25 @@ const Feed = ({ onNavigateToChat }) => {
         emotionTagIds: post.emotionTagIds || [],
       }));
 
-      dispatch(
-        fetchPostsSuccess({
-          posts: transformedPosts,
-          page: response.posts?.pageIndex || nextPage,
-          hasMore: response.posts?.hasNextPage || false,
+      dispatch(fetchPostsFromFeedSuccess({
+        posts: transformedPosts,
+        reset: false,
+      }));
+
+      // Check if we've loaded all available posts
+      const newLoadedCount = currentLoadedCount + transformedPosts.length;
+      if (newLoadedCount >= feedItems.length) {
+        dispatch(fetchFeedSuccess({
+          feedItems: [],
+          nextCursor: null,
+          hasMore: false,
+          totalCount: totalCount,
           reset: false,
-        })
-      );
+        }));
+      }
     } catch (error) {
       console.error("Error loading more posts:", error);
-      dispatch(fetchPostsFailure(error.message));
+      dispatch(fetchFeedFailure(error.message));
     }
   };
 
