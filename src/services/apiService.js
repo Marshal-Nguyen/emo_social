@@ -452,6 +452,52 @@ export const chatService = {
     },
 };
 
+export const tagService = {
+    // Lấy danh sách category tags
+    getCategoryTags: async () => {
+        const baseUrl = "https://api.emoease.vn/post-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/v1/category-tags`, {
+            method: 'GET',
+            headers: createApiHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    },
+
+    // Lấy danh sách emotion tags
+    getEmotionTags: async () => {
+        const baseUrl = "https://api.emoease.vn/post-service";
+        const token = getCurrentToken();
+
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+
+        const response = await fetch(`${baseUrl}/v1/emotion-tags`, {
+            method: 'GET',
+            headers: createApiHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    },
+};
+
 export const notificationService = {
     // Lấy notifications
     getNotifications: async (page = 1) => {
