@@ -5,19 +5,42 @@ import { loginSuccess, logout } from '../store/authSlice';
 // Decode JWT token
 const decodeJwt = (token) => {
     try {
-        const payload = token?.split(".")?.[1];
+        // Check if token is a valid JWT format (should have 3 parts separated by dots)
+        if (!token || typeof token !== 'string') return null;
+
+        const parts = token.split(".");
+        if (parts.length !== 3) {
+            console.log("Token is not a valid JWT format (should have 3 parts)");
+            return null;
+        }
+
+        const payload = parts[1];
         if (!payload) return null;
+
+        // Add padding if needed
         const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
-        const decoded = JSON.parse(
-            decodeURIComponent(
-                atob(normalized)
-                    .split("")
-                    .map((c) => ` %${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
-                    .join("")
-            )
-        );
-        return decoded;
-    } catch {
+        const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
+
+        // Try to decode base64 first
+        let decodedPayload;
+        try {
+            decodedPayload = atob(padded);
+        } catch (base64Error) {
+            console.log("Error decoding base64:", base64Error.message);
+            return null;
+        }
+
+        // Try to parse JSON
+        try {
+            const decoded = JSON.parse(decodedPayload);
+            return decoded;
+        } catch (jsonError) {
+            console.log("Error parsing JWT payload as JSON:", jsonError.message);
+            console.log("Payload content:", decodedPayload.substring(0, 100) + "...");
+            return null;
+        }
+    } catch (error) {
+        console.log("Error decoding JWT:", error.message);
         return null;
     }
 };
@@ -45,25 +68,34 @@ export const initializeAuth = () => {
             return false;
         }
 
-        // // Validate token
-        // const decoded = decodeJwt(token);
-        // if (!decoded || !decoded.exp) {
-        //     console.log("Invalid token format");
-        //     localStorage.removeItem("access_token");
-        //     localStorage.removeItem("refresh_token");
-        //     localStorage.removeItem("auth_user");
-        //     return false;
-        // }
+        // Debug token information
+        debugToken(token);
 
-        // Check if token is expired
-        // const currentTime = Math.floor(Date.now() / 1000);
-        // if (decoded.exp <= currentTime) {
-        //     console.log("Token expired, clearing auth data");
-        //     localStorage.removeItem("access_token");
-        //     localStorage.removeItem("refresh_token");
-        //     localStorage.removeItem("auth_user");
-        //     return false;
-        // }
+        // Validate token - check if it's a valid JWT format first
+        const decoded = decodeJwt(token);
+        if (!decoded) {
+            // Check if it's a demo token or other non-JWT token
+            if (token.startsWith("demo-") || token.startsWith("test-") || token.includes("demo")) {
+                console.log("Using demo/test token, skipping JWT validation");
+            } else {
+                console.log("Invalid token format - not a valid JWT and not a demo token");
+                // Clear corrupted token
+                clearCorruptedAuth();
+                return false;
+            }
+        } else {
+            // Valid JWT token - check expiration
+            if (decoded.exp) {
+                const currentTime = Math.floor(Date.now() / 1000);
+                if (decoded.exp <= currentTime) {
+                    console.log("Token expired, clearing auth data");
+                    clearAuth();
+                    return false;
+                }
+            } else {
+                console.log("JWT token has no expiration claim, assuming valid");
+            }
+        }
 
         // Update Redux store
         store.dispatch(loginSuccess({
@@ -74,18 +106,14 @@ export const initializeAuth = () => {
         console.log("Authentication initialized from localStorage:", {
             userId: userData.id,
             email: userData.email,
-            tokenExpiry: new Date(decoded.exp * 1000).toLocaleString()
+            tokenExpiry: decoded?.exp ? new Date(decoded.exp * 1000).toLocaleString() : "No expiration"
         });
 
         return true;
     } catch (error) {
         console.error("Error initializing auth:", error);
         // Clear potentially corrupted data
-        try {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            localStorage.removeItem("auth_user");
-        } catch { }
+        clearCorruptedAuth();
         return false;
     }
 };
@@ -100,6 +128,19 @@ export const clearAuth = () => {
         console.log("Authentication cleared");
     } catch (error) {
         console.error("Error clearing auth:", error);
+    }
+};
+
+// Clear corrupted auth data
+export const clearCorruptedAuth = () => {
+    try {
+        console.log("Clearing corrupted authentication data");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        localStorage.removeItem("auth_user");
+        store.dispatch(logout());
+    } catch (error) {
+        console.error("Error clearing corrupted auth:", error);
     }
 };
 
@@ -119,4 +160,23 @@ export const getCurrentUser = () => {
 export const getCurrentToken = () => {
     const state = store.getState();
     return state.auth.token;
+};
+
+// Debug token information
+export const debugToken = (token) => {
+    console.log("=== Token Debug Info ===");
+    console.log("Token length:", token?.length);
+    console.log("Token preview:", token?.substring(0, 50) + "...");
+    console.log("Token ends with:", token?.substring(token.length - 10));
+
+    if (token) {
+        const parts = token.split(".");
+        console.log("JWT parts count:", parts.length);
+        if (parts.length === 3) {
+            console.log("Header length:", parts[0]?.length);
+            console.log("Payload length:", parts[1]?.length);
+            console.log("Signature length:", parts[2]?.length);
+        }
+    }
+    console.log("========================");
 };

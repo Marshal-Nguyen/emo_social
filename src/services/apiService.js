@@ -1,6 +1,7 @@
 import api from "./api";
 import { getCurrentToken, createApiHeaders } from "./tokenService";
 import { postService } from "./postService";
+import { generateIdempotencyKey } from "../utils/uuid";
 
 export const authService = {
     // Đăng ký
@@ -152,13 +153,30 @@ export const postsService = {
 
     // Tạo post mới
     createPost: async (content, isAnonymous = true) => {
-        const response = await api.post("/posts", { content, isAnonymous });
+        const idempotencyKey = generateIdempotencyKey();
+        const response = await api.post("/posts",
+            {
+                content,
+                isAnonymous,
+                medias: []
+            },
+            {
+                headers: {
+                    'Idempotency-Key': idempotencyKey
+                }
+            }
+        );
         return response.data;
     },
 
     // Like/Unlike post
     toggleLike: async (postId) => {
-        const response = await api.post(`/posts/${postId}/like`);
+        const idempotencyKey = generateIdempotencyKey();
+        const response = await api.post(`/posts/${postId}/like`, {}, {
+            headers: {
+                'Idempotency-Key': idempotencyKey
+            }
+        });
         return response.data;
     },
 
@@ -171,9 +189,13 @@ export const postsService = {
             throw new Error("No authentication token found. Please login first.");
         }
 
+        const idempotencyKey = generateIdempotencyKey();
+        const headers = createApiHeaders();
+        headers['Idempotency-Key'] = idempotencyKey;
+
         const response = await fetch(`${baseUrl}/v1/comments`, {
             method: "POST",
-            headers: createApiHeaders(),
+            headers,
             body: JSON.stringify({
                 postId,
                 content,
@@ -352,7 +374,12 @@ export const chatService = {
 
     // Tạo conversation mới (DM)
     createConversation: async (userId) => {
-        const response = await api.post("/chat/conversations", { userId });
+        const idempotencyKey = generateIdempotencyKey();
+        const response = await api.post("/chat/conversations", { userId }, {
+            headers: {
+                'Idempotency-Key': idempotencyKey
+            }
+        });
         return response.data;
     },
 
@@ -366,11 +393,17 @@ export const chatService = {
 
     // Gửi message
     sendMessage: async (conversationId, content, type = "text") => {
+        const idempotencyKey = generateIdempotencyKey();
         const response = await api.post(
             `/chat/conversations/${conversationId}/messages`,
             {
                 content,
                 type,
+            },
+            {
+                headers: {
+                    'Idempotency-Key': idempotencyKey
+                }
             }
         );
         return response.data;
@@ -384,22 +417,37 @@ export const chatService = {
 
     // Request join group từ post
     requestJoinGroup: async (postId) => {
-        const response = await api.post(`/chat/groups/request-join`, { postId });
+        const idempotencyKey = generateIdempotencyKey();
+        const response = await api.post(`/chat/groups/request-join`, { postId }, {
+            headers: {
+                'Idempotency-Key': idempotencyKey
+            }
+        });
         return response.data;
     },
 
     // Approve/reject join request (cho chủ post)
     handleJoinRequest: async (requestId, action) => {
+        const idempotencyKey = generateIdempotencyKey();
         const response = await api.post(`/chat/groups/handle-request`, {
             requestId,
             action, // 'approve' hoặc 'reject'
+        }, {
+            headers: {
+                'Idempotency-Key': idempotencyKey
+            }
         });
         return response.data;
     },
 
     // Leave group
     leaveGroup: async (groupId) => {
-        const response = await api.post(`/chat/groups/${groupId}/leave`);
+        const idempotencyKey = generateIdempotencyKey();
+        const response = await api.post(`/chat/groups/${groupId}/leave`, {}, {
+            headers: {
+                'Idempotency-Key': idempotencyKey
+            }
+        });
         return response.data;
     },
 };
@@ -413,13 +461,23 @@ export const notificationService = {
 
     // Đánh dấu đã đọc
     markAsRead: async (notificationId) => {
-        const response = await api.post(`/notifications/${notificationId}/read`);
+        const idempotencyKey = generateIdempotencyKey();
+        const response = await api.post(`/notifications/${notificationId}/read`, {}, {
+            headers: {
+                'Idempotency-Key': idempotencyKey
+            }
+        });
         return response.data;
     },
 
     // Đánh dấu tất cả đã đọc
     markAllAsRead: async () => {
-        const response = await api.post("/notifications/read-all");
+        const idempotencyKey = generateIdempotencyKey();
+        const response = await api.post("/notifications/read-all", {}, {
+            headers: {
+                'Idempotency-Key': idempotencyKey
+            }
+        });
         return response.data;
     },
 };

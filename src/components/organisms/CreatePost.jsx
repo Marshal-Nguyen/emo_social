@@ -496,6 +496,9 @@ const CreatePost = () => {
       if (categoryTagId) body.categoryTagId = categoryTagId;
       if (emotionId) body.emotionId = emotionId;
 
+      // Luôn thêm medias array (rỗng nếu không có media)
+      body.medias = [];
+
       // Gọi API thật với postService (có auto token handling)
       const apiData = await postService.createPost(body);
 

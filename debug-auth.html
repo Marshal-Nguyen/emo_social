@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Authentication</title>
+</head>
+
+<body>
+    <h1>Debug Authentication</h1>
+    <div id="info"></div>
+    <button onclick="clearAuth()">Clear Authentication</button>
+    <button onclick="checkAuth()">Check Authentication</button>
+    <button onclick="testDemoToken()">Test Demo Token</button>
+
+    <script>
+        function checkAuth() {
+            const token = localStorage.getItem("access_token");
+            const user = localStorage.getItem("auth_user");
+
+            document.getElementById("info").innerHTML = `
+                <h3>Current Auth State:</h3>
+                <p><strong>Token:</strong> ${token ? token.substring(0, 50) + "..." : "None"}</p>
+                <p><strong>User:</strong> ${user || "None"}</p>
+                <p><strong>Token Length:</strong> ${token ? token.length : 0}</p>
+            `;
+        }
+
+        function clearAuth() {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+            localStorage.removeItem("auth_user");
+            alert("Authentication cleared!");
+            checkAuth();
+        }
+
+        function testDemoToken() {
+            const demoUser = {
+                id: "test-user-123",
+                email: "test@example.com",
+                fullName: "Test User",
+                avatar: null
+            };
+
+            localStorage.setItem("access_token", "demo-token-" + Date.now());
+            localStorage.setItem("refresh_token", "demo-refresh-" + Date.now());
+            localStorage.setItem("auth_user", JSON.stringify(demoUser));
+
+            alert("Demo token set!");
+            checkAuth();
+        }
+
+        // Check auth on load
+        checkAuth();
+    </script>
+</body>
+
+</html>

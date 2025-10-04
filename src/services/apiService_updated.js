@@ -151,7 +151,11 @@ export const postsService = {
 
     // Tạo post mới
     createPost: async (content, isAnonymous = true) => {
-        const response = await api.post("/posts", { content, isAnonymous });
+        const response = await api.post("/posts", {
+            content,
+            isAnonymous,
+            medias: []
+        });
         return response.data;
     },
 

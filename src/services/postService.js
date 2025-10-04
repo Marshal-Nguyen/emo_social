@@ -4,7 +4,13 @@ import api from "./api";
 export const postService = {
     // Create new post
     createPost: async (postData) => {
-        const response = await api.post("https://api.emoease.vn/post-service/v1/posts", postData, {
+        // Ensure medias array is included
+        const dataWithMedias = {
+            ...postData,
+            medias: postData.medias || []
+        };
+
+        const response = await api.post("https://api.emoease.vn/post-service/v1/posts", dataWithMedias, {
             headers: {
                 "Idempotency-Key": crypto.randomUUID(),  // Random UUID mỗi lần
             },
