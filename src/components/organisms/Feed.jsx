@@ -111,13 +111,16 @@ const Feed = ({ onNavigateToChat }) => {
           // Transform API data to match our component structure
           const transformedPosts = apiPosts.map(post => ({
             id: post.id,
+            title: post.title,
             content: post.content,
             author: {
               id: post.author.aliasId,
               username: post.author.displayName,
+              avatar: post.author.avatarUrl,
               isOnline: false, // API doesn't provide this info
             },
             createdAt: post.publishedAt,
+            editedAt: post.editedAt,
             likesCount: post.reactionCount,
             commentCount: post.commentCount,
             commentsCount: post.commentCount, // Sync with PostActions display
@@ -127,6 +130,8 @@ const Feed = ({ onNavigateToChat }) => {
             hasMedia: post.hasMedia,
             viewCount: post.viewCount,
             visibility: post.visibility,
+            categoryTagIds: post.categoryTagIds || [],
+            emotionTagIds: post.emotionTagIds || [],
           }));
 
           dispatch(
@@ -159,13 +164,16 @@ const Feed = ({ onNavigateToChat }) => {
       // Transform API data to match our component structure
       const transformedPosts = apiPosts.map(post => ({
         id: post.id,
+        title: post.title,
         content: post.content,
         author: {
           id: post.author.aliasId,
           username: post.author.displayName,
+          avatar: post.author.avatarUrl,
           isOnline: false,
         },
         createdAt: post.publishedAt,
+        editedAt: post.editedAt,
         likesCount: post.reactionCount,
         commentCount: post.commentCount,
         commentsCount: post.commentCount, // Sync with PostActions display
@@ -175,6 +183,8 @@ const Feed = ({ onNavigateToChat }) => {
         hasMedia: post.hasMedia,
         viewCount: post.viewCount,
         visibility: post.visibility,
+        categoryTagIds: post.categoryTagIds || [],
+        emotionTagIds: post.emotionTagIds || [],
       }));
 
       dispatch(

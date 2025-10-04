@@ -52,9 +52,30 @@ export const postsService = {
   // Lấy danh sách posts từ API thực tế
   getPosts: async (pageIndex = 1, pageSize = 10, sortBy = "CreatedAt", sortDescending = true) => {
     const baseUrl = "https://api.emoease.vn/post-service";
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwYjFkYTIzMi0wYjcyLTQ0ZjUtYWQyMy1jNzhmYjZlNmNmM2EiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk1NDAyNzcsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.QuB4RasK160OgdAjeDAtjFJO31kqZhBL0BACaXToURDrA_6twcUNJqWqXZhEprM0_AWt5omLzwYLZ4N06ujKPp09vSvIr-nvA0uzvXArvW2wrp8RULevVRQMrcdjW5cnrjp9CPMqHxHtsE2tIOxhsCfeRJu6JodkBYuPUMfMNm9bYZtYZp9Rnb6_g4bMqUd_g4586VWkkBGm03ZDrACqPQ9IBcq5v-GuOBnRN9fheRHjCzn4AiBAFus6fzNlVv_-ZnX1kv4-nNshbxnz0rEJ14oBfemdyqiMBXIV6Hdt4vvJr9gm-pR24eH-rJ6XDpBEEFGnqZpseDWQ1B_5Tc2b-Q";
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0Y2I4N2UxMS1kOWRmLTRjMzgtYTU5Mi0yODk1N2UyZDg3YzQiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk1NzYwNjEsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.MG1EkajgC6iLq1wVJ1KeOIhBq8woVovtUsgaWsDYI733IqgoRZtPmYb3t0Mq6uVCdVenWrWecGA8NGi1pYKtocEDmQk25Y-tVAUqnIjd3zGcMxTs-az9JJ51FeK87gD3nABv2Wznvgx6XRPJikLXfF6Hje6ywp0LT27AB-TipXIzkvV9gyVm7tHyMEsp5HF2Z7hCrpjrtZQCwWDGmFDzn0a11AZzkbWfdtZxaj9BChiRBNayhnxygQyRZ9oHRxO-dqfrbr8jfIekZ7UBCDJEAnwiEymTeSTCdCDY-ABEvXZZc-aHgy7LbPgp5scBxKJhfmdWBahzK7kumr3OKqQaww";
 
     const response = await fetch(`${baseUrl}/v1/posts?PageIndex=${pageIndex}&PageSize=${pageSize}&SortBy=${sortBy}&SortDescending=${sortDescending}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  },
+
+  // Lấy chi tiết bài viết
+  getPostDetail: async (postId) => {
+    const baseUrl = "https://api.emoease.vn/post-service";
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0Y2I4N2UxMS1kOWRmLTRjMzgtYTU5Mi0yODk1N2UyZDg3YzQiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk1NzYwNjEsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.MG1EkajgC6iLq1wVJ1KeOIhBq8woVovtUsgaWsDYI733IqgoRZtPmYb3t0Mq6uVCdVenWrWecGA8NGi1pYKtocEDmQk25Y-tVAUqnIjd3zGcMxTs-az9JJ51FeK87gD3nABv2Wznvgx6XRPJikLXfF6Hje6ywp0LT27AB-TipXIzkvV9gyVm7tHyMEsp5HF2Z7hCrpjrtZQCwWDGmFDzn0a11AZzkbWfdtZxaj9BChiRBNayhnxygQyRZ9oHRxO-dqfrbr8jfIekZ7UBCDJEAnwiEymTeSTCdCDY-ABEvXZZc-aHgy7LbPgp5scBxKJhfmdWBahzK7kumr3OKqQaww";
+
+    const response = await fetch(`${baseUrl}/v1/posts/${postId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -85,7 +106,7 @@ export const postsService = {
   // Thêm comment
   addComment: async (postId, content, parentCommentId = null) => {
     const baseUrl = "https://api.emoease.vn/post-service";
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZWVlZWY1NC0zNzQ1LTRkODAtYTc1OC02NWFlNWQ2YTFiODUiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0NzM3NTcsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.TXKohDzV54uglcDGzk-D9ySdEo_3tSKaLcssTOwZwJC9m8GRlKmlv9-vrfSLALpdw69KFFNyJep3AW5ZuYQCDf4NJmTcrusVo6m0EER17A6kFv7QAKOkjUxEvo5MCl3QhXy1Yh34534x6HeoxjQcc8nvR2Ngj-g27hUxZckPMogiAh9fIxyEyvyqPRlGV9wlm6fqWlvtxEzDxBiUiLzXV7JMVMBLhp6GpK4_-kKNPpGsn3ne1ytZJ9gjMgYsImMQhWP2AWEOelHkRbh7fG_C51hUxd-y_hsTgG70U4Qib71qTbxEky5VwBv9Ly__Dv1jY5-htT_LNgHWVYPWuFiFgQ";
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0Y2I4N2UxMS1kOWRmLTRjMzgtYTU5Mi0yODk1N2UyZDg3YzQiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk1NzYwNjEsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.MG1EkajgC6iLq1wVJ1KeOIhBq8woVovtUsgaWsDYI733IqgoRZtPmYb3t0Mq6uVCdVenWrWecGA8NGi1pYKtocEDmQk25Y-tVAUqnIjd3zGcMxTs-az9JJ51FeK87gD3nABv2Wznvgx6XRPJikLXfF6Hje6ywp0LT27AB-TipXIzkvV9gyVm7tHyMEsp5HF2Z7hCrpjrtZQCwWDGmFDzn0a11AZzkbWfdtZxaj9BChiRBNayhnxygQyRZ9oHRxO-dqfrbr8jfIekZ7UBCDJEAnwiEymTeSTCdCDY-ABEvXZZc-aHgy7LbPgp5scBxKJhfmdWBahzK7kumr3OKqQaww";
 
     const response = await fetch(`${baseUrl}/v1/comments`, {
       method: "POST",
@@ -111,7 +132,7 @@ export const postsService = {
   // Lấy comments với pagination
   getComments: async (postId, pageIndex = 1, pageSize = 20, parentCommentId = null) => {
     const baseUrl = "https://api.emoease.vn/post-service";
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZWVlZWY1NC0zNzQ1LTRkODAtYTc1OC02NWFlNWQ2YTFiODUiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0NzM3NTcsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.TXKohDzV54uglcDGzk-D9ySdEo_3tSKaLcssTOwZwJC9m8GRlKmlv9-vrfSLALpdw69KFFNyJep3AW5ZuYQCDf4NJmTcrusVo6m0EER17A6kFv7QAKOkjUxEvo5MCl3QhXy1Yh34534x6HeoxjQcc8nvR2Ngj-g27hUxZckPMogiAh9fIxyEyvyqPRlGV9wlm6fqWlvtxEzDxBiUiLzXV7JMVMBLhp6GpK4_-kKNPpGsn3ne1ytZJ9gjMgYsImMQhWP2AWEOelHkRbh7fG_C51hUxd-y_hsTgG70U4Qib71qTbxEky5VwBv9Ly__Dv1jY5-htT_LNgHWVYPWuFiFgQ";
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0Y2I4N2UxMS1kOWRmLTRjMzgtYTU5Mi0yODk1N2UyZDg3YzQiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk1NzYwNjEsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.MG1EkajgC6iLq1wVJ1KeOIhBq8woVovtUsgaWsDYI733IqgoRZtPmYb3t0Mq6uVCdVenWrWecGA8NGi1pYKtocEDmQk25Y-tVAUqnIjd3zGcMxTs-az9JJ51FeK87gD3nABv2Wznvgx6XRPJikLXfF6Hje6ywp0LT27AB-TipXIzkvV9gyVm7tHyMEsp5HF2Z7hCrpjrtZQCwWDGmFDzn0a11AZzkbWfdtZxaj9BChiRBNayhnxygQyRZ9oHRxO-dqfrbr8jfIekZ7UBCDJEAnwiEymTeSTCdCDY-ABEvXZZc-aHgy7LbPgp5scBxKJhfmdWBahzK7kumr3OKqQaww";
 
     let url = `${baseUrl}/v1/comments/post/${postId}?PageIndex=${pageIndex}&PageSize=${pageSize}&SortBy=CreatedAt&SortDescending=false`;
     if (parentCommentId) {
@@ -129,6 +150,27 @@ export const postsService = {
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`Không thể tải bình luận: ${errorText}`);
+    }
+
+    return await response.json();
+  },
+
+  // Lấy replies của comment
+  getCommentReplies: async (parentCommentId, pageIndex = 1, pageSize = 20) => {
+    const baseUrl = "https://api.emoease.vn/post-service";
+    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0Y2I4N2UxMS1kOWRmLTRjMzgtYTU5Mi0yODk1N2UyZDg3YzQiLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk1NzYwNjEsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.MG1EkajgC6iLq1wVJ1KeOIhBq8woVovtUsgaWsDYI733IqgoRZtPmYb3t0Mq6uVCdVenWrWecGA8NGi1pYKtocEDmQk25Y-tVAUqnIjd3zGcMxTs-az9JJ51FeK87gD3nABv2Wznvgx6XRPJikLXfF6Hje6ywp0LT27AB-TipXIzkvV9gyVm7tHyMEsp5HF2Z7hCrpjrtZQCwWDGmFDzn0a11AZzkbWfdtZxaj9BChiRBNayhnxygQyRZ9oHRxO-dqfrbr8jfIekZ7UBCDJEAnwiEymTeSTCdCDY-ABEvXZZc-aHgy7LbPgp5scBxKJhfmdWBahzK7kumr3OKqQaww";
+
+    const response = await fetch(`${baseUrl}/v1/comments/${parentCommentId}/replies?PageIndex=${pageIndex}&PageSize=${pageSize}&SortBy=CreatedAt&SortDescending=false`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Không thể tải replies: ${errorText}`);
     }
 
     return await response.json();

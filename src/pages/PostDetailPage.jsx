@@ -5,10 +5,6 @@ import PostCard from "../components/molecules/PostCard";
 import { fetchPostsStart, fetchPostsSuccess, setComments } from "../store/postsSlice";
 import { postsService } from "../services/apiService";
 
-const baseUrl = "https://api.emoease.vn/post-service";
-const token =
-    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhNGJlN2RjYS1lNDM5LTQxNGEtYWRmZC00M2Y5ZWRmOThmZDciLCJzdWIiOiI0YzQ2YTc1YS0zMTcyLTQ0NDctOWI2OS00ZjVmMDcyMTBmNGEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9hdXRoZW50aWNhdGlvbiI6IkNvbXBsZXRlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTk0Mjg1MzMsImlzcyI6Imh0dHBzOi8vYXBpLmVtb2Vhc2Uudm4iLCJhdWQiOiJodHRwczovL2FwaS5lbW9lYXNlLnZuIn0.RBtQeGTMko48pp1eAk-CfuaGR9ybcnFkK8fphM5hEFeVHPoG3q8KynbRAaf4ZqOAv72Lj7AoM9pCbuJ_ncY8J-UKnK_01ulQ_soKvtz3GBIxg0C45sjiKSuJ_Xv1-exjCHVFWmLKnZoX15t1-BAX7bd7aZtigEWtcvTLaVLcfmca-8_Qh3J1SQGQtg1C1E-XuqwCr1u-UJaVAkV67k0Jw3G7hZ9e3aUhlYHnec_Fl7AjRZacjb5X9vsb0ecOhjwAZ5-vBl8_h0SZr5-Kp73mYHoFe2YABbuU5JIDHp5y5nyb7dDcytti86nn7zgQRYmO3Wiu4FWEU3KiTYMOnl4JeQ";
-
 
 const PostDetailPage = () => {
     const { id } = useParams();
@@ -21,37 +17,35 @@ const PostDetailPage = () => {
             try {
                 dispatch(fetchPostsStart());
 
-                // Fetch post data
-                const postResponse = await fetch(`${baseUrl}/v1/posts/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                if (!postResponse.ok) throw new Error("Không thể tải bài viết");
-                const postData = await postResponse.json();
+                // Fetch post data using the new API service
+                const postData = await postsService.getPostDetail(id);
 
                 // Fetch comments using the new API service
                 const commentsData = await postsService.getComments(id, 1, 20);
 
-                // Map post data
+                // Map post data based on the new API response structure
                 const mappedPost = {
-                    id: postData.id,
-                    content: postData.content,
+                    id: postData.postSummary.id,
+                    content: postData.postSummary.content,
+                    title: postData.postSummary.title,
                     author: {
-                        id: postData.author.aliasId,
-                        username: postData.author.displayName,
-                        avatar: postData.author.avatarUrl || null,
+                        id: postData.postSummary.author.aliasId,
+                        username: postData.postSummary.author.displayName,
+                        avatar: postData.postSummary.author.avatarUrl || null,
                     },
-                    createdAt: postData.createdAt,
-                    reactionCount: postData.reactionCount,
-                    commentCount: postData.commentCount,
-                    commentsCount: postData.commentCount, // Use comment count from post API like feed
-                    viewCount: postData.viewCount,
-                    liked: postData.isReactedByCurrentUser || false,
+                    createdAt: postData.postSummary.publishedAt,
+                    editedAt: postData.postSummary.editedAt,
+                    likesCount: postData.postSummary.reactionCount,
+                    commentCount: postData.postSummary.commentCount,
+                    commentsCount: postData.postSummary.commentCount, // Sync with PostActions display - lấy từ commentCount của API
+                    viewCount: postData.postSummary.viewCount,
+                    liked: postData.postSummary.isReactedByCurrentUser || false,
                     comments: [], // Will be loaded separately
-                    images: postData.mediaUrls || [],
-                    isEnhanced: false,
-                    type: postData.visibility?.toLowerCase() || 'public',
+                    images: postData.postSummary.medias || [],
+                    hasMedia: postData.postSummary.hasMedia,
+                    visibility: postData.postSummary.visibility,
+                    categoryTagIds: postData.postSummary.categoryTagIds || [],
+                    emotionTagIds: postData.postSummary.emotionTagIds || [],
                 };
 
                 dispatch(fetchPostsSuccess({
@@ -63,13 +57,33 @@ const PostDetailPage = () => {
 
                 // Load comments separately using the new structure
                 if (commentsData.comments && commentsData.comments.data) {
+                    // Transform comments to handle replies structure
+                    const transformedComments = commentsData.comments.data.map(comment => ({
+                        id: comment.id,
+                        postId: comment.postId,
+                        content: comment.content,
+                        author: {
+                            id: comment.author.aliasId,
+                            username: comment.author.displayName,
+                            avatar: comment.author.avatarUrl,
+                        },
+                        createdAt: comment.createdAt,
+                        editedAt: comment.editedAt,
+                        likesCount: comment.reactionCount,
+                        liked: comment.isReactedByCurrentUser,
+                        replies: comment.replies || [],
+                        replyCount: comment.replyCount,
+                        isDeleted: comment.isDeleted,
+                        hierarchy: comment.hierarchy,
+                    }));
+
                     dispatch(setComments({
                         postId: id,
-                        comments: commentsData.comments.data
+                        comments: transformedComments
                     }));
                 }
             } catch (err) {
-                console.error(err.message);
+                console.error("Error loading post detail:", err.message);
             }
         };
         fetchPostData();

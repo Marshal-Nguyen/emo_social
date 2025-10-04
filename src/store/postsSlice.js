@@ -82,6 +82,9 @@ const postsSlice = createSlice({
                 if (existsReplyIndex === -1) {
                   c.replies.unshift(comment);
                   c.replyCount = (c.replyCount || 0) + 1;
+                  // Cộng commentCount khi thêm reply
+                  post.commentCount = (post.commentCount || 0) + 1;
+                  post.commentsCount = (post.commentsCount || 0) + 1; // Sync with PostActions display
                 } else {
                   c.replies[existsReplyIndex] = { ...c.replies[existsReplyIndex], ...comment };
                 }
@@ -169,16 +172,19 @@ const postsSlice = createSlice({
       if (!post || !post.comments) return;
 
       let commentRemoved = false;
-      const removeRecursive = (comments) => {
+      let isTopLevelComment = false;
+
+      const removeRecursive = (comments, isTopLevel = true) => {
         const idx = comments.findIndex((c) => c.id === commentId);
         if (idx !== -1) {
           comments.splice(idx, 1);
           commentRemoved = true;
+          isTopLevelComment = isTopLevel;
           return true;
         }
         for (let c of comments) {
           if (c.replies && c.replies.length > 0) {
-            if (removeRecursive(c.replies)) return true;
+            if (removeRecursive(c.replies, false)) return true;
           }
         }
         return false;
@@ -186,10 +192,28 @@ const postsSlice = createSlice({
 
       removeRecursive(post.comments);
 
-      // Decrease comment count if a top-level comment was removed
+      // Decrease comment count if any comment (top-level or reply) was removed
       if (commentRemoved) {
         post.commentCount = Math.max((post.commentCount || 0) - 1, 0);
         post.commentsCount = Math.max((post.commentsCount || 0) - 1, 0); // Sync with PostActions display
+
+        // Also decrease replyCount if it was a top-level comment
+        if (isTopLevelComment) {
+          // Find the parent comment and decrease its replyCount
+          const updateReplyCountRecursive = (comments) => {
+            for (let c of comments) {
+              if (c.replies && c.replies.some(r => r.id === commentId)) {
+                c.replyCount = Math.max((c.replyCount || 0) - 1, 0);
+                return true;
+              }
+              if (c.replies && c.replies.length > 0) {
+                if (updateReplyCountRecursive(c.replies)) return true;
+              }
+            }
+            return false;
+          };
+          updateReplyCountRecursive(post.comments);
+        }
       }
     },
     fetchRepliesSuccess: (state, action) => {
@@ -260,7 +284,8 @@ const postsSlice = createSlice({
       }));
 
       post.comments = mappedComments;
-      post.commentCount = mappedComments.length;
+      // Không cập nhật commentCount ở đây vì nó đã được set từ API post detail
+      // post.commentCount = mappedComments.length;
     },
   },
 });
