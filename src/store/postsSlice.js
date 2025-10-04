@@ -62,6 +62,7 @@ const postsSlice = createSlice({
 
       if (comment) {
         if (!parentId) {
+          // Add top-level comment
           const existsIndex = post.comments.findIndex((c) => c.id === comment.id);
           if (existsIndex === -1) {
             post.comments.unshift(comment);
@@ -71,6 +72,7 @@ const postsSlice = createSlice({
             post.comments[existsIndex] = { ...post.comments[existsIndex], ...comment };
           }
         } else {
+          // Add reply to existing comment
           const addReplyRecursive = (comments) => {
             for (let c of comments) {
               if (c.id === parentId) {
@@ -93,7 +95,6 @@ const postsSlice = createSlice({
             return false;
           };
           addReplyRecursive(post.comments);
-          // Only increment total count when a new comment/reply was actually inserted
         }
       } else if (update && parentId) {
         const updateRecursive = (comments) => {
@@ -204,6 +205,48 @@ const postsSlice = createSlice({
       };
       addRepliesRecursive(post.comments);
     },
+    // New action to handle the new comment API structure
+    setComments: (state, action) => {
+      const { postId, comments } = action.payload;
+      let post = state.posts.find((post) => post.id === postId);
+      if (!post) {
+        console.warn(`Post not found for postId: ${postId}, creating new post`);
+        post = { id: postId, comments: [] };
+        state.posts.push(post);
+      }
+
+      // Map the new API structure to our internal structure
+      const mappedComments = comments.map(comment => ({
+        id: comment.id,
+        content: comment.content,
+        author: comment.author.displayName,
+        avatar: comment.author.avatarUrl,
+        createdAt: comment.createdAt,
+        editedAt: comment.editedAt,
+        reactionCount: comment.reactionCount || 0,
+        replyCount: comment.replyCount || 0,
+        isReactedByCurrentUser: comment.isReactedByCurrentUser || false,
+        isDeleted: comment.isDeleted || false,
+        hierarchy: comment.hierarchy,
+        replies: comment.replies ? comment.replies.map(reply => ({
+          id: reply.id,
+          content: reply.content,
+          author: reply.author.displayName,
+          avatar: reply.author.avatarUrl,
+          createdAt: reply.createdAt,
+          editedAt: reply.editedAt,
+          reactionCount: reply.reactionCount || 0,
+          replyCount: reply.replyCount || 0,
+          isReactedByCurrentUser: reply.isReactedByCurrentUser || false,
+          isDeleted: reply.isDeleted || false,
+          hierarchy: reply.hierarchy,
+          replies: [] // Replies don't have nested replies in this structure
+        })) : []
+      }));
+
+      post.comments = mappedComments;
+      post.commentCount = mappedComments.length;
+    },
   },
 });
 
@@ -220,6 +263,7 @@ export const {
   finalizeComment,
   removeComment,
   fetchRepliesSuccess,
+  setComments,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;

@@ -5,7 +5,8 @@ import { Heart } from "lucide-react";
 import CommentForm from "./CommentForm";
 import { formatTimeAgo } from "../../utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
-import { addComment, fetchRepliesSuccess, finalizeComment, removeComment } from "../../store/postsSlice";
+import { addComment, fetchRepliesSuccess, finalizeComment, removeComment, setComments } from "../../store/postsSlice";
+import { postsService } from "../../services/apiService";
 
 const baseUrl = "https://api.emoease.vn/post-service";
 const token =
@@ -20,44 +21,38 @@ const PostComments = ({
   onReply,
   hideRepliesByDefault = false,
   postId,
+  autoLoadComments = false,
 }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [showReplyForm, setShowReplyForm] = useState({});
-  const [openReplies, setOpenReplies] = useState(
-    comments.reduce((acc, comment) => ({
-      ...acc,
-      [comment.id]: !hideRepliesByDefault,
-    }), {})
-  );
+  const [openReplies, setOpenReplies] = useState({});
   const [replyVisibleCount, setReplyVisibleCount] = useState({});
+  const [loadingReplies, setLoadingReplies] = useState({});
+  const [commentsLoaded, setCommentsLoaded] = useState(false);
   const commentEndRef = useRef(null);
 
-  const syncedRef = useRef(false);
-
+  // Load comments when component mounts or postId changes (only if autoLoadComments is true)
   useEffect(() => {
-    // Only sync once per mount or when postId changes
-    if (!syncedRef.current && postId && Array.isArray(comments)) {
-      comments.forEach((comment) => {
-        dispatch(addComment({
-          postId,
-          comment: {
-            id: comment.id,
-            content: comment.content,
-            author: comment.author,
-            avatar: comment.avatar,
-            createdAt: comment.createdAt,
-            reactionCount: comment.reactionCount,
-            replyCount: comment.replyCount,
-            liked: comment.liked,
-            replies: comment.replies,
-          },
-          parentId: null,
-        }));
-      });
-      syncedRef.current = true;
+    if (postId && !commentsLoaded && autoLoadComments) {
+      loadComments();
     }
-  }, [show, comments, dispatch, postId]);
+  }, [postId, commentsLoaded, autoLoadComments]);
+
+  const loadComments = async () => {
+    try {
+      const response = await postsService.getComments(postId, 1, 20);
+      if (response.comments && response.comments.data) {
+        dispatch(setComments({
+          postId,
+          comments: response.comments.data
+        }));
+        setCommentsLoaded(true);
+      }
+    } catch (error) {
+      console.error("Error loading comments:", error);
+    }
+  };
 
   const handleReplySubmit = async (commentId, content) => {
     try {
@@ -71,33 +66,23 @@ const PostComments = ({
         createdAt: new Date().toISOString(),
         reactionCount: 0,
         replyCount: 0,
-        liked: false,
+        isReactedByCurrentUser: false,
         replies: [],
       };
-      onReply(commentId, optimistic);
+
+      dispatch(addComment({
+        postId,
+        comment: optimistic,
+        parentId: commentId,
+      }));
+
       // Ensure the replies section opens when first reply is added
       setOpenReplies((prev) => ({ ...prev, [commentId]: true }));
       setReplyVisibleCount((prev) => ({ ...prev, [commentId]: Math.max(prev[commentId] || 0, 5) }));
 
-      const response = await fetch(`${baseUrl}/v1/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          postId,
-          content,
-          parentCommentId: commentId,
-        }),
-      });
+      const response = await postsService.addComment(postId, content, commentId);
+      const realId = response?.commentId || response?.id;
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Không thể thêm phản hồi: ${errorText}`);
-      }
-      const payload = await response.json();
-      const realId = payload?.commentId || payload?.id;
       if (realId) {
         // finalize optimistic reply id
         dispatch(
@@ -107,18 +92,16 @@ const PostComments = ({
         // rollback if API didn't return id
         dispatch(removeComment({ postId, commentId: tempId }));
       }
-      // setShowReplyForm((prev) => ({ ...prev, [commentId]: false }));
-      // Do not auto scroll to keep viewport stable per UX request
     } catch (error) {
       console.error("Lỗi khi thêm phản hồi:", error);
       // rollback optimistic if failed
-      // We don't have tempId here if error before declaration; ignore
+      dispatch(removeComment({ postId, commentId: tempId }));
     }
   };
 
-  const handleLikeComment = async (commentId, liked) => {
+  const handleLikeComment = async (commentId, isReacted) => {
     try {
-      if (!liked) {
+      if (!isReacted) {
         const response = await fetch(`${baseUrl}/v1/reactions`, {
           method: "POST",
           headers: {
@@ -136,10 +119,17 @@ const PostComments = ({
           const errorText = await response.text();
           throw new Error(`Không thể thích bình luận: ${errorText}`);
         }
-        onReply(commentId, null, {
-          liked: true,
-          reactionCount: (comments.find((c) => c.id === commentId)?.reactionCount || 0) + 1,
-        });
+
+        // Update comment in Redux
+        dispatch(addComment({
+          postId,
+          comment: null,
+          parentId: commentId,
+          update: {
+            isReactedByCurrentUser: true,
+            reactionCount: (validComments.find((c) => c.id === commentId)?.reactionCount || 0) + 1,
+          }
+        }));
       } else {
         const response = await fetch(
           `${baseUrl}/v1/reactions?TargetType=Comment&TargetId=${commentId}`,
@@ -155,10 +145,17 @@ const PostComments = ({
           const errorText = await response.text();
           throw new Error(`Không thể bỏ thích bình luận: ${errorText}`);
         }
-        onReply(commentId, null, {
-          liked: false,
-          reactionCount: (comments.find((c) => c.id === commentId)?.reactionCount || 0) - 1,
-        });
+
+        // Update comment in Redux
+        dispatch(addComment({
+          postId,
+          comment: null,
+          parentId: commentId,
+          update: {
+            isReactedByCurrentUser: false,
+            reactionCount: (validComments.find((c) => c.id === commentId)?.reactionCount || 0) - 1,
+          }
+        }));
       }
     } catch (error) {
       console.error("Lỗi khi xử lý lượt thích bình luận:", error);
@@ -167,49 +164,40 @@ const PostComments = ({
 
   const handleFetchReplies = async (commentId) => {
     try {
-      const response = await fetch(
-        `${baseUrl}/v1/comments/post/${postId}?PageIndex=1&PageSize=20&ParentCommentId=${commentId}&SortBy=CreatedAt&SortDescending=false`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      setLoadingReplies(prev => ({ ...prev, [commentId]: true }));
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Không thể tải phản hồi: ${errorText}`);
+      const response = await postsService.getComments(postId, 1, 20, commentId);
+
+      if (response.comments && response.comments.data) {
+        const mappedReplies = response.comments.data.map((reply) => ({
+          id: reply.id,
+          content: reply.content,
+          author: reply.author.displayName,
+          avatar: reply.author.avatarUrl || null,
+          createdAt: reply.createdAt,
+          reactionCount: reply.reactionCount || 0,
+          replyCount: reply.replyCount || 0,
+          isReactedByCurrentUser: reply.isReactedByCurrentUser || false,
+          replies: [],
+        }));
+
+        dispatch(
+          fetchRepliesSuccess({
+            postId,
+            parentId: commentId,
+            replies: mappedReplies,
+          })
+        );
+
+        setOpenReplies((prev) => {
+          const newState = { ...prev, [commentId]: true };
+          return newState;
+        });
       }
-
-      const repliesData = await response.json();
-      // console.debug("Replies API response:", repliesData);
-      const mappedReplies = repliesData.data.map((reply) => ({
-        id: reply.id,
-        content: reply.content,
-        author: reply.author.displayName,
-        avatar: reply.author.avatarUrl || null,
-        createdAt: reply.createdAt,
-        reactionCount: reply.reactionCount || 0,
-        replyCount: reply.replyCount || 0,
-        liked: false,
-        replies: [],
-      }));
-
-      dispatch(
-        fetchRepliesSuccess({
-          postId,
-          parentId: commentId,
-          replies: mappedReplies,
-        })
-      );
-      // console.debug("Dispatched fetchRepliesSuccess:", { postId, parentId: commentId, replies: mappedReplies });
-      setOpenReplies((prev) => {
-        const newState = { ...prev, [commentId]: true };
-        // console.debug("Updated openReplies:", newState);
-        return newState;
-      });
     } catch (error) {
       console.error("Lỗi khi tải phản hồi:", error);
+    } finally {
+      setLoadingReplies(prev => ({ ...prev, [commentId]: false }));
     }
   };
 
@@ -240,10 +228,10 @@ const PostComments = ({
     });
   };
 
-  // Filter out invalid comments without id
-  const validComments = Array.isArray(comments)
-    ? comments.filter((c) => c && c.id)
-    : [];
+  // Get comments from Redux store
+  const { posts } = useSelector((state) => state.posts);
+  const currentPost = posts.find((post) => post.id === postId);
+  const validComments = currentPost?.comments || [];
 
   if (!show || validComments.length === 0) return null;
 
@@ -252,11 +240,11 @@ const PostComments = ({
       const totalReplyCount = comment.replyCount || 0;
       const loadedReplies = Array.isArray(comment.replies) ? comment.replies.length : 0;
       const hasReplies = totalReplyCount > 0;
-      const isOpen = openReplies[comment.id] ?? !hideRepliesByDefault;
+      const isOpen = openReplies[comment.id] ?? false;
       const areRepliesLoaded = loadedReplies >= totalReplyCount && loadedReplies > 0;
       const hasLoadedAny = loadedReplies > 0;
       const shouldShowReplies = isOpen && (hasLoadedAny || areRepliesLoaded);
-      console.log(`Comment ${comment.id}: hasReplies=${hasReplies}, isOpen=${isOpen}, areRepliesLoaded=${areRepliesLoaded}, replies=`, comment.replies);
+      const isLoading = loadingReplies[comment.id] || false;
 
       return (
         <motion.div
@@ -286,15 +274,15 @@ const PostComments = ({
               </p>
               <div className="flex items-center space-x-2 sm:space-x-4 mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                 <button
-                  className={`flex items-center space-x-1 ${comment.liked
+                  className={`flex items-center space-x-1 ${comment.isReactedByCurrentUser
                     ? "text-red-500 dark:text-red-500"
                     : "hover:text-red-500"
                     }`}
-                  onClick={() => handleLikeComment(comment.id, comment.liked)}
+                  onClick={() => handleLikeComment(comment.id, comment.isReactedByCurrentUser)}
                 >
                   <Heart
                     className="w-3 h-3 sm:w-4 sm:h-4"
-                    fill={comment.liked ? "currentColor" : "none"}
+                    fill={comment.isReactedByCurrentUser ? "currentColor" : "none"}
                   />
                   <span>{comment.reactionCount}</span>
                 </button>
@@ -306,16 +294,21 @@ const PostComments = ({
                 </button>
                 {hasReplies && (
                   <button
-                    className="hover:text-gray-700 dark:hover:text-gray-200"
+                    className="hover:text-gray-700 dark:hover:text-gray-200 flex items-center space-x-1"
                     onClick={() =>
                       areRepliesLoaded
                         ? toggleReplies(comment.id)
                         : handleFetchReplies(comment.id)
                     }
+                    disabled={isLoading}
                   >
-                    {isOpen && areRepliesLoaded
-                      ? `Ẩn ${totalReplyCount} phản hồi`
-                      : `Xem ${totalReplyCount} phản hồi`}
+                    {isLoading ? (
+                      <span>Đang tải...</span>
+                    ) : isOpen && areRepliesLoaded ? (
+                      <span>Ẩn {totalReplyCount} phản hồi</span>
+                    ) : (
+                      <span>Xem {totalReplyCount} phản hồi</span>
+                    )}
                   </button>
                 )}
               </div>
@@ -338,12 +331,13 @@ const PostComments = ({
               </AnimatePresence>
             </div>
           </div>
-          {shouldShowReplies && (
+          {/* Show replies immediately if they exist (Facebook-like behavior) */}
+          {comment.replies && comment.replies.length > 0 && (
             <div className="mt-2">
               {(() => {
-                const total = Array.isArray(comment.replies) ? comment.replies.length : 0;
+                const total = comment.replies.length;
                 const visible = replyVisibleCount[comment.id] || 5;
-                const toRender = (comment.replies || []).slice(0, visible);
+                const toRender = comment.replies.slice(0, visible);
                 return (
                   <>
                     {renderComments(toRender, level + 1)}
@@ -365,7 +359,6 @@ const PostComments = ({
     });
   };
 
-  // console.debug("PostComments props.comments:", comments);
   return (
     <div className={`space-y-4 ${className}`}>
       {renderComments(validComments.slice(0, maxVisible))}

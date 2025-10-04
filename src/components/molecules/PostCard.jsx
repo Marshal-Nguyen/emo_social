@@ -10,6 +10,7 @@ import Button from "../atoms/Button";
 import { MessageSquare } from "lucide-react";
 import JoinGroupButton from "./JoinGroupButton";
 import { addComment, finalizeComment, removeComment } from "../../store/postsSlice";
+import { postsService } from "../../services/apiService";
 import { addConversation } from "../../store/chatSlice";
 import { useParams } from "react-router-dom";
 
@@ -77,7 +78,7 @@ const PostCard = ({
         createdAt: new Date().toISOString(),
         reactionCount: 0,
         replyCount: 0,
-        liked: false,
+        isReactedByCurrentUser: false,
         replies: [],
       };
       dispatch(
@@ -86,25 +87,8 @@ const PostCard = ({
           comment: optimistic,
         })
       );
-      const response = await fetch(`${baseUrl}/v1/comments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          postId: resolvedPostId,
-          content,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Không thể thêm bình luận: ${errorText}`);
-      }
-      const payload = await response.json();
-      const apiComment = payload?.data || payload || {};
-      const newId = apiComment.commentId || apiComment.id;
+      const response = await postsService.addComment(resolvedPostId, content);
+      const newId = response?.commentId || response?.id;
       if (newId) {
         // Only need to replace temp id with real id; keep optimistic fields
         dispatch(
@@ -189,6 +173,7 @@ const PostCard = ({
         onReply={handleReply}
         postId={effectivePost?.id || routePostId}
         hideRepliesByDefault={hideRepliesByDefault}
+        autoLoadComments={forceShowComments} // Only auto-load comments in detail view
         className="mt-3 sm:mt-4"
       />
       {(showComments || forceShowComments) && (
