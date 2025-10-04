@@ -102,55 +102,53 @@ const Feed = ({ onNavigateToChat }) => {
   useEffect(() => {
     // Load posts from API
     const loadPosts = async () => {
-      if (posts.length === 0) {
-        dispatch(fetchPostsStart());
-        try {
-          const response = await postsService.getPosts(1, 10);
-          const apiPosts = response.posts?.data || [];
+      dispatch(fetchPostsStart());
+      try {
+        const response = await postsService.getPosts(1, 10);
+        const apiPosts = response.posts?.data || [];
 
-          // Transform API data to match our component structure
-          const transformedPosts = apiPosts.map(post => ({
-            id: post.id,
-            title: post.title,
-            content: post.content,
-            author: {
-              id: post.author.aliasId,
-              username: post.author.displayName,
-              avatar: post.author.avatarUrl,
-              isOnline: false, // API doesn't provide this info
-            },
-            createdAt: post.publishedAt,
-            editedAt: post.editedAt,
-            likesCount: post.reactionCount,
-            commentCount: post.commentCount,
-            commentsCount: post.commentCount, // Sync with PostActions display
-            liked: post.isReactedByCurrentUser,
-            comments: [], // Will be loaded separately if needed
-            images: post.medias || [],
-            hasMedia: post.hasMedia,
-            viewCount: post.viewCount,
-            visibility: post.visibility,
-            categoryTagIds: post.categoryTagIds || [],
-            emotionTagIds: post.emotionTagIds || [],
-          }));
+        // Transform API data to match our component structure
+        const transformedPosts = apiPosts.map(post => ({
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          author: {
+            id: post.author.aliasId,
+            username: post.author.displayName,
+            avatar: post.author.avatarUrl,
+            isOnline: false, // API doesn't provide this info
+          },
+          createdAt: post.publishedAt,
+          editedAt: post.editedAt,
+          likesCount: post.reactionCount,
+          commentCount: post.commentCount,
+          commentsCount: post.commentCount, // Sync with PostActions display
+          liked: post.isReactedByCurrentUser,
+          comments: [], // Will be loaded separately if needed
+          images: post.medias || [],
+          hasMedia: post.hasMedia,
+          viewCount: post.viewCount,
+          visibility: post.visibility,
+          categoryTagIds: post.categoryTagIds || [],
+          emotionTagIds: post.emotionTagIds || [],
+        }));
 
-          dispatch(
-            fetchPostsSuccess({
-              posts: transformedPosts,
-              page: response.posts?.pageIndex || 1,
-              hasMore: response.posts?.hasNextPage || false,
-              reset: true,
-            })
-          );
-        } catch (error) {
-          console.error("Error loading posts:", error);
-          dispatch(fetchPostsFailure(error.message));
-        }
+        dispatch(
+          fetchPostsSuccess({
+            posts: transformedPosts,
+            page: response.posts?.pageIndex || 1,
+            hasMore: response.posts?.hasNextPage || false,
+            reset: true,
+          })
+        );
+      } catch (error) {
+        console.error("Error loading posts:", error);
+        dispatch(fetchPostsFailure(error.message));
       }
     };
 
     loadPosts();
-  }, [dispatch, posts.length]);
+  }, [dispatch]);
 
   const handleLoadMore = async () => {
     if (loading || !hasMore) return;
