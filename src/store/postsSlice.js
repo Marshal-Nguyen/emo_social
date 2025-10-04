@@ -51,6 +51,7 @@ const postsSlice = createSlice({
         post.reactionCount = action.payload.reactionCount;
       }
     },
+    // DEPRECATED: Comment handling moved to PostComments local state
     addComment: (state, action) => {
       const { postId, comment, parentId, update } = action.payload;
       const post = state.posts.find((post) => post.id === postId);
@@ -159,6 +160,7 @@ const postsSlice = createSlice({
       };
       toggleLikeRecursive(post.comments);
     },
+    // DEPRECATED: Comment handling moved to PostComments local state
     finalizeComment: (state, action) => {
       const { postId, tempId, newData } = action.payload;
       const post = state.posts.find((p) => p.id === postId);
@@ -178,6 +180,7 @@ const postsSlice = createSlice({
       };
       replaceRecursive(post.comments);
     },
+    // DEPRECATED: Comment handling moved to PostComments local state
     removeComment: (state, action) => {
       const { postId, commentId } = action.payload;
       const post = state.posts.find((p) => p.id === postId);
@@ -228,6 +231,7 @@ const postsSlice = createSlice({
         }
       }
     },
+    // DEPRECATED: Comment handling moved to PostComments local state
     fetchRepliesSuccess: (state, action) => {
       const { postId, parentId, replies } = action.payload;
       let post = state.posts.find((post) => post.id === postId);

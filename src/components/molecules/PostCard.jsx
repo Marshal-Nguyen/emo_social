@@ -9,7 +9,7 @@ import CommentForm from "./CommentForm";
 import Button from "../atoms/Button";
 import { MessageSquare } from "lucide-react";
 import JoinGroupButton from "./JoinGroupButton";
-import { addComment, finalizeComment, removeComment } from "../../store/postsSlice";
+// Removed Redux imports - PostComments now handles comments locally
 import { postsService } from "../../services/apiService";
 import { addConversation } from "../../store/chatSlice";
 import { useParams } from "react-router-dom";
@@ -28,7 +28,7 @@ const PostCard = ({
   hideRepliesByDefault = false,
 }) => {
   const { id: routePostId } = useParams();
-  const dispatch = useDispatch();
+  // Removed dispatch - PostComments handles comments locally
   const { user } = useSelector((state) => state.auth);
   const postFromStore = useSelector((state) =>
     state.posts?.posts?.find((p) => p.id === post?.id)
@@ -62,66 +62,15 @@ const PostCard = ({
     setMaxVisibleComments((prev) => prev + 5);
   };
 
+  // Comment submission is now handled by PostComments component
   const handleCommentSubmit = async (content) => {
-    if (!content.trim() || isCommenting) return;
-    setIsCommenting(true);
-
-    try {
-      const resolvedPostId = post?.id || routePostId;
-      // Optimistic add
-      const tempId = `temp-${Date.now()}`;
-      const optimistic = {
-        id: tempId,
-        content,
-        author: user?.username || "Anonymous",
-        avatar: user?.avatar || null,
-        createdAt: new Date().toISOString(),
-        reactionCount: 0,
-        replyCount: 0,
-        isReactedByCurrentUser: false,
-        replies: [],
-      };
-      dispatch(
-        addComment({
-          postId: resolvedPostId,
-          comment: optimistic,
-        })
-      );
-      const response = await postsService.addComment(resolvedPostId, content);
-      const newId = response?.commentId || response?.id;
-      if (newId) {
-        // Comment count will be automatically updated by Redux addComment action
-
-        // Replace temp id with real id
-        dispatch(
-          finalizeComment({
-            postId: resolvedPostId,
-            tempId,
-            newData: { id: newId },
-          })
-        );
-      } else {
-        dispatch(removeComment({ postId: resolvedPostId, commentId: tempId }));
-      }
-      // Keep viewport stable; no auto scroll after submit
-    } catch (error) {
-      console.error("Lỗi khi thêm bình luận:", error);
-      const resolvedPostId = post?.id || routePostId;
-      dispatch(removeComment({ postId: resolvedPostId, commentId: tempId }));
-    } finally {
-      setIsCommenting(false);
-    }
+    // This function is kept for compatibility but PostComments handles comments
+    console.log("Comment submission handled by PostComments component");
   };
 
+  // Reply handling is now done by PostComments component
   const handleReply = (parentId, comment, update) => {
-    dispatch(
-      addComment({
-        postId: post?.id || routePostId,
-        comment,
-        parentId,
-        update,
-      })
-    );
+    console.log("Reply handling done by PostComments component");
   };
 
   const handleDirectMessage = () => {
