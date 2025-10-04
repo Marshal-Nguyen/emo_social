@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "../organisms/Sidebar";
 import MobileNavBar from "../molecules/MobileNavBar";
 import ChatSidebar from "../organisms/ChatSidebar";
@@ -11,6 +11,7 @@ import { setFirstMountFalse } from "../../store/authSlice";
 const Layout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const { isFirstMount } = useSelector((state) => state.auth);
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [activeTab, setActiveTab] = useState("home");
@@ -43,9 +44,23 @@ const Layout = () => {
         }
     }, [dispatch, isFirstMount]);
 
+    // Update activeTab based on current location
+    useEffect(() => {
+        const path = location.pathname;
+        if (path === "/home") {
+            setActiveTab("home");
+        } else if (path === "/community-rules") {
+            setActiveTab("community-rules");
+        }
+    }, [location.pathname]);
+
     const handleTabChange = (tab) => {
-        setActiveTab(tab);
-        navigate(`/${tab}`);
+        // Allow navigation to home page and community rules
+        if (tab === "home" || tab === "community-rules") {
+            setActiveTab(tab);
+            navigate(`/${tab}`);
+        }
+        // For other tabs, do nothing (they are disabled with "soon" status)
     };
 
     const handleCollapseChange = (isCollapsed) => {

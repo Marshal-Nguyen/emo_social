@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
-import { Home, LogOut, MessageCircle, Bell, User, Settings, Smile, ChevronLeft, ChevronRight, Leaf } from "lucide-react";
+import { Home, LogOut, MessageCircle, Bell, User, Settings, Smile, ChevronLeft, ChevronRight, Leaf, Shield } from "lucide-react";
 
 import ThemeToggle from "../molecules/ThemeToggle";
 import Avatar from "../atoms/Avatar";
@@ -32,14 +32,26 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
     };
 
     const navigationItems = [
-        { key: "home", icon: Home, label: t("nav.home"), gradient: "from-indigo-500 to-purple-600", textColor: "text-indigo-600 dark:text-indigo-400", bgColor: "bg-indigo-100 dark:bg-indigo-900/30", hoverBg: "group-hover:bg-indigo-200 dark:group-hover:bg-indigo-900/50" },
-        { key: "chat", icon: MessageCircle, label: t("nav.chat"), gradient: "from-blue-500 to-cyan-600", textColor: "text-blue-600 dark:text-blue-400", bgColor: "bg-blue-100 dark:bg-blue-900/30", hoverBg: "group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50", badge: unreadMessages },
-        { key: "notifications", icon: Bell, label: t("nav.notifications"), gradient: "from-orange-500 to-red-600", textColor: "text-orange-600 dark:text-orange-400", bgColor: "bg-orange-100 dark:bg-orange-900/30", hoverBg: "group-hover:bg-orange-200 dark:group-hover:bg-orange-900/50", badge: unreadNotifications },
-        { key: "profile", icon: User, label: t("nav.profile"), gradient: "from-green-500 to-emerald-600", textColor: "text-green-600 dark:text-green-400", bgColor: "bg-green-100 dark:bg-green-900/30", hoverBg: "group-hover:bg-green-200 dark:group-hover:bg-green-900/50" },
-        { key: "wellness-hub", icon: Leaf, label: t("nav.wellness-hub"), gradient: "from-gray-500 to-slate-600", textColor: "text-gray-600 dark:text-gray-400", bgColor: "bg-gray-100 dark:bg-gray-700/30", hoverBg: "group-hover:bg-gray-200 dark:group-hover:bg-gray-700/50" },
-        { key: "settings", icon: Settings, label: t("nav.settings"), gradient: "from-gray-500 to-slate-600", textColor: "text-gray-600 dark:text-gray-400", bgColor: "bg-gray-100 dark:bg-gray-700/30", hoverBg: "group-hover:bg-gray-200 dark:group-hover:bg-gray-700/50" },
-        { key: "icons", icon: Smile, label: t("nav.icons"), gradient: "from-red-500 to-slate-600", textColor: "text-red-600 dark:text-red-400", bgColor: "bg-red-100 dark:bg-red-700/30", hoverBg: "group-hover:bg-red-200 dark:group-hover:bg-red-700/50" },
+        { key: "home", icon: Home, label: t("nav.home"), gradient: "from-indigo-500 to-purple-600", textColor: "text-indigo-600 dark:text-indigo-400", bgColor: "bg-indigo-100 dark:bg-indigo-900/30", hoverBg: "group-hover:bg-indigo-200 dark:group-hover:bg-indigo-900/50", enabled: true },
+        // { key: "chat", icon: MessageCircle, label: t("nav.chat"), gradient: "from-blue-500 to-cyan-600", textColor: "text-blue-600 dark:text-blue-400", bgColor: "bg-blue-100 dark:bg-blue-900/30", hoverBg: "group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50", badge: unreadMessages, enabled: false, soonLabel: "Soon" },
+        // { key: "notifications", icon: Bell, label: t("nav.notifications"), gradient: "from-orange-500 to-red-600", textColor: "text-orange-600 dark:text-orange-400", bgColor: "bg-orange-100 dark:bg-orange-900/30", hoverBg: "group-hover:bg-orange-200 dark:group-hover:bg-orange-900/50", badge: unreadNotifications, enabled: false, soonLabel: "Soon" },
+        // { key: "profile", icon: User, label: t("nav.profile"), gradient: "from-green-500 to-emerald-600", textColor: "text-green-600 dark:text-green-400", bgColor: "bg-green-100 dark:bg-green-900/30", hoverBg: "group-hover:bg-green-200 dark:group-hover:bg-green-900/50", enabled: false, soonLabel: "Soon" },
+        // { key: "wellness-hub", icon: Leaf, label: t("nav.wellness-hub"), gradient: "from-gray-500 to-slate-600", textColor: "text-gray-600 dark:text-gray-400", bgColor: "bg-gray-100 dark:bg-gray-700/30", hoverBg: "group-hover:bg-gray-200 dark:group-hover:bg-gray-700/50", enabled: false, soonLabel: "Soon" },
+        // { key: "settings", icon: Settings, label: t("nav.settings"), gradient: "from-gray-500 to-slate-600", textColor: "text-gray-600 dark:text-gray-400", bgColor: "bg-gray-100 dark:bg-gray-700/30", hoverBg: "group-hover:bg-gray-200 dark:group-hover:bg-gray-700/50", enabled: false, soonLabel: "Soon" },
+        // { key: "icons", icon: Smile, label: t("nav.icons"), gradient: "from-red-500 to-slate-600", textColor: "text-red-600 dark:text-red-400", bgColor: "bg-red-100 dark:bg-red-700/30", hoverBg: "group-hover:bg-red-200 dark:group-hover:bg-red-700/50", enabled: false, soonLabel: "Soon" },
     ];
+
+    const communityRulesItem = {
+        key: "community-rules",
+        icon: Shield,
+        label: "Quy tắc cộng đồng",
+        gradient: "from-purple-500 to-pink-600",
+        textColor: "text-purple-600 dark:text-purple-400",
+        bgColor: "bg-purple-100 dark:bg-purple-900/30",
+        hoverBg: "group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50",
+        enabled: true
+    };
+
 
     if (isMobile) return null;
 
@@ -121,23 +133,35 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
                         {navigationItems.map((item, index) => {
                             const Icon = item.icon;
                             const isActive = location.pathname.startsWith(`/${item.key}`);
+                            const isDisabled = !item.enabled;
                             return (
                                 <motion.button
                                     key={item.key}
                                     initial={isFirstMount ? { opacity: 0, x: -20 } : false}
                                     animate={isFirstMount ? { opacity: 1, x: 0 } : false}
                                     transition={isFirstMount ? { delay: index * 0.1 + 0.4, duration: 0.4 } : {}}
-                                    onClick={() => onTabChange(item.key)}
-                                    className={`${buttonStyles} ${isCollapsed ? "justify-center" : "space-x-3 px-4"} py-3 text-left ${isActive ? `${item.textColor} transform scale-[1.02]` : hoverStyles}`}
+                                    onClick={isDisabled ? undefined : () => onTabChange(item.key)}
+                                    disabled={isDisabled}
+                                    className={`${buttonStyles} ${isCollapsed ? "justify-center" : "space-x-3 px-4"} py-3 text-left ${isDisabled
+                                        ? "opacity-50 cursor-not-allowed text-gray-400 dark:text-gray-600"
+                                        : isActive
+                                            ? `${item.textColor} transform scale-[1.02]`
+                                            : hoverStyles
+                                        }`}
                                 >
-                                    {isActive && <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent opacity-50" />}
-                                    <div className={iconStyles(item, isActive)}>
+                                    {isActive && item.enabled && <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent opacity-50" />}
+                                    <div className={`${iconStyles(item, isActive)} ${isDisabled ? "opacity-50" : ""}`}>
                                         <Icon className="w-5 h-5" />
+                                        {isDisabled && (
+                                            <span className="absolute -top-1 -right-1 bg-gray-400 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-[8px]">
+                                                {item.soonLabel}
+                                            </span>
+                                        )}
                                     </div>
                                     {!isCollapsed && (
                                         <>
                                             <span className="font-semibold flex-1 text-sm">{item.label}</span>
-                                            {item.badge > 0 && (
+                                            {item.badge > 0 && item.enabled && (
                                                 <motion.div initial={isFirstMount ? { scale: 0, opacity: 0 } : false} animate={isFirstMount ? { scale: 1, opacity: 1 } : false} className="relative">
                                                     <div className="bg-gradient-to-r from-red-500 to-rose-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
                                                         {item.badge}
@@ -154,6 +178,41 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
                                 </motion.button>
                             );
                         })}
+                    </div>
+
+                    {/* Gạch ngang phân cách */}
+                    <div className="my-4 w-full h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent"></div>
+
+                    {/* Tab Quy tắc cộng đồng */}
+                    <div className="space-y-2">
+                        {(() => {
+                            const Icon = communityRulesItem.icon;
+                            const isActive = location.pathname.startsWith(`/${communityRulesItem.key}`);
+                            const isDisabled = !communityRulesItem.enabled;
+                            return (
+                                <motion.button
+                                    initial={isFirstMount ? { opacity: 0, x: -20 } : false}
+                                    animate={isFirstMount ? { opacity: 1, x: 0 } : false}
+                                    transition={isFirstMount ? { delay: 0.8, duration: 0.4 } : {}}
+                                    onClick={isDisabled ? undefined : () => onTabChange(communityRulesItem.key)}
+                                    disabled={isDisabled}
+                                    className={`${buttonStyles} ${isCollapsed ? "justify-center" : "space-x-3 px-4"} py-3 text-left ${isDisabled
+                                        ? "opacity-50 cursor-not-allowed text-gray-400 dark:text-gray-600"
+                                        : isActive
+                                            ? `${communityRulesItem.textColor} transform scale-[1.02]`
+                                            : hoverStyles
+                                        }`}
+                                >
+                                    {isActive && communityRulesItem.enabled && <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent opacity-50" />}
+                                    <div className={`${iconStyles(communityRulesItem, isActive)} ${isDisabled ? "opacity-50" : ""}`}>
+                                        <Icon className="w-5 h-5" />
+                                    </div>
+                                    {!isCollapsed && (
+                                        <span className="font-semibold flex-1 text-sm">{communityRulesItem.label}</span>
+                                    )}
+                                </motion.button>
+                            );
+                        })()}
                     </div>
                 </div>
 
