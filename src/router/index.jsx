@@ -14,6 +14,8 @@ import LoadingSpinner from "../components/atoms/LoadingSpinner";
 import NotificationSystem from "../components/organisms/NotificationSystem";
 import WellnessHub from "../pages/WellnessHub";
 import TestCommentLogic from "../test-comment-logic";
+import TestWebSocket from "../test-websocket";
+import TestWebSocketComments from "../test-websocket-comments";
 import { useAutoTheme, useTheme } from "../hooks/useTheme";
 
 function AppRouter() {
@@ -70,6 +72,14 @@ function AppRouter() {
                     <Route
                         path="/test-comments"
                         element={isAuthenticated ? <TestCommentLogic /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/test-websocket"
+                        element={isAuthenticated ? <TestWebSocket /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/test-websocket-comments"
+                        element={isAuthenticated ? <TestWebSocketComments /> : <Navigate to="/auth" />}
                     />
                     <Route
                         path="/"

@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Avatar from "../atoms/Avatar";
 import { Heart } from "lucide-react";
 import CommentForm from "./CommentForm";
 import { formatTimeAgo } from "../../utils/helpers";
-import { useDispatch, useSelector } from "react-redux";
-import { addComment, fetchRepliesSuccess, finalizeComment, removeComment, setComments } from "../../store/postsSlice";
 import { postsService } from "../../services/apiService";
+import { useWebSocket } from "../../hooks/useWebSocket";
+import websocketService from "../../services/websocketService";
 
 const baseUrl = "https://api.emoease.vn/post-service";
 const token =
@@ -23,8 +23,8 @@ const PostComments = ({
   postId,
   autoLoadComments = false,
 }) => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  // Local state management (no Redux needed with WebSocket)
+  const [localComments, setLocalComments] = useState(comments);
   const [showReplyForm, setShowReplyForm] = useState({});
   const [openReplies, setOpenReplies] = useState({});
   const [replyVisibleCount, setReplyVisibleCount] = useState({});
@@ -33,6 +33,89 @@ const PostComments = ({
   const [fetchingReplies, setFetchingReplies] = useState(new Set());
   const [loadedAllReplies, setLoadedAllReplies] = useState(new Set());
   const commentEndRef = useRef(null);
+
+  // WebSocket hook with callback for real-time updates
+  const handleCommentUpdate = useCallback((type, data) => {
+    switch (type) {
+      case 'newComment':
+        setLocalComments(prev => [data, ...prev]);
+        break;
+      case 'newReply':
+        setLocalComments(prev => {
+          const addReplyToComment = (comments) => {
+            return comments.map(comment => {
+              if (comment.id === data.parentId) {
+                return {
+                  ...comment,
+                  replies: [data.reply, ...(comment.replies || [])],
+                  replyCount: (comment.replyCount || 0) + 1
+                };
+              }
+              if (comment.replies && comment.replies.length > 0) {
+                return {
+                  ...comment,
+                  replies: addReplyToComment(comment.replies)
+                };
+              }
+              return comment;
+            });
+          };
+          return addReplyToComment(prev);
+        });
+        break;
+      case 'commentLiked':
+        setLocalComments(prev => {
+          const updateLike = (comments) => {
+            return comments.map(comment => {
+              if (comment.id === data.commentId) {
+                return {
+                  ...comment,
+                  isReactedByCurrentUser: data.isLiked,
+                  reactionCount: data.reactionCount || (comment.reactionCount || 0) + (data.isLiked ? 1 : -1)
+                };
+              }
+              if (comment.replies && comment.replies.length > 0) {
+                return {
+                  ...comment,
+                  replies: updateLike(comment.replies)
+                };
+              }
+              return comment;
+            });
+          };
+          return updateLike(prev);
+        });
+        break;
+      case 'commentDeleted':
+        setLocalComments(prev => prev.filter(comment => comment.id !== data.commentId));
+        break;
+      case 'replyDeleted':
+        setLocalComments(prev => {
+          const removeReply = (comments) => {
+            return comments.map(comment => {
+              if (comment.replies && comment.replies.length > 0) {
+                const filteredReplies = comment.replies.filter(reply => reply.id !== data.replyId);
+                return {
+                  ...comment,
+                  replies: filteredReplies,
+                  replyCount: Math.max((comment.replyCount || 0) - 1, 0)
+                };
+              }
+              return comment;
+            });
+          };
+          return removeReply(prev);
+        });
+        break;
+    }
+  }, []);
+
+  const { sendComment, sendReply, sendLike, isConnected } = useWebSocket(postId, show, handleCommentUpdate);
+
+  // Sync local comments with props
+  useEffect(() => {
+    setLocalComments(comments);
+  }, [comments]);
 
   // Load comments when component mounts or postId changes (only if autoLoadComments is true)
   useEffect(() => {
@@ -47,14 +130,55 @@ const PostComments = ({
     setFetchingReplies(new Set());
   }, [postId]);
 
+  // Initialize WebSocket connection (disabled for now due to connection issues)
+  useEffect(() => {
+    if (postId && show) {
+      // Temporarily disable WebSocket due to connection issues
+      // const wsUrl = `wss://api.emoease.vn/ws?postId=${postId}&token=${token}`;
+      // websocketService.connect(wsUrl);
+
+      console.log('🔌 WebSocket disabled - using API fallback only');
+
+      return () => {
+        // websocketService.disconnect();
+      };
+    }
+  }, [postId, show]);
+
   const loadComments = async () => {
     try {
       const response = await postsService.getComments(postId, 1, 20);
       if (response.comments && response.comments.data) {
-        dispatch(setComments({
-          postId,
-          comments: response.comments.data
+        // Map comments to local format
+        const mappedComments = response.comments.data.map((comment) => ({
+          id: comment.id,
+          content: comment.content,
+          author: comment.author.displayName,
+          avatar: comment.author.avatarUrl,
+          createdAt: comment.createdAt,
+          editedAt: comment.editedAt,
+          reactionCount: comment.reactionCount || 0,
+          replyCount: comment.replyCount || 0,
+          isReactedByCurrentUser: comment.isReactedByCurrentUser || false,
+          isDeleted: comment.isDeleted || false,
+          hierarchy: comment.hierarchy,
+          replies: comment.replies ? comment.replies.map((reply) => ({
+            id: reply.id,
+            content: reply.content,
+            author: reply.author.displayName,
+            avatar: reply.author.avatarUrl,
+            createdAt: reply.createdAt,
+            editedAt: reply.editedAt,
+            reactionCount: reply.reactionCount || 0,
+            replyCount: reply.replyCount || 0,
+            isReactedByCurrentUser: reply.isReactedByCurrentUser || false,
+            isDeleted: reply.isDeleted || false,
+            hierarchy: reply.hierarchy,
+            replies: [], // Replies don't have nested replies in this structure
+          })) : [],
         }));
+
+        setLocalComments(mappedComments);
         setCommentsLoaded(true);
       }
     } catch (error) {
@@ -74,8 +198,8 @@ const PostComments = ({
       const optimistic = {
         id: tempId,
         content,
-        author: user?.username || "Anonymous",
-        avatar: user?.avatar || null,
+        author: "Anonymous", // You can get this from auth context
+        avatar: null,
         createdAt: new Date().toISOString(),
         reactionCount: 0,
         replyCount: 0,
@@ -83,34 +207,115 @@ const PostComments = ({
         replies: [],
       };
 
-      dispatch(addComment({
-        postId,
-        comment: optimistic,
-        parentId: commentId,
-      }));
+      // Add optimistic reply to local state
+      setLocalComments(prev => {
+        const addReplyToComment = (comments) => {
+          return comments.map(comment => {
+            if (comment.id === commentId) {
+              return {
+                ...comment,
+                replies: [optimistic, ...(comment.replies || [])],
+                replyCount: (comment.replyCount || 0) + 1
+              };
+            }
+            if (comment.replies && comment.replies.length > 0) {
+              return {
+                ...comment,
+                replies: addReplyToComment(comment.replies)
+              };
+            }
+            return comment;
+          });
+        };
+        return addReplyToComment(prev);
+      });
 
       // Ensure the replies section opens when first reply is added
       setOpenReplies((prev) => ({ ...prev, [commentId]: true }));
-      setReplyVisibleCount((prev) => ({ ...prev, [commentId]: Math.max(prev[commentId] || 0, 5) }));
+      setReplyVisibleCount((prev) => ({ ...prev, [commentId]: Math.max(prev[commentId] || 0, 3) }));
 
-      const response = await postsService.addComment(postId, content, commentId);
-      const realId = response?.commentId || response?.id;
-
-      if (realId) {
-        // Comment count will be automatically updated by Redux addComment action
-
-        // finalize optimistic reply id
-        dispatch(
-          finalizeComment({ postId, tempId, newData: { id: realId } })
-        );
+      // Send via WebSocket if connected, otherwise fallback to API
+      if (isConnected) {
+        sendReply(postId, commentId, content);
+        // WebSocket will handle the real-time update
       } else {
-        // rollback if API didn't return id
-        dispatch(removeComment({ postId, commentId: tempId }));
+        // Fallback to API
+        const response = await postsService.addComment(postId, content, commentId);
+        const realId = response?.commentId || response?.id;
+
+        if (realId) {
+          // Update optimistic reply with real ID
+          setLocalComments(prev => {
+            const updateReplyId = (comments) => {
+              return comments.map(comment => {
+                if (comment.id === commentId) {
+                  return {
+                    ...comment,
+                    replies: comment.replies.map(reply =>
+                      reply.id === tempId ? { ...reply, id: realId } : reply
+                    )
+                  };
+                }
+                if (comment.replies && comment.replies.length > 0) {
+                  return {
+                    ...comment,
+                    replies: updateReplyId(comment.replies)
+                  };
+                }
+                return comment;
+              });
+            };
+            return updateReplyId(prev);
+          });
+        } else {
+          // Remove optimistic reply if failed
+          setLocalComments(prev => {
+            const removeReply = (comments) => {
+              return comments.map(comment => {
+                if (comment.id === commentId) {
+                  return {
+                    ...comment,
+                    replies: comment.replies.filter(reply => reply.id !== tempId),
+                    replyCount: Math.max((comment.replyCount || 0) - 1, 0)
+                  };
+                }
+                if (comment.replies && comment.replies.length > 0) {
+                  return {
+                    ...comment,
+                    replies: removeReply(comment.replies)
+                  };
+                }
+                return comment;
+              });
+            };
+            return removeReply(prev);
+          });
+        }
       }
     } catch (error) {
       console.error("Lỗi khi thêm phản hồi:", error);
-      // rollback optimistic if failed
-      dispatch(removeComment({ postId, commentId: tempId }));
+      // Remove optimistic reply on error
+      setLocalComments(prev => {
+        const removeReply = (comments) => {
+          return comments.map(comment => {
+            if (comment.id === commentId) {
+              return {
+                ...comment,
+                replies: comment.replies.filter(reply => reply.id !== tempId),
+                replyCount: Math.max((comment.replyCount || 0) - 1, 0)
+              };
+            }
+            if (comment.replies && comment.replies.length > 0) {
+              return {
+                ...comment,
+                replies: removeReply(comment.replies)
+              };
+            }
+            return comment;
+          });
+        };
+        return removeReply(prev);
+      });
     }
   };
 
@@ -121,61 +326,92 @@ const PostComments = ({
     }
 
     try {
-      if (!isReacted) {
-        const response = await fetch(`${baseUrl}/v1/reactions`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            targetType: "Comment",
-            targetId: commentId,
-            reactionCode: "Like",
-          }),
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Không thể thích bình luận: ${errorText}`);
-        }
-
-        // Update comment in Redux
-        dispatch(addComment({
-          postId,
-          comment: null,
-          parentId: commentId,
-          update: {
-            isReactedByCurrentUser: true,
-            reactionCount: (validComments.find((c) => c.id === commentId)?.reactionCount || 0) + 1,
-          }
-        }));
+      // Send via WebSocket if connected, otherwise fallback to API
+      if (isConnected) {
+        sendLike(postId, commentId, !isReacted);
+        // WebSocket will handle the real-time update
       } else {
-        const response = await fetch(
-          `${baseUrl}/v1/reactions?TargetType=Comment&TargetId=${commentId}`,
-          {
-            method: "DELETE",
+        // Fallback to API
+        if (!isReacted) {
+          const response = await fetch(`${baseUrl}/v1/reactions`, {
+            method: "POST",
             headers: {
+              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-          }
-        );
+            body: JSON.stringify({
+              targetType: "Comment",
+              targetId: commentId,
+              reactionCode: "Like",
+            }),
+          });
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Không thể bỏ thích bình luận: ${errorText}`);
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Không thể thích bình luận: ${errorText}`);
+          }
+
+          // Update local state
+          setLocalComments(prev => {
+            const updateLike = (comments) => {
+              return comments.map(comment => {
+                if (comment.id === commentId) {
+                  return {
+                    ...comment,
+                    isReactedByCurrentUser: true,
+                    reactionCount: (comment.reactionCount || 0) + 1
+                  };
+                }
+                if (comment.replies && comment.replies.length > 0) {
+                  return {
+                    ...comment,
+                    replies: updateLike(comment.replies)
+                  };
+                }
+                return comment;
+              });
+            };
+            return updateLike(prev);
+          });
+        } else {
+          const response = await fetch(
+            `${baseUrl}/v1/reactions?TargetType=Comment&TargetId=${commentId}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Không thể bỏ thích bình luận: ${errorText}`);
+          }
+
+          // Update local state
+          setLocalComments(prev => {
+            const updateLike = (comments) => {
+              return comments.map(comment => {
+                if (comment.id === commentId) {
+                  return {
+                    ...comment,
+                    isReactedByCurrentUser: false,
+                    reactionCount: Math.max((comment.reactionCount || 0) - 1, 0)
+                  };
+                }
+                if (comment.replies && comment.replies.length > 0) {
+                  return {
+                    ...comment,
+                    replies: updateLike(comment.replies)
+                  };
+                }
+                return comment;
+              });
+            };
+            return updateLike(prev);
+          });
         }
-
-        // Update comment in Redux
-        dispatch(addComment({
-          postId,
-          comment: null,
-          parentId: commentId,
-          update: {
-            isReactedByCurrentUser: false,
-            reactionCount: (validComments.find((c) => c.id === commentId)?.reactionCount || 0) - 1,
-          }
-        }));
       }
     } catch (error) {
       console.error("Lỗi khi xử lý lượt thích bình luận:", error);
@@ -206,9 +442,22 @@ const PostComments = ({
       setFetchingReplies(prev => new Set([...prev, commentId]));
       setLoadingReplies(prev => ({ ...prev, [commentId]: true }));
 
-      // Get current page based on existing replies
-      const currentPost = posts.find((post) => post.id === postId);
-      const currentComment = currentPost?.comments?.find(c => c.id === commentId);
+      // Get current page based on existing replies - search in nested structure
+      // Recursive function to find comment in nested structure
+      const findComment = (comments) => {
+        for (let comment of comments) {
+          if (comment.id === commentId) {
+            return comment;
+          }
+          if (comment.replies && comment.replies.length > 0) {
+            const found = findComment(comment.replies);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+
+      const currentComment = findComment(localComments);
       const existingRepliesCount = currentComment?.replies?.length || 0;
       const pageIndex = Math.floor(existingRepliesCount / 20) + 1;
 
@@ -243,15 +492,28 @@ const PostComments = ({
         console.log(`✅ Mapped replies for ${commentId}:`, mappedReplies);
         console.log(`🆕 New replies after filtering:`, newReplies);
 
-        // Chỉ dispatch nếu có replies mới
+        // Update local state with new replies
         if (newReplies.length > 0) {
-          dispatch(
-            fetchRepliesSuccess({
-              postId,
-              parentId: commentId,
-              replies: newReplies,
-            })
-          );
+          setLocalComments(prev => {
+            const addRepliesToComment = (comments) => {
+              return comments.map(comment => {
+                if (comment.id === commentId) {
+                  return {
+                    ...comment,
+                    replies: [...(comment.replies || []), ...newReplies]
+                  };
+                }
+                if (comment.replies && comment.replies.length > 0) {
+                  return {
+                    ...comment,
+                    replies: addRepliesToComment(comment.replies)
+                  };
+                }
+                return comment;
+              });
+            };
+            return addRepliesToComment(prev);
+          });
 
           // Kiểm tra xem đã load hết chưa
           const totalRepliesAfterLoad = existingRepliesCount + newReplies.length;
@@ -276,6 +538,11 @@ const PostComments = ({
             console.log(`🔓 Opening replies for ${commentId}:`, newState);
             return newState;
           });
+          // Set initial visible count to 3 (social media style)
+          setReplyVisibleCount((prev) => ({
+            ...prev,
+            [commentId]: 3,
+          }));
         }
       } else {
         console.warn(`⚠️ No replies data for comment ${commentId}`);
@@ -302,32 +569,29 @@ const PostComments = ({
   const toggleReplies = (commentId) => {
     setOpenReplies((prev) => {
       const newState = { ...prev, [commentId]: !prev[commentId] };
-      // console.debug("Toggled openReplies:", newState);
       return newState;
     });
     setReplyVisibleCount((prev) => ({
       ...prev,
-      [commentId]: prev[commentId] || 5,
+      [commentId]: prev[commentId] || 3, // Bắt đầu với 3 replies
     }));
   };
 
   const handleShowMoreReplies = (commentId, total) => {
     setReplyVisibleCount((prev) => {
-      const current = prev[commentId] || 5;
+      const current = prev[commentId] || 3; // Bắt đầu với 3 replies
       const next = Math.min(current + 5, total || current + 5);
       return { ...prev, [commentId]: next };
     });
   };
 
-  // Get comments from Redux store or use passed comments
-  const { posts } = useSelector((state) => state.posts);
-  const currentPost = postId ? posts.find((post) => post.id === postId) : null;
-  const validComments = currentPost?.comments || comments || [];
+  // Use local comments instead of Redux
+  const validComments = localComments;
 
-  // Auto-open replies that have replies from API (only once)
+  // Auto-open replies that have replies from API (social media style)
   useEffect(() => {
-    if (validComments.length > 0) {
-      const commentsWithReplies = validComments.filter(comment =>
+    if (localComments.length > 0) {
+      const commentsWithReplies = localComments.filter(comment =>
         comment.replies && comment.replies.length > 0
       );
 
@@ -337,7 +601,8 @@ const PostComments = ({
           let hasChanges = false;
 
           commentsWithReplies.forEach(comment => {
-            if (!newOpenReplies[comment.id]) {
+            // Chỉ auto-open nếu có ít hơn 3 replies (giống social media)
+            if (!newOpenReplies[comment.id] && comment.replies.length <= 3) {
               newOpenReplies[comment.id] = true;
               hasChanges = true;
             }
@@ -347,9 +612,9 @@ const PostComments = ({
         });
       }
     }
-  }, [validComments.length]); // Chỉ depend vào length thay vì toàn bộ validComments
+  }, [localComments.length]);
 
-  if (!show || validComments.length === 0) return null;
+  if (!show || localComments.length === 0) return null;
 
   const renderComments = (commentsList, level = 0) => {
     return commentsList.map((comment) => {
@@ -363,9 +628,15 @@ const PostComments = ({
       const isLoading = loadingReplies[comment.id] || false;
       const hasMoreReplies = totalReplyCount > loadedReplies && loadedReplies > 0 && !isLoading && !loadedAllReplies.has(comment.id);
 
-      // Debug log for each comment
-      if (hasReplies) {
-        console.log(`🔍 Comment ${comment.id}: total=${totalReplyCount}, loaded=${loadedReplies}, isOpen=${isOpen}, hasMore=${hasMoreReplies}, loadedAll=${loadedAllReplies.has(comment.id)}`);
+      // Debug log for each comment (only when state changes) - reduce noise
+      if (hasReplies && (comment.id === '9ecbdb95-9976-4e75-858a-d1a5d46864c6' || comment.id === '0ba7d257-be4d-4e82-b68d-c7ad9e2c4cdc')) {
+        // Only log when there's a significant change
+        const prevLoaded = window.lastLoadedReplies?.[comment.id] || 0;
+        if (prevLoaded !== loadedReplies) {
+          console.log(`🔍 Comment ${comment.id}: total=${totalReplyCount}, loaded=${loadedReplies}, isOpen=${isOpen}, hasMore=${hasMoreReplies}, loadedAll=${loadedAllReplies.has(comment.id)}`);
+          if (!window.lastLoadedReplies) window.lastLoadedReplies = {};
+          window.lastLoadedReplies[comment.id] = loadedReplies;
+        }
       }
 
       return (
@@ -438,9 +709,9 @@ const PostComments = ({
                     {loadingReplies[comment.id] ? (
                       <span>Đang tải...</span>
                     ) : isOpen && areRepliesLoaded ? (
-                      <span>Ẩn {totalReplyCount} phản hồi</span>
+                      <span>Ẩn phản hồi</span>
                     ) : hasLoadedAny ? (
-                      <span>Xem {totalReplyCount} phản hồi</span>
+                      <span>Xem phản hồi ({loadedReplies}/{totalReplyCount})</span>
                     ) : (
                       <span>Xem {totalReplyCount} phản hồi</span>
                     )}
@@ -466,22 +737,25 @@ const PostComments = ({
               </AnimatePresence>
             </div>
           </div>
-          {/* Show replies when opened */}
+          {/* Show replies when opened (social media style) */}
           {shouldShowReplies && comment.replies && comment.replies.length > 0 && (
             <div className="mt-2">
               {(() => {
                 const total = comment.replies.length;
-                const visible = replyVisibleCount[comment.id] || 5;
+                const initialVisible = 3; // Chỉ hiển thị 3 replies đầu tiên
+                const visible = replyVisibleCount[comment.id] || initialVisible;
                 const toRender = comment.replies.slice(0, visible);
+                const remaining = total - visible;
+
                 return (
                   <>
                     {renderComments(toRender, level + 1)}
-                    {total > visible && (
+                    {remaining > 0 && (
                       <button
-                        className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm mt-1"
+                        className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm mt-1 font-medium"
                         onClick={() => handleShowMoreReplies(comment.id, total)}
                       >
-                        Xem thêm phản hồi
+                        Xem thêm {remaining} phản hồi
                       </button>
                     )}
                   </>
@@ -490,13 +764,14 @@ const PostComments = ({
             </div>
           )}
 
-          {/* Show "Xem thêm phản hồi" button when there are more replies to load */}
+          {/* Show "Xem thêm phản hồi" button when there are more replies to load (social media style) */}
           {hasMoreReplies && (
             <div className="mt-2">
               <button
-                className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm"
+                className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm font-medium"
                 onClick={() => {
                   if (!isLoading) {
+                    console.log(`🔄 Fetching more replies for comment ${comment.id} (level ${level})`);
                     handleFetchReplies(comment.id);
                   }
                 }}
@@ -517,10 +792,28 @@ const PostComments = ({
 
   return (
     <div className={`space-y-4 ${className}`}>
+      {/* WebSocket status indicator */}
+      {postId && (
+        <div className="flex items-center space-x-2 text-xs">
+          <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+          <span className="text-gray-500 dark:text-gray-400">
+            {isConnected ? 'Kết nối real-time' : 'Chế độ offline'}
+          </span>
+        </div>
+      )}
+
+      {/* Comment count header (social media style) */}
+      {validComments.length > 0 && (
+        <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+          {validComments.length} bình luận
+        </div>
+      )}
+
       {renderComments(validComments.slice(0, maxVisible))}
+
       {validComments.length > maxVisible && (
         <button
-          className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm"
+          className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
           onClick={onShowMore}
         >
           Xem thêm bình luận

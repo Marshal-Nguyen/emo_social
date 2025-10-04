@@ -123,7 +123,7 @@ const postsSlice = createSlice({
       }
     },
     likeComment: (state, action) => {
-      const { postId, commentId } = action.payload;
+      const { postId, commentId, isLiked, reactionCount } = action.payload;
       const post = state.posts.find((post) => post.id === postId);
       if (!post || !post.comments) {
         console.error(`Post or comments not found for postId: ${postId}`);
@@ -133,9 +133,21 @@ const postsSlice = createSlice({
       const toggleLikeRecursive = (comments) => {
         for (let c of comments) {
           if (c.id === commentId) {
-            c.liked = !c.liked;
-            c.reactionCount = (c.reactionCount || 0) + (c.liked ? 1 : -1);
-            console.log(`Toggled like for comment ${commentId}:`, c);
+            // Support both old and new field names
+            if (isLiked !== undefined) {
+              c.isReactedByCurrentUser = isLiked;
+              c.liked = isLiked; // Keep backward compatibility
+            } else {
+              c.isReactedByCurrentUser = !c.isReactedByCurrentUser;
+              c.liked = !c.liked; // Keep backward compatibility
+            }
+
+            if (reactionCount !== undefined) {
+              c.reactionCount = reactionCount;
+            } else {
+              c.reactionCount = (c.reactionCount || 0) + (c.isReactedByCurrentUser ? 1 : -1);
+            }
+            console.log(`Updated like for comment ${commentId}:`, c);
             return true;
           }
           if (c.replies && c.replies.length > 0) {
@@ -227,9 +239,9 @@ const postsSlice = createSlice({
       if (!post.comments) post.comments = [];
       console.log(`Processing fetchRepliesSuccess for postId: ${postId}, parentId: ${parentId}, replies:`, replies);
 
-      const addRepliesRecursive = (comments) => {
+      const addRepliesRecursive = (comments, level = 0) => {
         for (let c of comments) {
-          console.log(`Checking comment id: ${c.id}`);
+          console.log(`${'  '.repeat(level)}Checking comment id: ${c.id} (level ${level})`);
           if (c.id === parentId) {
             // Append new replies to existing ones instead of replacing
             if (!c.replies) c.replies = [];
@@ -239,17 +251,19 @@ const postsSlice = createSlice({
             const newReplies = replies.filter(reply => !existingIds.has(reply.id));
 
             c.replies = [...c.replies, ...newReplies];
-            console.log(`Appended ${newReplies.length} new replies to comment ${parentId}. Total replies: ${c.replies.length}`);
+            console.log(`✅ Found and updated comment ${parentId} at level ${level}. Appended ${newReplies.length} new replies. Total replies: ${c.replies.length}`);
             return true;
           }
           if (c.replies && c.replies.length > 0) {
-            if (addRepliesRecursive(c.replies)) return true;
+            if (addRepliesRecursive(c.replies, level + 1)) return true;
           }
         }
-        console.warn(`Comment with parentId ${parentId} not found in comments`);
         return false;
       };
-      addRepliesRecursive(post.comments);
+      const found = addRepliesRecursive(post.comments);
+      if (!found) {
+        console.warn(`❌ Comment with parentId ${parentId} not found in any level of comments`);
+      }
     },
     // New action to handle the new comment API structure
     setComments: (state, action) => {
