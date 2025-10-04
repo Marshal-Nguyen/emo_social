@@ -45,25 +45,25 @@ export const initializeAuth = () => {
             return false;
         }
 
-        // Validate token
-        const decoded = decodeJwt(token);
-        if (!decoded || !decoded.exp) {
-            console.log("Invalid token format");
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            localStorage.removeItem("auth_user");
-            return false;
-        }
+        // // Validate token
+        // const decoded = decodeJwt(token);
+        // if (!decoded || !decoded.exp) {
+        //     console.log("Invalid token format");
+        //     localStorage.removeItem("access_token");
+        //     localStorage.removeItem("refresh_token");
+        //     localStorage.removeItem("auth_user");
+        //     return false;
+        // }
 
         // Check if token is expired
-        const currentTime = Math.floor(Date.now() / 1000);
-        if (decoded.exp <= currentTime) {
-            console.log("Token expired, clearing auth data");
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            localStorage.removeItem("auth_user");
-            return false;
-        }
+        // const currentTime = Math.floor(Date.now() / 1000);
+        // if (decoded.exp <= currentTime) {
+        //     console.log("Token expired, clearing auth data");
+        //     localStorage.removeItem("access_token");
+        //     localStorage.removeItem("refresh_token");
+        //     localStorage.removeItem("auth_user");
+        //     return false;
+        // }
 
         // Update Redux store
         store.dispatch(loginSuccess({
