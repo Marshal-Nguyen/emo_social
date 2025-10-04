@@ -62,15 +62,18 @@ const postsSlice = createSlice({
 
       if (comment) {
         if (!parentId) {
+          // Add top-level comment
           const existsIndex = post.comments.findIndex((c) => c.id === comment.id);
           if (existsIndex === -1) {
             post.comments.unshift(comment);
             post.commentCount = (post.commentCount || 0) + 1;
+            post.commentsCount = (post.commentsCount || 0) + 1; // Sync with PostActions display
           } else {
             // Merge/update existing to avoid duplicates
             post.comments[existsIndex] = { ...post.comments[existsIndex], ...comment };
           }
         } else {
+          // Add reply to existing comment
           const addReplyRecursive = (comments) => {
             for (let c of comments) {
               if (c.id === parentId) {
@@ -93,7 +96,6 @@ const postsSlice = createSlice({
             return false;
           };
           addReplyRecursive(post.comments);
-          // Only increment total count when a new comment/reply was actually inserted
         }
       } else if (update && parentId) {
         const updateRecursive = (comments) => {
@@ -111,6 +113,10 @@ const postsSlice = createSlice({
           return false;
         };
         updateRecursive(post.comments);
+      } else if (update && !parentId) {
+        // Update post-level data (like comment count from API response)
+        Object.assign(post, update);
+        console.log(`Updated post ${postId}:`, update);
       }
     },
     likeComment: (state, action) => {
@@ -161,10 +167,13 @@ const postsSlice = createSlice({
       const { postId, commentId } = action.payload;
       const post = state.posts.find((p) => p.id === postId);
       if (!post || !post.comments) return;
+
+      let commentRemoved = false;
       const removeRecursive = (comments) => {
         const idx = comments.findIndex((c) => c.id === commentId);
         if (idx !== -1) {
           comments.splice(idx, 1);
+          commentRemoved = true;
           return true;
         }
         for (let c of comments) {
@@ -174,7 +183,14 @@ const postsSlice = createSlice({
         }
         return false;
       };
+
       removeRecursive(post.comments);
+
+      // Decrease comment count if a top-level comment was removed
+      if (commentRemoved) {
+        post.commentCount = Math.max((post.commentCount || 0) - 1, 0);
+        post.commentsCount = Math.max((post.commentsCount || 0) - 1, 0); // Sync with PostActions display
+      }
     },
     fetchRepliesSuccess: (state, action) => {
       const { postId, parentId, replies } = action.payload;
@@ -204,6 +220,48 @@ const postsSlice = createSlice({
       };
       addRepliesRecursive(post.comments);
     },
+    // New action to handle the new comment API structure
+    setComments: (state, action) => {
+      const { postId, comments } = action.payload;
+      let post = state.posts.find((post) => post.id === postId);
+      if (!post) {
+        console.warn(`Post not found for postId: ${postId}, creating new post`);
+        post = { id: postId, comments: [] };
+        state.posts.push(post);
+      }
+
+      // Map the new API structure to our internal structure
+      const mappedComments = comments.map(comment => ({
+        id: comment.id,
+        content: comment.content,
+        author: comment.author.displayName,
+        avatar: comment.author.avatarUrl,
+        createdAt: comment.createdAt,
+        editedAt: comment.editedAt,
+        reactionCount: comment.reactionCount || 0,
+        replyCount: comment.replyCount || 0,
+        isReactedByCurrentUser: comment.isReactedByCurrentUser || false,
+        isDeleted: comment.isDeleted || false,
+        hierarchy: comment.hierarchy,
+        replies: comment.replies ? comment.replies.map(reply => ({
+          id: reply.id,
+          content: reply.content,
+          author: reply.author.displayName,
+          avatar: reply.author.avatarUrl,
+          createdAt: reply.createdAt,
+          editedAt: reply.editedAt,
+          reactionCount: reply.reactionCount || 0,
+          replyCount: reply.replyCount || 0,
+          isReactedByCurrentUser: reply.isReactedByCurrentUser || false,
+          isDeleted: reply.isDeleted || false,
+          hierarchy: reply.hierarchy,
+          replies: [] // Replies don't have nested replies in this structure
+        })) : []
+      }));
+
+      post.comments = mappedComments;
+      post.commentCount = mappedComments.length;
+    },
   },
 });
 
@@ -220,6 +278,7 @@ export const {
   finalizeComment,
   removeComment,
   fetchRepliesSuccess,
+  setComments,
 } = postsSlice.actions;
 
 export default postsSlice.reducer;

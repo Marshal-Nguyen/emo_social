@@ -119,7 +119,8 @@ const Feed = ({ onNavigateToChat }) => {
             },
             createdAt: post.publishedAt,
             likesCount: post.reactionCount,
-            commentsCount: post.commentCount,
+            commentCount: post.commentCount,
+            commentsCount: post.commentCount, // Sync with PostActions display
             liked: post.isReactedByCurrentUser,
             comments: [], // Will be loaded separately if needed
             images: post.medias || [],
@@ -166,7 +167,8 @@ const Feed = ({ onNavigateToChat }) => {
         },
         createdAt: post.publishedAt,
         likesCount: post.reactionCount,
-        commentsCount: post.commentCount,
+        commentCount: post.commentCount,
+        commentsCount: post.commentCount, // Sync with PostActions display
         liked: post.isReactedByCurrentUser,
         comments: [],
         images: post.medias || [],
