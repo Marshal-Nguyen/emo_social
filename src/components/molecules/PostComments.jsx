@@ -30,6 +30,8 @@ const PostComments = ({
   const [replyVisibleCount, setReplyVisibleCount] = useState({});
   const [loadingReplies, setLoadingReplies] = useState({});
   const [commentsLoaded, setCommentsLoaded] = useState(false);
+  const [fetchingReplies, setFetchingReplies] = useState(new Set());
+  const [loadedAllReplies, setLoadedAllReplies] = useState(new Set());
   const commentEndRef = useRef(null);
 
   // Load comments when component mounts or postId changes (only if autoLoadComments is true)
@@ -38,6 +40,12 @@ const PostComments = ({
       loadComments();
     }
   }, [postId, commentsLoaded, autoLoadComments]);
+
+  // Reset loadedAllReplies when postId changes
+  useEffect(() => {
+    setLoadedAllReplies(new Set());
+    setFetchingReplies(new Set());
+  }, [postId]);
 
   const loadComments = async () => {
     try {
@@ -55,6 +63,11 @@ const PostComments = ({
   };
 
   const handleReplySubmit = async (commentId, content) => {
+    if (!postId) {
+      console.warn("Cannot submit reply without postId");
+      return;
+    }
+
     try {
       // Optimistic reply
       const tempId = `temp-${Date.now()}`;
@@ -102,6 +115,11 @@ const PostComments = ({
   };
 
   const handleLikeComment = async (commentId, isReacted) => {
+    if (!postId) {
+      console.warn("Cannot like comment without postId");
+      return;
+    }
+
     try {
       if (!isReacted) {
         const response = await fetch(`${baseUrl}/v1/reactions`, {
@@ -165,10 +183,45 @@ const PostComments = ({
   };
 
   const handleFetchReplies = async (commentId) => {
+    if (!postId) {
+      console.warn("Cannot fetch replies without postId");
+      return;
+    }
+
+    // Prevent duplicate API calls
+    if (fetchingReplies.has(commentId)) {
+      console.log(`⏳ Already fetching replies for comment ${commentId}, skipping...`);
+      return;
+    }
+
+    // Prevent API calls if already loaded all replies
+    if (loadedAllReplies.has(commentId)) {
+      console.log(`✅ Comment ${commentId} đã load hết replies, skipping...`);
+      return;
+    }
+
+    console.log(`🔄 Fetching replies for comment ${commentId}`);
+
     try {
+      setFetchingReplies(prev => new Set([...prev, commentId]));
       setLoadingReplies(prev => ({ ...prev, [commentId]: true }));
 
-      const response = await postsService.getComments(postId, 1, 20, commentId);
+      // Get current page based on existing replies
+      const currentPost = posts.find((post) => post.id === postId);
+      const currentComment = currentPost?.comments?.find(c => c.id === commentId);
+      const existingRepliesCount = currentComment?.replies?.length || 0;
+      const pageIndex = Math.floor(existingRepliesCount / 20) + 1;
+
+      console.log(`📊 Comment ${commentId}: existingReplies=${existingRepliesCount}, pageIndex=${pageIndex}, totalReplyCount=${currentComment?.replyCount}`);
+
+      // Nếu đã load hết replies thì không gọi API nữa
+      if (existingRepliesCount >= (currentComment?.replyCount || 0)) {
+        console.log(`✅ Comment ${commentId} đã load hết replies, không cần gọi API`);
+        return;
+      }
+
+      const response = await postsService.getComments(postId, pageIndex, 20, commentId);
+      console.log(`📡 API Response for ${commentId}:`, response);
 
       if (response.comments && response.comments.data) {
         const mappedReplies = response.comments.data.map((reply) => ({
@@ -183,22 +236,58 @@ const PostComments = ({
           replies: [],
         }));
 
-        dispatch(
-          fetchRepliesSuccess({
-            postId,
-            parentId: commentId,
-            replies: mappedReplies,
-          })
-        );
+        // Filter chỉ lấy replies mới (chưa có trong existingReplies)
+        const existingReplyIds = new Set(currentComment?.replies?.map(r => r.id) || []);
+        const newReplies = mappedReplies.filter(reply => !existingReplyIds.has(reply.id));
 
-        setOpenReplies((prev) => {
-          const newState = { ...prev, [commentId]: true };
-          return newState;
-        });
+        console.log(`✅ Mapped replies for ${commentId}:`, mappedReplies);
+        console.log(`🆕 New replies after filtering:`, newReplies);
+
+        // Chỉ dispatch nếu có replies mới
+        if (newReplies.length > 0) {
+          dispatch(
+            fetchRepliesSuccess({
+              postId,
+              parentId: commentId,
+              replies: newReplies,
+            })
+          );
+
+          // Kiểm tra xem đã load hết chưa
+          const totalRepliesAfterLoad = existingRepliesCount + newReplies.length;
+          if (totalRepliesAfterLoad >= (currentComment?.replyCount || 0)) {
+            setLoadedAllReplies(prev => new Set([...prev, commentId]));
+            console.log(`🎯 Comment ${commentId} đã load hết tất cả replies`);
+          }
+        } else {
+          console.log(`⚠️ No new replies to add for comment ${commentId}`);
+          // Nếu không có replies mới, đánh dấu đã load hết
+          setLoadedAllReplies(prev => new Set([...prev, commentId]));
+          setOpenReplies((prev) => {
+            const newState = { ...prev, [commentId]: true };
+            return newState;
+          });
+        }
+
+        // Open replies section when first batch is loaded
+        if (existingRepliesCount === 0) {
+          setOpenReplies((prev) => {
+            const newState = { ...prev, [commentId]: true };
+            console.log(`🔓 Opening replies for ${commentId}:`, newState);
+            return newState;
+          });
+        }
+      } else {
+        console.warn(`⚠️ No replies data for comment ${commentId}`);
       }
     } catch (error) {
-      console.error("Lỗi khi tải phản hồi:", error);
+      console.error(`❌ Error fetching replies for ${commentId}:`, error);
     } finally {
+      setFetchingReplies(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(commentId);
+        return newSet;
+      });
       setLoadingReplies(prev => ({ ...prev, [commentId]: false }));
     }
   };
@@ -230,10 +319,35 @@ const PostComments = ({
     });
   };
 
-  // Get comments from Redux store
+  // Get comments from Redux store or use passed comments
   const { posts } = useSelector((state) => state.posts);
-  const currentPost = posts.find((post) => post.id === postId);
-  const validComments = currentPost?.comments || [];
+  const currentPost = postId ? posts.find((post) => post.id === postId) : null;
+  const validComments = currentPost?.comments || comments || [];
+
+  // Auto-open replies that have replies from API (only once)
+  useEffect(() => {
+    if (validComments.length > 0) {
+      const commentsWithReplies = validComments.filter(comment =>
+        comment.replies && comment.replies.length > 0
+      );
+
+      if (commentsWithReplies.length > 0) {
+        setOpenReplies(prev => {
+          const newOpenReplies = { ...prev };
+          let hasChanges = false;
+
+          commentsWithReplies.forEach(comment => {
+            if (!newOpenReplies[comment.id]) {
+              newOpenReplies[comment.id] = true;
+              hasChanges = true;
+            }
+          });
+
+          return hasChanges ? newOpenReplies : prev;
+        });
+      }
+    }
+  }, [validComments.length]); // Chỉ depend vào length thay vì toàn bộ validComments
 
   if (!show || validComments.length === 0) return null;
 
@@ -247,6 +361,12 @@ const PostComments = ({
       const hasLoadedAny = loadedReplies > 0;
       const shouldShowReplies = isOpen && (hasLoadedAny || areRepliesLoaded);
       const isLoading = loadingReplies[comment.id] || false;
+      const hasMoreReplies = totalReplyCount > loadedReplies && loadedReplies > 0 && !isLoading && !loadedAllReplies.has(comment.id);
+
+      // Debug log for each comment
+      if (hasReplies) {
+        console.log(`🔍 Comment ${comment.id}: total=${totalReplyCount}, loaded=${loadedReplies}, isOpen=${isOpen}, hasMore=${hasMoreReplies}, loadedAll=${loadedAllReplies.has(comment.id)}`);
+      }
 
       return (
         <motion.div
@@ -297,17 +417,30 @@ const PostComments = ({
                 {hasReplies && (
                   <button
                     className="hover:text-gray-700 dark:hover:text-gray-200 flex items-center space-x-1"
-                    onClick={() =>
-                      areRepliesLoaded
-                        ? toggleReplies(comment.id)
-                        : handleFetchReplies(comment.id)
-                    }
+                    onClick={() => {
+                      if (isLoading) {
+                        // Đang loading -> Không làm gì
+                        return;
+                      }
+                      if (isOpen && areRepliesLoaded) {
+                        // Đã mở và load hết -> Ẩn
+                        toggleReplies(comment.id);
+                      } else if (!hasLoadedAny) {
+                        // Chưa load gì -> Load từ API
+                        handleFetchReplies(comment.id);
+                      } else {
+                        // Đã có replies sẵn -> Toggle hiển thị
+                        toggleReplies(comment.id);
+                      }
+                    }}
                     disabled={loadingReplies[comment.id]}
                   >
                     {loadingReplies[comment.id] ? (
                       <span>Đang tải...</span>
                     ) : isOpen && areRepliesLoaded ? (
                       <span>Ẩn {totalReplyCount} phản hồi</span>
+                    ) : hasLoadedAny ? (
+                      <span>Xem {totalReplyCount} phản hồi</span>
                     ) : (
                       <span>Xem {totalReplyCount} phản hồi</span>
                     )}
@@ -333,8 +466,8 @@ const PostComments = ({
               </AnimatePresence>
             </div>
           </div>
-          {/* Show replies immediately if they exist (Facebook-like behavior) */}
-          {comment.replies && comment.replies.length > 0 && (
+          {/* Show replies when opened */}
+          {shouldShowReplies && comment.replies && comment.replies.length > 0 && (
             <div className="mt-2">
               {(() => {
                 const total = comment.replies.length;
@@ -354,6 +487,27 @@ const PostComments = ({
                   </>
                 );
               })()}
+            </div>
+          )}
+
+          {/* Show "Xem thêm phản hồi" button when there are more replies to load */}
+          {hasMoreReplies && (
+            <div className="mt-2">
+              <button
+                className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 text-xs sm:text-sm"
+                onClick={() => {
+                  if (!isLoading) {
+                    handleFetchReplies(comment.id);
+                  }
+                }}
+                disabled={loadingReplies[comment.id]}
+              >
+                {loadingReplies[comment.id] ? (
+                  "Đang tải..."
+                ) : (
+                  `Xem thêm ${totalReplyCount - loadedReplies} phản hồi`
+                )}
+              </button>
             </div>
           )}
         </motion.div>

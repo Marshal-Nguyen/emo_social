@@ -13,6 +13,7 @@ import Layout from "../components/layouts/Layout";
 import LoadingSpinner from "../components/atoms/LoadingSpinner";
 import NotificationSystem from "../components/organisms/NotificationSystem";
 import WellnessHub from "../pages/WellnessHub";
+import TestCommentLogic from "../test-comment-logic";
 import { useAutoTheme, useTheme } from "../hooks/useTheme";
 
 function AppRouter() {
@@ -65,6 +66,10 @@ function AppRouter() {
                     <Route
                         path="/icons"
                         element={isAuthenticated ? <IconEmotion /> : <Navigate to="/auth" />}
+                    />
+                    <Route
+                        path="/test-comments"
+                        element={isAuthenticated ? <TestCommentLogic /> : <Navigate to="/auth" />}
                     />
                     <Route
                         path="/"

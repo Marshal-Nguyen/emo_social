@@ -231,8 +231,15 @@ const postsSlice = createSlice({
         for (let c of comments) {
           console.log(`Checking comment id: ${c.id}`);
           if (c.id === parentId) {
-            c.replies = replies;
-            console.log(`Assigned replies to comment ${parentId}:`, replies);
+            // Append new replies to existing ones instead of replacing
+            if (!c.replies) c.replies = [];
+
+            // Filter out duplicates based on id
+            const existingIds = new Set(c.replies.map(r => r.id));
+            const newReplies = replies.filter(reply => !existingIds.has(reply.id));
+
+            c.replies = [...c.replies, ...newReplies];
+            console.log(`Appended ${newReplies.length} new replies to comment ${parentId}. Total replies: ${c.replies.length}`);
             return true;
           }
           if (c.replies && c.replies.length > 0) {
