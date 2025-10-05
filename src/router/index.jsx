@@ -10,7 +10,6 @@ import IconEmotion from "../pages/IconEmotion";
 import SettingsPage from "../pages/SettingsPage";
 import PostDetailPage from "../pages/PostDetailPage";
 import Layout from "../components/layouts/Layout";
-import LoadingSpinner from "../components/atoms/LoadingSpinner";
 import NotificationSystem from "../components/organisms/NotificationSystem";
 import WellnessHub from "../pages/WellnessHub";
 import CommunityRulesPage from "../pages/CommunityRulesPage";
@@ -25,7 +24,7 @@ function AppRouter() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-                <LoadingSpinner breathing={true} />
+                <div className="w-8 h-8 border-4 border-gray-200 dark:border-gray-700 border-t-blue-500 rounded-full animate-spin"></div>
             </div>
         );
     }
@@ -43,7 +42,7 @@ function AppRouter() {
                                 isCheckingAlias ? (
                                     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
                                         <div className="text-center">
-                                            <LoadingSpinner breathing={true} />
+                                            <div className="w-8 h-8 border-4 border-gray-200 dark:border-gray-700 border-t-blue-500 rounded-full animate-spin"></div>
                                             <p className="mt-4 text-gray-600 dark:text-gray-400">Đang kiểm tra thông tin tài khoản...</p>
                                         </div>
                                     </div>
