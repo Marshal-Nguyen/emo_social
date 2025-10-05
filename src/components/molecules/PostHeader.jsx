@@ -44,6 +44,23 @@ const PostHeader = ({
     loadEmotionTags();
   }, [emotionTagIds]);
 
+  const [showDelete, setShowDelete] = useState(false);
+
+  const canDeletePost = isMine;
+
+  const handleDeletePost = async () => {
+    try {
+      const { postService } = await import("../../services/postService");
+      await postService.deletePost(post.id);
+      try {
+        window.dispatchEvent(new CustomEvent("app:toast", { detail: { type: "success", message: "Đã xóa bài viết" } }));
+      } catch { }
+      try {
+        if (window.location.pathname.startsWith('/post/')) window.history.back(); else window.location.reload();
+      } catch { }
+    } catch { }
+  };
+
   return (
     <div className={`flex items-start justify-between ${className}`}>
       <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
@@ -94,15 +111,44 @@ const PostHeader = ({
           </div>
         </div>
       </div>
-      {onMoreClick && (
-        <IconButton
-          icon={MoreHorizontal}
-          variant="ghost"
-          size="sm"
-          onClick={onMoreClick}
-          title="Tùy chọn khác"
-          className="flex-shrink-0"
-        />
+      {(onMoreClick || canDeletePost) && (
+        <div className="relative flex-shrink-0">
+          <span
+            onClick={(e) => {
+              e.stopPropagation();
+              (onMoreClick ? onMoreClick() : setShowDelete(true));
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                e.stopPropagation();
+                (onMoreClick ? onMoreClick() : setShowDelete(true));
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            className="inline-flex"
+          >
+            <IconButton
+              icon={MoreHorizontal}
+              variant="ghost"
+              size="sm"
+              title="Tùy chọn khác"
+            />
+          </span>
+          {canDeletePost && showDelete && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setShowDelete(false)}>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-80 p-5" onClick={(e) => e.stopPropagation()}>
+                <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Xác nhận xóa bài viết</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">Bạn có chắc muốn xóa bài viết này?</p>
+                <div className="flex justify-end gap-2 mt-4">
+                  <button className="px-3 py-1.5 text-sm rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600" onClick={() => setShowDelete(false)}>Hủy</button>
+                  <button className="px-3 py-1.5 text-sm rounded-md bg-red-600 text-white hover:bg-red-700" onClick={handleDeletePost}>Xóa</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

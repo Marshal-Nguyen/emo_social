@@ -75,7 +75,8 @@ export const postService = {
 
     // Delete post
     deletePost: async (postId) => {
-        const response = await api.delete(`https://api.emoease.vn/post-service/v1/posts/${postId}`);
+        const url = `https://api.emoease.vn/post-service/v1/posts/${postId}`;
+        const response = await api.delete(url);
         return response.data;
     },
 
