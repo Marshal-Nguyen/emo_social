@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { aliasService } from '../../services/apiService';
 
 const AliasSelection = ({ onAliasSelected, onError }) => {
@@ -7,6 +7,7 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
     const [loading, setLoading] = useState(true);
     const [selecting, setSelecting] = useState(false);
     const [error, setError] = useState(null);
+    const shouldReduceMotion = useReducedMotion();
 
     // Load alias suggestions on component mount
     useEffect(() => {
@@ -35,6 +36,9 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
 
             // Issue the selected alias
             await aliasService.issueAlias(alias.label, alias.reservationToken);
+
+            // Wait a bit for the alias to be processed
+            await new Promise(resolve => setTimeout(resolve, 1000));
 
             // Get the current alias info to save to localStorage
             const aliasInfo = await aliasService.getCurrentAlias();
@@ -70,17 +74,17 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-50 to-fuchsia-50 p-4">
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
+                initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+                animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+                transition={shouldReduceMotion ? {} : { duration: 0.6 }}
                 className="w-full max-w-2xl"
             >
                 {/* Header */}
                 <div className="text-center mb-10">
                     <motion.div
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
+                        initial={shouldReduceMotion ? {} : { scale: 0.8, opacity: 0 }}
+                        animate={shouldReduceMotion ? {} : { scale: 1, opacity: 1 }}
+                        transition={shouldReduceMotion ? {} : { duration: 0.6, delay: 0.2 }}
                         className="mb-6"
                     >
                         <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-full flex items-center justify-center">
@@ -111,13 +115,13 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
                     {suggestions.map((alias, index) => (
                         <motion.button
                             key={`${alias.label}-${index}`}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.4, delay: index * 0.1 }}
+                            initial={shouldReduceMotion ? {} : { opacity: 0, x: -20 }}
+                            animate={shouldReduceMotion ? {} : { opacity: 1, x: 0 }}
+                            transition={shouldReduceMotion ? {} : { duration: 0.4, delay: index * 0.1 }}
                             onClick={() => handleSelectAlias(alias)}
                             disabled={selecting}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
+                            whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
                             className="w-full p-6 bg-white rounded-2xl border-2 border-slate-200 hover:border-violet-300 hover:shadow-xl transition-all duration-300 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <div className="flex items-center justify-between">
@@ -149,8 +153,8 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
                     <motion.button
                         onClick={handleRandomize}
                         disabled={loading || selecting}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                        whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
                         className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold rounded-2xl hover:opacity-90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                     >
                         {loading ? (
@@ -161,8 +165,8 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
                         ) : (
                             <>
                                 <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 0.5 }}
+                                    animate={shouldReduceMotion ? {} : { rotate: 360 }}
+                                    transition={shouldReduceMotion ? {} : { duration: 0.5 }}
                                 >
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
