@@ -273,6 +273,9 @@ const LogIn = () => {
     try {
       // Always allow in development for local testing
       if (import.meta.env.MODE !== "production") return true;
+      // Allow Vercel preview/production domains by default
+      const host = window.location.hostname || "";
+      if (host.endsWith(".vercel.app")) return true;
       const allowed = import.meta.env.VITE_GOOGLE_ALLOWED_ORIGINS;
       if (!allowed) return false;
       const list = allowed
