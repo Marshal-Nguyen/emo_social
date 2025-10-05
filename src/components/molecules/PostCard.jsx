@@ -136,6 +136,13 @@ const PostCard = ({
         postId={effectivePost?.id || routePostId}
         hideRepliesByDefault={hideRepliesByDefault}
         autoLoadComments={forceShowComments} // Only auto-load comments in detail view
+        onCountsChange={(delta) => {
+          try {
+            // Update counts on the visible card object
+            effectivePost.commentCount = Math.max((effectivePost.commentCount || 0) + delta, 0);
+            effectivePost.commentsCount = Math.max((effectivePost.commentsCount || 0) + delta, 0);
+          } catch { }
+        }}
         className="mt-3 sm:mt-4"
       />
       {(showComments || forceShowComments) && (

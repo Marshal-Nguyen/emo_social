@@ -22,6 +22,7 @@ const PostComments = forwardRef(({
   hideRepliesByDefault = false,
   postId,
   autoLoadComments = false,
+  onCountsChange = () => { },
 }, ref) => {
   // Get user info from Redux
   const user = useSelector((state) => state.auth.user);
@@ -242,20 +243,22 @@ const PostComments = forwardRef(({
       return;
     }
 
+    // Prepare optimistic reply id in outer scope so catch can access
+    const tempId = `temp-${Date.now()}`;
+    const optimistic = {
+      id: tempId,
+      content,
+      author: user?.aliasLabel || user?.displayName || user?.username || "Anonymous",
+      avatar: user?.avatar || user?.avatarUrl || null,
+      createdAt: new Date().toISOString(),
+      reactionCount: 0,
+      replyCount: 0,
+      isReactedByCurrentUser: false,
+      replies: [],
+    };
+
     try {
       // Optimistic reply
-      const tempId = `temp-${Date.now()}`;
-      const optimistic = {
-        id: tempId,
-        content,
-        author: user?.aliasLabel || user?.displayName || user?.username || "Anonymous",
-        avatar: user?.avatar || user?.avatarUrl || null,
-        createdAt: new Date().toISOString(),
-        reactionCount: 0,
-        replyCount: 0,
-        isReactedByCurrentUser: false,
-        replies: [],
-      };
 
       // Add optimistic reply to local state
       setLocalComments(prev => {
@@ -293,7 +296,7 @@ const PostComments = forwardRef(({
         // WebSocket will handle the real-time update
       } else {
         // Fallback to API
-        const response = await postsService.addComment(postId, content, commentId);
+        const response = await postService.addComment(postId, content, commentId);
         const realId = response?.commentId || response?.id;
 
         if (realId) {
@@ -384,7 +387,7 @@ const PostComments = forwardRef(({
       } else {
         // Fallback to API
         if (!isReacted) {
-          const response = await postsService.likeComment(commentId);
+          const response = await postService.likeComment(commentId);
 
           // Update local state
           setLocalComments(prev => {
@@ -409,7 +412,7 @@ const PostComments = forwardRef(({
             return updateLike(prev);
           });
         } else {
-          await postsService.unlikeComment(commentId);
+          await postService.unlikeComment(commentId);
 
           // Update local state
           setLocalComments(prev => {
@@ -670,9 +673,9 @@ const PostComments = forwardRef(({
                       ⋯
                     </button>
                     {openMenuId === comment.id && (
-                      <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10">
+                      <div className="absolute right-0 mt-1 w-40 bg-white text-gray-800 dark:bg-neutral-800 dark:text-gray-100 border border-gray-200 dark:border-neutral-700 rounded-md shadow-xl z-20">
                         <button
-                          className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-neutral-700 rounded-md"
                           onClick={(e) => {
                             e.stopPropagation();
                             setConfirmDeleteId(comment.id);
@@ -818,18 +821,18 @@ const PostComments = forwardRef(({
       <div ref={commentEndRef} />
       {confirmDeleteId && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[1px]"
           onClick={() => setConfirmDeleteId(null)}
         >
           <div
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-80 p-5"
+            className="bg-white dark:bg-neutral-800 rounded-xl shadow-2xl w-80 p-5 border border-gray-200 dark:border-neutral-700"
             onClick={(e) => e.stopPropagation()}
           >
             <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Xác nhận xóa</h4>
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">Bạn có chắc muốn xóa bình luận này?</p>
             <div className="flex justify-end gap-2 mt-4">
               <button
-                className="px-3 py-1.5 text-sm rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                className="px-3 py-1.5 text-sm rounded-md bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-neutral-600"
                 onClick={() => setConfirmDeleteId(null)}
               >
                 Hủy
@@ -840,6 +843,7 @@ const PostComments = forwardRef(({
                   try {
                     await postService.deleteComment(confirmDeleteId);
                     setLocalComments(prev => removeCommentById(prev, confirmDeleteId));
+                    try { onCountsChange(-1); } catch { }
                   } catch { }
                   setConfirmDeleteId(null);
                 }}
