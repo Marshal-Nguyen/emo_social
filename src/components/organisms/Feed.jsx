@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import PostCard from "../molecules/PostCard";
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "../atoms/LoadingSpinner";
 import Button from "../atoms/Button";
 import {
   fetchPostsSuccess,
@@ -14,7 +13,7 @@ import {
   fetchFeedFailure,
   fetchPostsFromFeedSuccess
 } from "../../store/postsSlice";
-import { postsService } from "../../services/apiService";
+import { postService } from "../../services/postService";
 import { image } from "framer-motion/client";
 
 // Mock data for demo
@@ -135,7 +134,7 @@ const mockPosts = [
   },
 ];
 
-const Feed = ({ onNavigateToChat }) => {
+const Feed = ({ onNavigateToChat, selectedCategory }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { posts, loading, error, hasMore, feedItems, nextCursor, totalCount } = useSelector(
@@ -152,35 +151,58 @@ const Feed = ({ onNavigateToChat }) => {
 
     dispatch(fetchFeedStart());
     try {
-      // Get next batch of feed items using cursor
-      const feedResponse = await postsService.getFeed(20, nextCursor);
-      const newFeedItems = feedResponse.items || [];
+      let apiPosts = [];
+      let hasMorePosts = false;
+      let totalPostsCount = 0;
 
-      if (newFeedItems.length === 0) {
-        // No more items
+      if (selectedCategory) {
+        // Load posts by category
+        const categoryResponse = await postService.getPostsByCategory(selectedCategory.id, 1, 20);
+        apiPosts = categoryResponse.posts?.data || [];
+        hasMorePosts = categoryResponse.posts?.hasNextPage || false;
+        totalPostsCount = categoryResponse.posts?.totalCount || 0;
+        
+        // Reset loading state for category posts
         dispatch(fetchFeedSuccess({
           feedItems: [],
           nextCursor: null,
-          hasMore: false,
-          totalCount: totalCount,
+          hasMore: hasMorePosts,
+          totalCount: totalPostsCount,
           reset: false,
         }));
-        return;
+      } else {
+        // Get next batch of feed items using cursor
+        const feedResponse = await postService.getFeed(20, nextCursor);
+        const newFeedItems = feedResponse.items || [];
+
+        if (newFeedItems.length === 0) {
+          // No more items
+          dispatch(fetchFeedSuccess({
+            feedItems: [],
+            nextCursor: null,
+            hasMore: false,
+            totalCount: totalCount,
+            reset: false,
+          }));
+          return;
+        }
+
+        // Update feed items in state
+        dispatch(fetchFeedSuccess({
+          feedItems: newFeedItems,
+          nextCursor: feedResponse.nextCursor,
+          hasMore: feedResponse.hasMore,
+          totalCount: feedResponse.totalCount,
+          reset: false,
+        }));
+
+        // Get post details for the new batch
+        const postIds = newFeedItems.map(item => item.postId);
+        const postsResponse = await postService.getPostsByIds(postIds, 1, 20);
+        apiPosts = postsResponse.posts?.data || [];
+        hasMorePosts = feedResponse.hasMore;
+        totalPostsCount = feedResponse.totalCount;
       }
-
-      // Update feed items in state
-      dispatch(fetchFeedSuccess({
-        feedItems: newFeedItems,
-        nextCursor: feedResponse.nextCursor,
-        hasMore: feedResponse.hasMore,
-        totalCount: feedResponse.totalCount,
-        reset: false,
-      }));
-
-      // Get post details for the new batch
-      const postIds = newFeedItems.map(item => item.postId);
-      const postsResponse = await postsService.getPostsByIds(postIds, 1, 20);
-      const apiPosts = postsResponse.posts?.data || [];
 
       // Transform API data to match our component structure
       const transformedPosts = apiPosts.map(post => ({
@@ -211,67 +233,94 @@ const Feed = ({ onNavigateToChat }) => {
       dispatch(fetchPostsFromFeedSuccess({
         posts: transformedPosts,
         reset: false,
+        hasMore: hasMorePosts,
+        totalCount: totalPostsCount,
       }));
     } catch (error) {
       console.error("Error loading more posts:", error);
       dispatch(fetchFeedFailure(error.message));
     }
-  }, [dispatch, loading, hasMore, nextCursor, totalCount]);
+  }, [dispatch, loading, hasMore, nextCursor, totalCount, selectedCategory]);
 
   // Initial load
   useEffect(() => {
     const loadInitialFeed = async () => {
       dispatch(fetchFeedStart());
       try {
-        // Get initial feed items
-        const feedResponse = await postsService.getFeed(20);
-        const feedItems = feedResponse.items || [];
+        let apiPosts = [];
+        let hasMorePosts = false;
+        let totalPostsCount = 0;
 
-        dispatch(fetchFeedSuccess({
-          feedItems,
-          nextCursor: feedResponse.nextCursor,
-          hasMore: feedResponse.hasMore,
-          totalCount: feedResponse.totalCount,
-          reset: true,
-        }));
-
-        // Get post details for the first batch
-        if (feedItems.length > 0) {
-          const postIds = feedItems.map(item => item.postId);
-          const postsResponse = await postsService.getPostsByIds(postIds, 1, 20);
-          const apiPosts = postsResponse.posts?.data || [];
-
-          // Transform API data to match our component structure
-          const transformedPosts = apiPosts.map(post => ({
-            id: post.id,
-            title: post.title,
-            content: post.content,
-            author: {
-              id: post.author.aliasId,
-              username: post.author.displayName,
-              avatar: post.author.avatarUrl,
-              isOnline: false, // API doesn't provide this info
-            },
-            createdAt: post.publishedAt,
-            editedAt: post.editedAt,
-            likesCount: post.reactionCount,
-            commentCount: post.commentCount,
-            commentsCount: post.commentCount, // Sync with PostActions display
-            liked: post.isReactedByCurrentUser,
-            comments: [], // Will be loaded separately if needed
-            images: post.medias || [],
-            hasMedia: post.hasMedia,
-            viewCount: post.viewCount,
-            visibility: post.visibility,
-            categoryTagIds: post.categoryTagIds || [],
-            emotionTagIds: post.emotionTagIds || [],
-          }));
-
-          dispatch(fetchPostsFromFeedSuccess({
-            posts: transformedPosts,
+        if (selectedCategory) {
+          // Load posts by category
+          const categoryResponse = await postService.getPostsByCategory(selectedCategory.id, 1, 20);
+          apiPosts = categoryResponse.posts?.data || [];
+          hasMorePosts = categoryResponse.posts?.hasNextPage || false;
+          totalPostsCount = categoryResponse.posts?.totalCount || 0;
+          
+          // Reset loading state for category posts
+          dispatch(fetchFeedSuccess({
+            feedItems: [],
+            nextCursor: null,
+            hasMore: hasMorePosts,
+            totalCount: totalPostsCount,
             reset: true,
           }));
+        } else {
+          // Get initial feed items
+          const feedResponse = await postService.getFeed(20);
+          const feedItems = feedResponse.items || [];
+
+          dispatch(fetchFeedSuccess({
+            feedItems,
+            nextCursor: feedResponse.nextCursor,
+            hasMore: feedResponse.hasMore,
+            totalCount: feedResponse.totalCount,
+            reset: true,
+          }));
+
+          // Get post details for the first batch
+          if (feedItems.length > 0) {
+            const postIds = feedItems.map(item => item.postId);
+            const postsResponse = await postService.getPostsByIds(postIds, 1, 20);
+            apiPosts = postsResponse.posts?.data || [];
+            hasMorePosts = feedResponse.hasMore;
+            totalPostsCount = feedResponse.totalCount;
+          }
         }
+
+        // Transform API data to match our component structure
+        const transformedPosts = apiPosts.map(post => ({
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          author: {
+            id: post.author.aliasId,
+            username: post.author.displayName,
+            avatar: post.author.avatarUrl,
+            isOnline: false, // API doesn't provide this info
+          },
+          createdAt: post.publishedAt,
+          editedAt: post.editedAt,
+          likesCount: post.reactionCount,
+          commentCount: post.commentCount,
+          commentsCount: post.commentCount, // Sync with PostActions display
+          liked: post.isReactedByCurrentUser,
+          comments: [], // Will be loaded separately if needed
+          images: post.medias || [],
+          hasMedia: post.hasMedia,
+          viewCount: post.viewCount,
+          visibility: post.visibility,
+          categoryTagIds: post.categoryTagIds || [],
+          emotionTagIds: post.emotionTagIds || [],
+        }));
+
+        dispatch(fetchPostsFromFeedSuccess({
+          posts: transformedPosts,
+          reset: true,
+          hasMore: hasMorePosts,
+          totalCount: totalPostsCount,
+        }));
       } catch (error) {
         console.error("Error loading initial feed:", error);
         dispatch(fetchFeedFailure(error.message));
@@ -279,7 +328,7 @@ const Feed = ({ onNavigateToChat }) => {
     };
 
     loadInitialFeed();
-  }, [dispatch]);
+  }, [dispatch, selectedCategory]);
 
   // Intersection Observer for infinite scroll
   useEffect(() => {
@@ -313,7 +362,7 @@ const Feed = ({ onNavigateToChat }) => {
   if (loading && posts.length === 0) {
     return (
       <div className="flex justify-center py-8">
-        <LoadingSpinner size="lg" text="Đang tải bài viết..." />
+        <div className="w-8 h-8 border-4 border-gray-200 dark:border-gray-700 border-t-blue-500 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -326,6 +375,23 @@ const Feed = ({ onNavigateToChat }) => {
             Không thể tải bài viết
           </p>
           <p className="text-red-600 dark:text-red-400 text-sm mt-2">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Hiển thị thông báo khi không có bài viết
+  if (!loading && (posts.length === 0 || totalCount === 0)) {
+    return (
+      <div className="text-center py-12">
+        <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-8 max-w-md mx-auto">
+          <div className="text-6xl mb-4">📝</div>
+          <p className="text-gray-600 dark:text-gray-400 font-medium text-lg">
+            {selectedCategory ? `Chưa có bài viết nào trong chủ đề "${selectedCategory.displayName}"` : "Chưa có bài viết nào"}
+          </p>
+          <p className="text-gray-500 dark:text-gray-500 text-sm mt-2">
+            {selectedCategory ? "Hãy tạo bài viết đầu tiên cho chủ đề này!" : "Hãy tạo bài viết đầu tiên của bạn!"}
+          </p>
         </div>
       </div>
     );
@@ -357,7 +423,7 @@ const Feed = ({ onNavigateToChat }) => {
       {/* Infinite Scroll Loading Indicator */}
       {hasMore && (
         <div ref={loadingRef} className="text-center py-6">
-          <LoadingSpinner size="md" text="Đang tải thêm..." />
+          <div className="w-6 h-6 border-4 border-gray-200 dark:border-gray-700 border-t-blue-500 rounded-full animate-spin"></div>
         </div>
       )}
 

@@ -342,12 +342,19 @@ const postsSlice = createSlice({
       state.error = action.payload;
     },
     fetchPostsFromFeedSuccess: (state, action) => {
-      const { posts, reset = false } = action.payload;
+      const { posts, reset = false, hasMore, totalCount } = action.payload;
 
       if (reset) {
         state.posts = posts;
       } else {
         state.posts = [...state.posts, ...posts];
+      }
+
+      if (hasMore !== undefined) {
+        state.hasMore = hasMore;
+      }
+      if (totalCount !== undefined) {
+        state.totalCount = totalCount;
       }
     },
   },

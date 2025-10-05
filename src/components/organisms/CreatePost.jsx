@@ -126,7 +126,7 @@ const CreatePostForm = ({
                         </div>
                         <div className="text-left">
                             <div className={`text-sm font-medium ${emotionId ? "text-purple-800 dark:text-purple-200" : "text-gray-800 dark:text-gray-200"}`}>
-                                {selectedEmotion ? selectedEmotion.displayName : "Cảm xúc"}
+                                {selectedEmotion ? (selectedEmotion.displayNameVi || selectedEmotion.displayName) : "Cảm xúc"}
                             </div>
                             <div className={`text-xs ${emotionId ? "text-purple-600 dark:text-purple-300" : "text-gray-500 dark:text-gray-400"}`}>
                                 {emotionId ? "Đã chọn" : "Chọn cảm xúc"}
@@ -287,7 +287,9 @@ const CreatePostForm = ({
                         ) : (
                             <div className="grid grid-cols-4 gap-2 max-h-64 overflow-y-auto">
                                 {emotionTags?.filter(emo =>
-                                    !emotionSearch || emo.displayName.toLowerCase().includes(emotionSearch.toLowerCase())
+                                    !emotionSearch ||
+                                    emo.displayName.toLowerCase().includes(emotionSearch.toLowerCase()) ||
+                                    (emo.displayNameVi && emo.displayNameVi.toLowerCase().includes(emotionSearch.toLowerCase()))
                                 ).map(emo => {
                                     if (!emo || !emo.id || !emo.displayName) return null;
                                     const isSelected = emotionId === emo.id;
@@ -304,7 +306,7 @@ const CreatePostForm = ({
                                                 }`}
                                         >
                                             <span className="text-lg">{getUnicodeEmoji(emo.unicodeCodepoint)}</span>
-                                            <span className="text-center leading-tight text-xs">{emo.displayName}</span>
+                                            <span className="text-center leading-tight text-xs">{emo.displayNameVi || emo.displayName}</span>
                                         </button>
                                     );
                                 })}

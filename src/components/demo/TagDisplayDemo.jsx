@@ -41,7 +41,7 @@ const TagDisplayDemo = () => {
                                     <div key={emotion.id} className="flex items-center space-x-1">
                                         <span className="text-sm">{getUnicodeEmoji(emotion.unicodeCodepoint)}</span>
                                         <span className="text-xs text-purple-600 dark:text-purple-400 font-medium">
-                                            {emotion.displayName}
+                                            {emotion.displayNameVi || emotion.displayName}
                                         </span>
                                         {index < emotionTags.length - 1 && (
                                             <span className="text-xs text-gray-400">,</span>

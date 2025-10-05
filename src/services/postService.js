@@ -109,4 +109,18 @@ export const postService = {
         const response = await api.delete(`https://api.emoease.vn/post-service/v1/reactions?TargetType=Comment&TargetId=${commentId}`);
         return response.data;
     },
+
+    // Get posts by category
+    getPostsByCategory: async (categoryId, pageIndex = 1, pageSize = 10) => {
+        const url = `https://api.emoease.vn/post-service/v1/tags/${categoryId}/posts?PageIndex=${pageIndex}&PageSize=${pageSize}`;
+        const response = await api.get(url);
+        return response.data;
+    },
+
+    // Get feed
+    getFeed: async (limit = 20, cursor = null) => {
+        const url = `https://api.emoease.vn/Feed-service/v1/feed?limit=${limit}${cursor ? `&cursor=${cursor}` : ''}`;
+        const response = await api.get(url);
+        return response.data;
+    },
 };

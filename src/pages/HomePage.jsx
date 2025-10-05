@@ -5,13 +5,15 @@ import Feed from "../components/organisms/Feed";
 import { useOutletContext } from "react-router-dom";
 import SearchBar from "../components/molecules/SearchBar";
 import FeedNav from "../components/molecules/FeedNav";
-import categories from "../data/categories.json"; // Adjust the path based on your file location
+import tagCategoryData from "../data/tagCategory.json"; // Use tagCategory.json instead
+import { getUnicodeEmoji } from "../utils/tagHelpers";
 
 const HomePage = () => {
   const { handleNavigateToChat } = useOutletContext();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [search, setSearch] = useState("");
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null); // Single category selection
   const [selectedTab, setSelectedTab] = useState("most_recent");
   const [anonymousPost, setAnonymousPost] = useState("");
   const [selectedMood, setSelectedMood] = useState(null);
@@ -61,12 +63,13 @@ const HomePage = () => {
     }
   };
 
-  const toggleFilter = (filter) => {
-    setSelectedFilters((prev) =>
-      prev.includes(filter)
-        ? prev.filter((item) => item !== filter)
-        : [...prev, filter]
-    );
+  const toggleFilter = (category) => {
+    // Single category selection - toggle on/off
+    if (selectedCategory && selectedCategory.id === category.id) {
+      setSelectedCategory(null); // Deselect if same category clicked
+    } else {
+      setSelectedCategory(category); // Select new category
+    }
   };
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
@@ -137,6 +140,7 @@ const HomePage = () => {
               onNavigateToChat={handleNavigateToChat}
               search={search}
               filter={selectedFilters}
+              selectedCategory={selectedCategory}
             />
           </div>
         </motion.div>
@@ -189,17 +193,17 @@ const HomePage = () => {
               </h3>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              {categories.map((category) => (
+              {tagCategoryData.categoryTags.map((category) => (
                 <button
                   key={category.id}
-                  onClick={() => toggleFilter(category.name)}
-                  className={`flex items-center gap-2 p-2 rounded-xl dark:text-white text-sm ${selectedFilters.includes(category.name)
+                  onClick={() => toggleFilter(category)}
+                  className={`flex items-center gap-2 p-2 rounded-xl dark:text-white text-sm ${selectedCategory && selectedCategory.id === category.id
                     ? "bg-purple-100 dark:text-black"
                     : "bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-neutral-500"
                     } transition-colors`}
                 >
-                  <span>{category.icon}</span>
-                  <span>{category.nameVi}</span>
+                  <span>{getUnicodeEmoji(category.unicodeCodepoint)}</span>
+                  <span>{category.displayName}</span>
                 </button>
               ))}
             </div>
