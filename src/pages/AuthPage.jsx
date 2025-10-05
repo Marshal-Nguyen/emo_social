@@ -214,11 +214,7 @@ const LogIn = () => {
       return;
     }
 
-    // Clear localStorage on login page load (fresh start)
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('auth_user');
-    localStorage.removeItem('device_id');
+    // Do not clear persisted auth on page load to preserve login across refreshes
 
     // If already authenticated via Redux, redirect to home
     if (isAuthenticated) {
@@ -273,6 +269,21 @@ const LogIn = () => {
   }, []);
 
   // --- Helper utilities ---
+  const isOriginAllowed = () => {
+    try {
+      // Always allow in development for local testing
+      if (import.meta.env.MODE !== "production") return true;
+      const allowed = import.meta.env.VITE_GOOGLE_ALLOWED_ORIGINS;
+      if (!allowed) return false;
+      const list = allowed
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      return list.includes(window.location.origin);
+    } catch {
+      return false;
+    }
+  };
   const getOrCreateDeviceId = () => {
     const key = "device_id";
     let existing = localStorage.getItem(key);
@@ -473,6 +484,12 @@ const LogIn = () => {
 
   // --- Google Identity Services (GIS) setup ---
   useEffect(() => {
+    // Only load GIS when origin is allowed and client id is configured
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (!clientId || clientId === "your-google-client-id-here" || !isOriginAllowed()) {
+      setGoogleReady(false);
+      return;
+    }
     if (window.google && window.google.accounts && window.google.accounts.id) {
       setGoogleReady(true);
       return;
@@ -492,8 +509,8 @@ const LogIn = () => {
   useEffect(() => {
     if (!googleReady) return;
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    if (!clientId || clientId === "your-google-client-id-here") {
-      console.warn("Google Client ID not configured properly");
+    if (!clientId || clientId === "your-google-client-id-here" || !isOriginAllowed()) {
+      console.warn("Google OAuth skipped: invalid client ID or disallowed origin");
       return;
     }
     try {
@@ -864,26 +881,22 @@ const LogIn = () => {
                   ))}
                 </div>
 
-                {/* Google button */}
-                {import.meta.env.VITE_GOOGLE_CLIENT_ID && import.meta.env.VITE_GOOGLE_CLIENT_ID !== "your-google-client-id-here" ? (
-                  <Button
-                    type="button"
-                    onClick={handleGoogle}
-                    disabled={loading || !googleReady}
-                    variant="neutral"
-                    leftIcon={<GoogleIcon />}
-                    className="mt-6 w-full">
-                    {mode === "login"
-                      ? "Tiếp tục với Google"
-                      : "Đăng ký với Google"}
-                  </Button>
-                ) : (
-                  <div className="mt-6 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                    <p className="text-sm text-gray-600 text-center">
-                      Google OAuth chưa được cấu hình
-                    </p>
-                  </div>
-                )}
+                {/* Google button (always rendered; disabled if not available) */}
+                <Button
+                  type="button"
+                  onClick={handleGoogle}
+                  disabled={
+                    loading ||
+                    !googleReady ||
+                    !isOriginAllowed() ||
+                    !import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+                    import.meta.env.VITE_GOOGLE_CLIENT_ID === "your-google-client-id-here"
+                  }
+                  variant="neutral"
+                  leftIcon={<GoogleIcon />}
+                  className="mt-6 w-full">
+                  {mode === "login" ? "Tiếp tục với Google" : "Đăng ký với Google"}
+                </Button>
                 {/* Hidden container for the official GIS button */}
                 <div ref={googleBtnRef} className="hidden" aria-hidden />
 
