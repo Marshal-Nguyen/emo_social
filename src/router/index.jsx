@@ -18,7 +18,7 @@ import TagDemoPage from "../pages/TagDemoPage";
 import { useAutoTheme, useTheme } from "../hooks/useTheme";
 
 function AppRouter() {
-    const { isAuthenticated, loading } = useSelector((state) => state.auth);
+    const { isAuthenticated, loading, aliasStatus, isCheckingAlias } = useSelector((state) => state.auth);
     useAutoTheme();
     useTheme();
 
@@ -38,47 +38,124 @@ function AppRouter() {
                 <Route element={<Layout />}>
                     <Route
                         path="/home"
-                        element={isAuthenticated ? <HomePage /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                isCheckingAlias ? (
+                                    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                                        <div className="text-center">
+                                            <LoadingSpinner breathing={true} />
+                                            <p className="mt-4 text-gray-600 dark:text-gray-400">Đang kiểm tra thông tin tài khoản...</p>
+                                        </div>
+                                    </div>
+                                ) : aliasStatus === false ? (
+                                    <Navigate to="/auth" />
+                                ) : (
+                                    <HomePage />
+                                )
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/post/:id"
-                        element={isAuthenticated ? <PostDetailPage /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <PostDetailPage />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/chat"
-                        element={isAuthenticated ? <ChatPage /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <ChatPage />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/notifications"
-                        element={isAuthenticated ? <NotificationsPage /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <NotificationsPage />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/profile"
-                        element={isAuthenticated ? <ProfilePage /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <ProfilePage />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/wellness-hub"
-                        element={isAuthenticated ? <WellnessHub /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <WellnessHub />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/settings"
-                        element={isAuthenticated ? <SettingsPage /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <SettingsPage />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/icons"
-                        element={isAuthenticated ? <IconEmotion /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <IconEmotion />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/community-rules"
-                        element={isAuthenticated ? <CommunityRulesPage /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <CommunityRulesPage />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/tag-demo"
-                        element={isAuthenticated ? <TagDemoPage /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <TagDemoPage />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                     <Route
                         path="/"
-                        element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/auth" />}
+                        element={
+                            isAuthenticated ? (
+                                aliasStatus === false ? <Navigate to="/auth" /> : <Navigate to="/home" />
+                            ) : (
+                                <Navigate to="/auth" />
+                            )
+                        }
                     />
                 </Route>
             </Routes>

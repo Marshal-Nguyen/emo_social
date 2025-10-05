@@ -544,6 +544,8 @@ export const aliasService = {
         });
 
         if (!response.ok) {
+            const errorText = await response.text();
+            console.error('API Error response:', errorText);
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 

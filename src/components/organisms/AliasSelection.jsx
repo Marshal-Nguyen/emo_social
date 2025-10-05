@@ -76,12 +76,22 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
                 className="w-full max-w-2xl"
             >
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-slate-800 mb-2">
+                <div className="text-center mb-10">
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="mb-6"
+                    >
+                        <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-full flex items-center justify-center">
+                            <span className="text-3xl">🎭</span>
+                        </div>
+                    </motion.div>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent mb-3">
                         Chọn tên của bạn
                     </h1>
-                    <p className="text-slate-600">
-                        Hãy chọn một tên để sử dụng trong cộng đồng
+                    <p className="text-slate-600 text-lg">
+                        Hãy chọn một tên độc đáo để sử dụng trong cộng đồng
                     </p>
                 </div>
 
@@ -97,7 +107,7 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
                 )}
 
                 {/* Alias suggestions */}
-                <div className="space-y-3 mb-6">
+                <div className="space-y-4 mb-8">
                     {suggestions.map((alias, index) => (
                         <motion.button
                             key={`${alias.label}-${index}`}
@@ -106,19 +116,26 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
                             transition={{ duration: 0.4, delay: index * 0.1 }}
                             onClick={() => handleSelectAlias(alias)}
                             disabled={selecting}
-                            className="w-full p-4 bg-white rounded-xl border border-slate-200 hover:border-violet-300 hover:shadow-lg transition-all duration-200 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="w-full p-6 bg-white rounded-2xl border-2 border-slate-200 hover:border-violet-300 hover:shadow-xl transition-all duration-300 text-left group disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <div className="flex items-center justify-between">
-                                <div>
-                                    <h3 className="text-lg font-semibold text-slate-800 group-hover:text-violet-600 transition-colors">
-                                        {alias.label}
-                                    </h3>
-                                    <p className="text-sm text-slate-500">
-                                        Hết hạn: {new Date(alias.expiredAt).toLocaleString('vi-VN')}
-                                    </p>
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-violet-100 to-fuchsia-100 rounded-full flex items-center justify-center">
+                                        <span className="text-xl">🎭</span>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-bold text-slate-800 group-hover:text-violet-600 transition-colors mb-1">
+                                            {alias.label}
+                                        </h3>
+                                        <p className="text-sm text-slate-500">
+                                            Hết hạn: {new Date(alias.expiredAt).toLocaleString('vi-VN')}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="text-violet-500 group-hover:text-violet-600">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="text-violet-500 group-hover:text-violet-600 transition-colors">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>
                                 </div>
@@ -129,25 +146,35 @@ const AliasSelection = ({ onAliasSelected, onError }) => {
 
                 {/* Randomize button */}
                 <div className="text-center">
-                    <button
+                    <motion.button
                         onClick={handleRandomize}
                         disabled={loading || selecting}
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold rounded-2xl hover:opacity-90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                     >
                         {loading ? (
                             <>
-                                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                                Đang tải...
+                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                                <span className="text-lg">Đang tải...</span>
                             </>
                         ) : (
                             <>
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                                Tạo tên khác
+                                <motion.div
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                </motion.div>
+                                <span className="text-lg">🎲 Tạo tên khác</span>
                             </>
                         )}
-                    </button>
+                    </motion.button>
+                    <p className="mt-3 text-sm text-slate-500">
+                        Không thích? Hãy thử tạo tên mới!
+                    </p>
                 </div>
 
                 {/* Loading overlay for selection */}

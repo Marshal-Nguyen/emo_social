@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess, loginFailure, logout } from "../store/authSlice";
+import { loginSuccess, loginFailure, logout, setAliasStatus, setCheckingAlias } from "../store/authSlice";
 import { clearAuth } from "../services/authInit";
 import { aliasService } from "../services/apiService";
 import AliasSelection from "../components/organisms/AliasSelection";
@@ -113,7 +113,7 @@ const LogIn = () => {
   const reduceMotion = useReducedMotion();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated, loading: authLoading } = useSelector((state) => state.auth);
+  const { isAuthenticated, loading: authLoading, aliasStatus, isCheckingAlias } = useSelector((state) => state.auth);
   const [mode, setMode] = useState("login"); // 'login' | 'register'
   const [showPw, setShowPw] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
@@ -139,7 +139,8 @@ const LogIn = () => {
   const [apiStatus, setApiStatus] = useState("checking"); // "checking", "available", "unavailable"
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [showAliasSelection, setShowAliasSelection] = useState(false);
-  const [isCheckingAlias, setIsCheckingAlias] = useState(false);
+  const [aliasCheckCompleted, setAliasCheckCompleted] = useState(false);
+  const [authCheckCompleted, setAuthCheckCompleted] = useState(false);
 
   // Axios instance with token attachment and refresh flow
   const isRefreshingRef = useRef(false);
@@ -208,14 +209,27 @@ const LogIn = () => {
 
   // --- Check existing authentication ---
   useEffect(() => {
+    // Prevent multiple calls
+    if (authCheckCompleted) {
+      return;
+    }
+
+    // Clear localStorage on login page load (fresh start)
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('auth_user');
+    localStorage.removeItem('device_id');
+
     // If already authenticated via Redux, redirect to home
     if (isAuthenticated) {
+      setAuthCheckCompleted(true);
       navigate("/");
       return;
     }
 
     // If not authenticated, check localStorage and initialize if valid
     const checkExistingAuth = async () => {
+      setAuthCheckCompleted(true);
       try {
         const token = localStorage.getItem("access_token");
         const user = localStorage.getItem("auth_user");
@@ -252,39 +266,11 @@ const LogIn = () => {
     checkExistingAuth();
   }, [navigate, isAuthenticated, dispatch]);
 
-  // --- API Status Check ---
+  // --- API Status Check (REMOVED - No more health check spam) ---
+  // Set API as available by default
   useEffect(() => {
-    const checkApiStatus = async () => {
-      if (!apiBase) {
-        setApiStatus("unavailable");
-        return;
-      }
-
-      try {
-        // Try a simple health check or login endpoint
-        const response = await axios.get(`${apiBase}/health`, { timeout: 5000 });
-        setApiStatus("available");
-      } catch (error) {
-        // If health check fails, try login endpoint with dummy data
-        try {
-          await axios.post(`${apiBase}/Auth/v2/login`, {
-            email: "test@example.com",
-            password: "test123"
-          }, { timeout: 5000 });
-          setApiStatus("available");
-        } catch (loginError) {
-          // If it's a 400/401 error, API is available but credentials are wrong
-          if (loginError?.response?.status === 400 || loginError?.response?.status === 401) {
-            setApiStatus("available");
-          } else {
-            setApiStatus("unavailable");
-          }
-        }
-      }
-    };
-
-    checkApiStatus();
-  }, [apiBase]);
+    setApiStatus("available");
+  }, []);
 
   // --- Helper utilities ---
   const getOrCreateDeviceId = () => {
@@ -363,21 +349,31 @@ const LogIn = () => {
 
   // Check alias status and handle accordingly
   const checkAliasStatus = async () => {
-    try {
-      setIsCheckingAlias(true);
-      const aliasStatus = await aliasService.checkAliasStatus();
+    // Prevent multiple calls
+    if (aliasCheckCompleted) {
+      return;
+    }
 
-      if (aliasStatus.aliasIssued) {
+    try {
+      dispatch(setCheckingAlias(true));
+      setAliasCheckCompleted(true); // Mark as completed immediately
+
+      const aliasStatusResponse = await aliasService.checkAliasStatus();
+
+      if (aliasStatusResponse.aliasIssued) {
         // User already has an alias, get the current alias info
         const aliasInfo = await aliasService.getCurrentAlias();
         await updateUserWithAlias(aliasInfo);
+        dispatch(setAliasStatus(true));
       } else {
         // User needs to select an alias
-        setShowAliasSelection(true);
+        dispatch(setAliasStatus(false));
+        setShowAliasSelection(true); // Show immediately, no delay
       }
     } catch (error) {
       console.error("Error checking alias status:", error);
       // If alias check fails, proceed without alias
+      dispatch(setAliasStatus(true)); // Assume user has alias to proceed
       try {
         window.dispatchEvent(
           new CustomEvent("app:toast", { detail: { type: "success", message: "Đăng nhập thành công" } })
@@ -385,7 +381,7 @@ const LogIn = () => {
       } catch { }
       navigate("/");
     } finally {
-      setIsCheckingAlias(false);
+      dispatch(setCheckingAlias(false));
     }
   };
 
@@ -436,6 +432,8 @@ const LogIn = () => {
   // Handle alias selection completion
   const handleAliasSelected = async (aliasInfo) => {
     setShowAliasSelection(false);
+    setAliasCheckCompleted(false); // Reset flag for next login
+    dispatch(setAliasStatus(true)); // User now has alias
     await updateUserWithAlias(aliasInfo);
   };
 
@@ -763,6 +761,7 @@ const LogIn = () => {
     return () => window.removeEventListener("app:logout", onLogout);
   }, []);
 
+
   // Show loading screen while checking authentication
   if (isCheckingAuth) {
     return (
@@ -776,24 +775,12 @@ const LogIn = () => {
   }
 
   // Show alias selection screen
-  if (showAliasSelection) {
+  if (showAliasSelection || aliasStatus === false) {
     return (
       <AliasSelection
         onAliasSelected={handleAliasSelected}
         onError={handleAliasError}
       />
-    );
-  }
-
-  // Show loading screen while checking alias status
-  if (isCheckingAlias) {
-    return (
-      <section className="relative overflow-hidden w-full min-h-screen py-10 md:py-16 flex items-center justify-center">
-        <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent mx-auto mb-4"></div>
-          <p className="text-slate-600">Đang kiểm tra thông tin tài khoản...</p>
-        </div>
-      </section>
     );
   }
 

@@ -7,6 +7,8 @@ const initialState = {
   loading: false,
   error: null,
   isFirstMount: true,
+  aliasStatus: null, // null = chưa check, true = có alias, false = cần chọn alias
+  isCheckingAlias: false,
 };
 
 const authSlice = createSlice({
@@ -24,6 +26,8 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.error = null;
       state.isFirstMount = true; // Reset isFirstMount khi đăng nhập
+      state.aliasStatus = null; // Reset alias status
+      state.isCheckingAlias = false;
     },
     loginFailure: (state, action) => {
       state.loading = false;
@@ -40,6 +44,8 @@ const authSlice = createSlice({
       state.error = null;
       state.loading = false;
       state.isFirstMount = true; // Reset isFirstMount khi đăng xuất
+      state.aliasStatus = null;
+      state.isCheckingAlias = false;
     },
     clearError: (state) => {
       state.error = null;
@@ -47,10 +53,16 @@ const authSlice = createSlice({
     setFirstMountFalse: (state) => {
       state.isFirstMount = false; // Đặt isFirstMount thành false sau lần mount đầu
     },
+    setAliasStatus: (state, action) => {
+      state.aliasStatus = action.payload; // true = có alias, false = cần chọn alias
+    },
+    setCheckingAlias: (state, action) => {
+      state.isCheckingAlias = action.payload;
+    },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout, clearError, setFirstMountFalse } =
+export const { loginStart, loginSuccess, loginFailure, logout, clearError, setFirstMountFalse, setAliasStatus, setCheckingAlias } =
   authSlice.actions;
 
 export default authSlice.reducer;

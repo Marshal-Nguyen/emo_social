@@ -10,7 +10,6 @@ const decodeJwt = (token) => {
 
         const parts = token.split(".");
         if (parts.length !== 3) {
-            console.log("Token is not a valid JWT format (should have 3 parts)");
             return null;
         }
 
@@ -26,7 +25,6 @@ const decodeJwt = (token) => {
         try {
             decodedPayload = atob(padded);
         } catch (base64Error) {
-            console.log("Error decoding base64:", base64Error.message);
             return null;
         }
 
@@ -35,12 +33,9 @@ const decodeJwt = (token) => {
             const decoded = JSON.parse(decodedPayload);
             return decoded;
         } catch (jsonError) {
-            console.log("Error parsing JWT payload as JSON:", jsonError.message);
-            console.log("Payload content:", decodedPayload.substring(0, 100) + "...");
             return null;
         }
     } catch (error) {
-        console.log("Error decoding JWT:", error.message);
         return null;
     }
 };
@@ -52,7 +47,6 @@ export const initializeAuth = () => {
         const userStr = localStorage.getItem("auth_user");
 
         if (!token || !userStr) {
-            console.log("No auth data found in localStorage");
             return false;
         }
 
@@ -69,17 +63,15 @@ export const initializeAuth = () => {
         }
 
         // Debug token information
-        debugToken(token);
 
         // Validate token - check if it's a valid JWT format first
         const decoded = decodeJwt(token);
         if (!decoded) {
             // Check if it's a demo token or other non-JWT token
             if (token.startsWith("demo-") || token.startsWith("test-") || token.includes("demo")) {
-                console.log("Using demo/test token, skipping JWT validation");
+                // Using demo/test token, skipping JWT validation
             } else {
-                console.log("Invalid token format - not a valid JWT and not a demo token");
-                // Clear corrupted token
+                // Invalid token format - not a valid JWT and not a demo token
                 clearCorruptedAuth();
                 return false;
             }
@@ -88,12 +80,9 @@ export const initializeAuth = () => {
             if (decoded.exp) {
                 const currentTime = Math.floor(Date.now() / 1000);
                 if (decoded.exp <= currentTime) {
-                    console.log("Token expired, clearing auth data");
                     clearAuth();
                     return false;
                 }
-            } else {
-                console.log("JWT token has no expiration claim, assuming valid");
             }
         }
 
@@ -103,12 +92,6 @@ export const initializeAuth = () => {
             token: token
         }));
 
-        console.log("Authentication initialized from localStorage:", {
-            userId: userData.id,
-            email: userData.email,
-            aliasLabel: userData.aliasLabel || "No alias",
-            tokenExpiry: decoded?.exp ? new Date(decoded.exp * 1000).toLocaleString() : "No expiration"
-        });
 
         return true;
     } catch (error) {
@@ -126,7 +109,6 @@ export const clearAuth = () => {
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("auth_user");
         store.dispatch(logout());
-        console.log("Authentication cleared");
     } catch (error) {
         console.error("Error clearing auth:", error);
     }
@@ -135,7 +117,6 @@ export const clearAuth = () => {
 // Clear corrupted auth data
 export const clearCorruptedAuth = () => {
     try {
-        console.log("Clearing corrupted authentication data");
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("auth_user");
@@ -163,21 +144,3 @@ export const getCurrentToken = () => {
     return state.auth.token;
 };
 
-// Debug token information
-export const debugToken = (token) => {
-    console.log("=== Token Debug Info ===");
-    console.log("Token length:", token?.length);
-    console.log("Token preview:", token?.substring(0, 50) + "...");
-    console.log("Token ends with:", token?.substring(token.length - 10));
-
-    if (token) {
-        const parts = token.split(".");
-        console.log("JWT parts count:", parts.length);
-        if (parts.length === 3) {
-            console.log("Header length:", parts[0]?.length);
-            console.log("Payload length:", parts[1]?.length);
-            console.log("Signature length:", parts[2]?.length);
-        }
-    }
-    console.log("========================");
-};
