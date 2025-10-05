@@ -161,7 +161,7 @@ const Feed = ({ onNavigateToChat, selectedCategory }) => {
         apiPosts = categoryResponse.posts?.data || [];
         hasMorePosts = categoryResponse.posts?.hasNextPage || false;
         totalPostsCount = categoryResponse.posts?.totalCount || 0;
-        
+
         // Reset loading state for category posts
         dispatch(fetchFeedSuccess({
           feedItems: [],
@@ -257,7 +257,7 @@ const Feed = ({ onNavigateToChat, selectedCategory }) => {
           apiPosts = categoryResponse.posts?.data || [];
           hasMorePosts = categoryResponse.posts?.hasNextPage || false;
           totalPostsCount = categoryResponse.posts?.totalCount || 0;
-          
+
           // Reset loading state for category posts
           dispatch(fetchFeedSuccess({
             feedItems: [],
