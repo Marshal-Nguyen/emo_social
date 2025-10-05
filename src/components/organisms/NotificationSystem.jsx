@@ -5,26 +5,17 @@ import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from "lucide-react";
 const NotificationSystem = () => {
   const [notifications, setNotifications] = useState([]);
 
-  // Mock notifications for demo
+  // Listen to app:toast events only; remove demo welcome toast
   useEffect(() => {
-    const mockNotifications = [
-      {
-        id: 1,
-        type: "success",
-        title: "Chào mừng đến với EmoSocial!",
-        message: "Hãy bắt đầu chia sẻ cảm xúc của bạn với cộng đồng.",
-        duration: 5000,
-      },
-    ];
-
-    setNotifications(mockNotifications);
-
-    // Auto remove notifications
-    mockNotifications.forEach((notification) => {
-      setTimeout(() => {
-        removeNotification(notification.id);
-      }, notification.duration);
-    });
+    const handler = (e) => {
+      const { type = "info", title = "", message = "", duration = 3500 } = e.detail || {};
+      const id = Date.now() + Math.random();
+      const notif = { id, type, title, message, duration };
+      setNotifications((prev) => [...prev, notif]);
+      setTimeout(() => removeNotification(id), duration);
+    };
+    window.addEventListener("app:toast", handler);
+    return () => window.removeEventListener("app:toast", handler);
   }, []);
 
   const removeNotification = (id) => {

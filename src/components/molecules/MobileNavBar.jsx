@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Home, MessageCircle, Bell, User, Settings, Shield } from "lucide-react";
+import { Home, Shield } from "lucide-react";
 import Button from "../atoms/Button";
+import ThemeToggle from "./ThemeToggle";
 
 const MobileNavBar = ({
   activeTab = "home",
@@ -10,45 +11,7 @@ const MobileNavBar = ({
   unreadNotifications = 0,
 }) => {
   const navItems = [
-    {
-      id: "home",
-      icon: Home,
-      label: "Trang chủ",
-      badge: null,
-      enabled: true,
-    },
-    {
-      id: "chat",
-      icon: MessageCircle,
-      label: "Tin nhắn",
-      badge: unreadMessages > 0 ? unreadMessages : null,
-      enabled: false,
-      soonLabel: "Soon",
-    },
-    {
-      id: "notifications",
-      icon: Bell,
-      label: "Thông báo",
-      badge: unreadNotifications > 0 ? unreadNotifications : null,
-      enabled: false,
-      soonLabel: "Soon",
-    },
-    {
-      id: "profile",
-      icon: User,
-      label: "Cá nhân",
-      badge: null,
-      enabled: false,
-      soonLabel: "Soon",
-    },
-    {
-      id: "settings",
-      icon: Settings,
-      label: "Cài đặt",
-      badge: null,
-      enabled: false,
-      soonLabel: "Soon",
-    },
+    { id: "home", icon: Home, label: "Trang chủ", enabled: true },
   ];
 
 
@@ -81,16 +44,6 @@ const MobileNavBar = ({
                   }`}>
                 <div className="relative">
                   <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  {item.badge && item.enabled && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center text-[8px] sm:text-[10px]">
-                      {item.badge > 9 ? "9+" : item.badge}
-                    </span>
-                  )}
-                  {isDisabled && (
-                    <span className="absolute -top-1 -right-1 bg-gray-400 text-white text-xs rounded-full w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center text-[8px] sm:text-[10px]">
-                      {item.soonLabel}
-                    </span>
-                  )}
                 </div>
                 <span className="text-[10px] sm:text-xs font-medium hidden sm:block">{item.label}</span>
               </Button>
@@ -103,32 +56,33 @@ const MobileNavBar = ({
             </motion.div>
           );
         })}
-      </div>
-
-      {/* Tab Quy tắc cộng đồng ở dưới */}
-      <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
-        <motion.div
-          whileTap={{ scale: 0.9 }}
-          className="relative">
+        {/* Theme toggle as middle icon (no Safe mode button) */}
+        <div className="relative">
+          <div className="flex flex-col items-center space-y-1 p-1 sm:p-2 min-w-[50px] sm:min-w-[60px]">
+            <ThemeToggle showSafeToggle={false} />
+          </div>
+        </div>
+        {/* Community rules icon on the same row */}
+        <motion.div whileTap={{ scale: 0.9 }} className="relative">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => onTabChange?.("community-rules")}
-            className={`w-full flex items-center justify-center space-x-2 p-3 rounded-lg transition-all duration-200 ${activeTab === "community-rules"
-                ? "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30"
-                : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50"
-              }`}>
-            <Shield className="w-4 h-4" />
-            <span className="text-sm font-medium">Quy tắc cộng đồng</span>
+            className={`flex flex-col items-center space-y-1 p-1 sm:p-2 min-w-[50px] sm:min-w-[60px] ${activeTab === "community-rules"
+              ? "text-purple-600 dark:text-purple-400"
+              : "text-gray-500 dark:text-gray-400"}`}>
+            <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="text-[10px] sm:text-xs font-medium hidden sm:block">Quy tắc</span>
           </Button>
           {activeTab === "community-rules" && (
             <motion.div
               layoutId="activeCommunityRulesTab"
-              className="absolute top-0 left-0 right-0 h-0.5 bg-purple-600 dark:bg-purple-400 rounded-full"
+              className="absolute top-0 left-0 right-0 mx-auto w-6 sm:w-8 h-0.5 bg-purple-600 dark:bg-purple-400 rounded-full"
             />
           )}
         </motion.div>
       </div>
+
     </div>
   );
 };
