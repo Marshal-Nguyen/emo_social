@@ -134,7 +134,7 @@ const mockPosts = [
   },
 ];
 
-const Feed = ({ onNavigateToChat, selectedCategory }) => {
+const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { posts, loading, error, hasMore, feedItems, nextCursor, totalCount } = useSelector(
@@ -155,7 +155,25 @@ const Feed = ({ onNavigateToChat, selectedCategory }) => {
       let hasMorePosts = false;
       let totalPostsCount = 0;
 
-      if (selectedCategory) {
+      if (selectedTab === 'mine') {
+        // Load posts authored by current user
+        const authUserStr = localStorage.getItem('auth_user');
+        const aliasId = authUserStr ? (JSON.parse(authUserStr)?.aliasId) : null;
+        if (!aliasId) {
+          throw new Error('Missing aliasId. Please ensure user alias is set.');
+        }
+        const mineResponse = await postService.getPostsByAliasIds([aliasId], 1, 20);
+        apiPosts = mineResponse.posts?.data || [];
+        hasMorePosts = mineResponse.posts?.hasNextPage || false;
+        totalPostsCount = mineResponse.posts?.totalCount || 0;
+        dispatch(fetchFeedSuccess({
+          feedItems: [],
+          nextCursor: null,
+          hasMore: hasMorePosts,
+          totalCount: totalPostsCount,
+          reset: false,
+        }));
+      } else if (selectedCategory) {
         // Load posts by category
         const categoryResponse = await postService.getPostsByCategory(selectedCategory.id, 1, 20);
         apiPosts = categoryResponse.posts?.data || [];
@@ -251,7 +269,24 @@ const Feed = ({ onNavigateToChat, selectedCategory }) => {
         let hasMorePosts = false;
         let totalPostsCount = 0;
 
-        if (selectedCategory) {
+        if (selectedTab === 'mine') {
+          const authUserStr = localStorage.getItem('auth_user');
+          const aliasId = authUserStr ? (JSON.parse(authUserStr)?.aliasId) : null;
+          if (!aliasId) {
+            throw new Error('Missing aliasId. Please ensure user alias is set.');
+          }
+          const mineResponse = await postService.getPostsByAliasIds([aliasId], 1, 20);
+          apiPosts = mineResponse.posts?.data || [];
+          hasMorePosts = mineResponse.posts?.hasNextPage || false;
+          totalPostsCount = mineResponse.posts?.totalCount || 0;
+          dispatch(fetchFeedSuccess({
+            feedItems: [],
+            nextCursor: null,
+            hasMore: hasMorePosts,
+            totalCount: totalPostsCount,
+            reset: true,
+          }));
+        } else if (selectedCategory) {
           // Load posts by category
           const categoryResponse = await postService.getPostsByCategory(selectedCategory.id, 1, 20);
           apiPosts = categoryResponse.posts?.data || [];
@@ -328,7 +363,7 @@ const Feed = ({ onNavigateToChat, selectedCategory }) => {
     };
 
     loadInitialFeed();
-  }, [dispatch, selectedCategory]);
+  }, [dispatch, selectedCategory, selectedTab]);
 
   // Intersection Observer for infinite scroll
   useEffect(() => {

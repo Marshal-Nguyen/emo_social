@@ -2,14 +2,14 @@ import React from "react";
 import Button from "../atoms/Button";
 
 const FEED_TABS = [
-    { key: "most_recent", label: "Most Recent" },
+    // { key: "most_recent", label: "Most Recent" },
     { key: "feed", label: "Feed" },
-    { key: "news", label: "News" },
+    // { key: "news", label: "News" },
     { key: "mine", label: "Của tôi" },
 ];
 
 const FeedNav = ({ selected, onSelect }) => (
-    <nav className="flex gap-1 sm:gap-2 overflow-x-auto scrollbar-none">
+    <nav className="flex p-4 gap-1 sm:gap-2 overflow-x-auto scrollbar-none">
         {FEED_TABS.map(tab => (
             <Button
                 key={tab.key}

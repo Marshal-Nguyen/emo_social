@@ -123,4 +123,12 @@ export const postService = {
         const response = await api.get(url);
         return response.data;
     },
+
+    // Get posts by alias IDs (current user's posts)
+    getPostsByAliasIds: async (aliasIds, pageIndex = 1, pageSize = 10) => {
+        const url = `https://api.emoease.vn/post-service/v1/posts/by-alias-ids?PageIndex=${pageIndex}&PageSize=${pageSize}`;
+        // API expects POST with body: { aliasIds: [...] }
+        const response = await api.post(url, { aliasIds });
+        return response.data;
+    },
 };

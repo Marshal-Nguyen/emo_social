@@ -14,8 +14,19 @@ const PostHeader = ({
   className = "",
   onBack,
 }) => {
+  const currentAliasId = (() => {
+    try {
+      const u = localStorage.getItem('auth_user');
+      return u ? JSON.parse(u)?.aliasId : null;
+    } catch {
+      return null;
+    }
+  })();
+
+  const isMine = currentAliasId && post.author?.id === currentAliasId;
+
   const author = {
-    username: post.author?.displayName || post.author?.username || "Anonymous",
+    username: (post.author?.displayName || post.author?.username || "Anonymous") + (isMine ? " (tôi)" : ""),
     isOnline: post.author?.isOnline ?? false,
   };
 

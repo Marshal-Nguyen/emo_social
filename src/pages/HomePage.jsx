@@ -14,7 +14,7 @@ const HomePage = () => {
   const [search, setSearch] = useState("");
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null); // Single category selection
-  const [selectedTab, setSelectedTab] = useState("most_recent");
+  const [selectedTab, setSelectedTab] = useState("feed");
   const [anonymousPost, setAnonymousPost] = useState("");
   const [selectedMood, setSelectedMood] = useState(null);
 
@@ -125,9 +125,14 @@ const HomePage = () => {
           transition={{ duration: 0.5 }}
           className={isMobile ? "flex justify-center" : ""}
         >
-          <div className={isMobile ? "w-full max-w-sm sm:max-w-md" : ""}>
-            <CreatePost />
-          </div>
+          {selectedTab !== "mine" && (
+            <div
+              className={`${isMobile ? "w-full max-w-sm sm:max-w-md" : ""} border-2 border-purple-200 rounded-2xl`}
+            >
+              <CreatePost />
+            </div>
+
+          )}
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -141,73 +146,80 @@ const HomePage = () => {
               search={search}
               filter={selectedFilters}
               selectedCategory={selectedCategory}
+              selectedTab={selectedTab}
             />
           </div>
         </motion.div>
       </div>
-      {/* Right section: Fixed width (320px), hidden on mobile, scrollable */}
+      {/* Right section: always reserve width; when tab is "Của tôi" show a blank placeholder */}
       {!isMobile && (
         <div className="w-80 flex flex-col h-full p-4 dark:from-neutral-800 dark:to-neutral-900 overflow-y-auto scrollbar-none">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4 text-center"
-          >
-            <div className="flex items-center gap-2 mb-2 justify-center">
-              <span className="text-2xl">🌟</span>
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                Quote hôm nay
-              </h3>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-300 italic">
-              "{randomQuote}"
-            </p>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4"
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-2xl">🌿</span>
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                Thử một điều nhỏ để cảm thấy tốt hơn
-              </h3>
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-300">
-              <p>✔ {randomActivity}</p>
-            </div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4"
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-2xl">📌</span>
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                Lọc theo chủ đề
-              </h3>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {tagCategoryData.categoryTags.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => toggleFilter(category)}
-                  className={`flex items-center gap-2 p-2 rounded-xl dark:text-white text-sm ${selectedCategory && selectedCategory.id === category.id
-                    ? "bg-purple-100 dark:text-black"
-                    : "bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-neutral-500"
-                    } transition-colors`}
-                >
-                  <span>{getUnicodeEmoji(category.unicodeCodepoint)}</span>
-                  <span>{category.displayName}</span>
-                </button>
-              ))}
-            </div>
-          </motion.div>
+          {selectedTab === "mine" ? (
+            <div className="flex-1 bg-white dark:bg-gray-800 rounded-2xl" />
+          ) : (
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4 text-center"
+              >
+                <div className="flex items-center gap-2 mb-2 justify-center">
+                  <span className="text-2xl">🌟</span>
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    Quote hôm nay
+                  </h3>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-300 italic">
+                  "{randomQuote}"
+                </p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">🌿</span>
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    Thử một điều nhỏ để cảm thấy tốt hơn
+                  </h3>
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">
+                  <p>✔ {randomActivity}</p>
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-2xl">📌</span>
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    Lọc theo chủ đề
+                  </h3>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {tagCategoryData.categoryTags.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => toggleFilter(category)}
+                      className={`flex items-center gap-2 p-2 rounded-xl dark:text-white text-sm ${selectedCategory && selectedCategory.id === category.id
+                        ? "bg-purple-100 dark:text-black"
+                        : "bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-neutral-500"
+                        } transition-colors`}
+                    >
+                      <span>{getUnicodeEmoji(category.unicodeCodepoint)}</span>
+                      <span>{category.displayName}</span>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            </>
+          )}
         </div>
       )}
     </div>
