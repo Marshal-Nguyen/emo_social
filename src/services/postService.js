@@ -59,6 +59,13 @@ export const postService = {
         return response.data;
     },
 
+    // Delete comment by id
+    deleteComment: async (commentId) => {
+        const url = `https://api.emoease.vn/post-service/v1/comments/${commentId}`;
+        const response = await api.delete(url);
+        return response.data;
+    },
+
     // Get comment replies
     getCommentReplies: async (parentCommentId, pageIndex = 1, pageSize = 20) => {
         const url = `https://api.emoease.vn/post-service/v1/comments/${parentCommentId}/replies?PageIndex=${pageIndex}&PageSize=${pageSize}&SortBy=CreatedAt&SortDescending=false`;

@@ -6,7 +6,7 @@ import { Heart } from "lucide-react";
 import CommentForm from "./CommentForm";
 import FormattedComment from "../atoms/FormattedComment";
 import { formatTimeAgo } from "../../utils/helpers";
-import { postsService } from "../../services/apiService";
+import { postService } from "../../services/postService";
 import { useWebSocket } from "../../hooks/useWebSocket";
 import websocketService from "../../services/websocketService";
 
@@ -25,6 +25,14 @@ const PostComments = forwardRef(({
 }, ref) => {
   // Get user info from Redux
   const user = useSelector((state) => state.auth.user);
+  const currentAliasId = (() => {
+    try {
+      const str = localStorage.getItem('auth_user');
+      return str ? JSON.parse(str)?.aliasId : null;
+    } catch {
+      return null;
+    }
+  })();
 
   // Local state management (no Redux needed with WebSocket)
   const [localComments, setLocalComments] = useState(comments);
@@ -34,6 +42,17 @@ const PostComments = forwardRef(({
   const [loadingReplies, setLoadingReplies] = useState({});
   const [commentsLoaded, setCommentsLoaded] = useState(false);
   const [fetchingReplies, setFetchingReplies] = useState(new Set());
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+
+  const removeCommentById = (comments, targetId) => {
+    return comments
+      .filter(c => c.id !== targetId)
+      .map(c => ({
+        ...c,
+        replies: Array.isArray(c.replies) ? removeCommentById(c.replies, targetId) : [],
+      }));
+  };
   const commentEndRef = useRef(null);
 
   // Expose refreshComments function to parent
@@ -171,13 +190,14 @@ const PostComments = forwardRef(({
 
   const loadComments = async () => {
     try {
-      const response = await postsService.getComments(postId, 1, 20);
+      const response = await postService.getComments(postId, 1, 20);
       if (response.comments && response.comments.data) {
         // Map comments to local format
         const mappedComments = response.comments.data.map((comment) => ({
           id: comment.id,
           content: comment.content,
           author: comment.author.displayName,
+          authorAliasId: comment.author.aliasId,
           avatar: comment.author.avatarUrl,
           createdAt: comment.createdAt,
           editedAt: comment.editedAt,
@@ -190,6 +210,7 @@ const PostComments = forwardRef(({
             id: reply.id,
             content: reply.content,
             author: reply.author.displayName,
+            authorAliasId: reply.author.aliasId,
             avatar: reply.author.avatarUrl,
             createdAt: reply.createdAt,
             editedAt: reply.editedAt,
@@ -462,13 +483,14 @@ const PostComments = forwardRef(({
       }
 
       // Gọi API riêng cho replies của comment
-      const responseData = await postsService.getCommentReplies(commentId, pageIndex, 20);
+      const responseData = await postService.getCommentReplies(commentId, pageIndex, 20);
 
       if (responseData.comments && responseData.comments.data) {
         const mappedReplies = responseData.comments.data.map((reply) => ({
           id: reply.id,
           content: reply.content,
           author: reply.author.displayName,
+          authorAliasId: reply.author.aliasId,
           avatar: reply.author.avatarUrl || null,
           createdAt: reply.createdAt,
           reactionCount: reply.reactionCount || 0,
@@ -611,6 +633,7 @@ const PostComments = forwardRef(({
       const isMaxDepth = level >= 5;
 
 
+      const isMine = currentAliasId && comment.authorAliasId === currentAliasId;
       return (
         <motion.div
           key={comment.id}
@@ -629,10 +652,39 @@ const PostComments = forwardRef(({
               <div className="flex items-center space-x-1 sm:space-x-2">
                 <span className="font-semibold text-xs sm:text-sm text-gray-900 dark:text-white">
                   {comment.author || "Unknown"}
+                  {currentAliasId && comment.authorAliasId === currentAliasId ? " (tôi)" : ""}
                 </span>
                 <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
                   {formatTimeAgo(comment.createdAt)}
                 </span>
+                {isMine && (
+                  <div className="relative ml-auto">
+                    <button
+                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 px-2"
+                      title="Tùy chọn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenMenuId(prev => prev === comment.id ? null : comment.id);
+                      }}
+                    >
+                      ⋯
+                    </button>
+                    {openMenuId === comment.id && (
+                      <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10">
+                        <button
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmDeleteId(comment.id);
+                            setOpenMenuId(null);
+                          }}
+                        >
+                          Xóa bình luận
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="mt-1 text-sm sm:text-base text-gray-900 dark:text-gray-200 break-words">
                 <FormattedComment
@@ -764,6 +816,40 @@ const PostComments = forwardRef(({
         </button>
       )}
       <div ref={commentEndRef} />
+      {confirmDeleteId && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          onClick={() => setConfirmDeleteId(null)}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-80 p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Xác nhận xóa</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">Bạn có chắc muốn xóa bình luận này?</p>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                className="px-3 py-1.5 text-sm rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                onClick={() => setConfirmDeleteId(null)}
+              >
+                Hủy
+              </button>
+              <button
+                className="px-3 py-1.5 text-sm rounded-md bg-red-600 text-white hover:bg-red-700"
+                onClick={async () => {
+                  try {
+                    await postService.deleteComment(confirmDeleteId);
+                    setLocalComments(prev => removeCommentById(prev, confirmDeleteId));
+                  } catch { }
+                  setConfirmDeleteId(null);
+                }}
+              >
+                Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 });
