@@ -52,8 +52,23 @@ const HomePage = () => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
+    const handleSelectCategory = (e) => {
+      try {
+        const { categoryId } = e.detail || {};
+        if (!categoryId) return;
+        const allCategories = Array.isArray(tagCategoryData?.categoryTags) ? tagCategoryData.categoryTags : [];
+        const found = allCategories.find((c) => c.id === categoryId) || null;
+        setSelectedCategory(found);
+        setSelectedTab("feed");
+        try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { }
+      } catch { }
+    };
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener("app:selectCategory", handleSelectCategory);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("app:selectCategory", handleSelectCategory);
+    };
   }, []);
 
   const handleAnonymousSubmit = () => {

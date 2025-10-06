@@ -103,16 +103,25 @@ const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
       {categoryTags.length > 0 && (
         <div className="flex items-center space-x-2">
           {categoryTags.map((category) => (
-            <div
+            <button
               key={category.id}
-              className="flex items-center space-x-1 px-2 py-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-full"
+              type="button"
+              className="flex items-center space-x-1 px-2 py-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/40 transition"
+              title={`Lọc theo chủ đề: ${category.displayName}`}
+              onClick={(e) => {
+                try {
+                  window.dispatchEvent(
+                    new CustomEvent("app:selectCategory", { detail: { categoryId: category.id } })
+                  );
+                } catch { }
+              }}
             >
               <Hash className="w-3 h-3 text-blue-600 dark:text-blue-400" />
               <span className="text-xs text-blue-700 dark:text-blue-300 font-medium">
                 {category.displayName}
               </span>
               <span className="text-sm">{getUnicodeEmoji(category.unicodeCodepoint)}</span>
-            </div>
+            </button>
           ))}
         </div>
       )}

@@ -445,8 +445,7 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
               duration: 0.3,
               delay: index * 0.1,
             }}
-            onClick={() => navigate(`/post/${post.id}`)}
-            className="cursor-pointer">
+          >
             <PostCard
               post={post}
               onNavigateToChat={onNavigateToChat}
