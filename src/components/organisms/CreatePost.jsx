@@ -377,6 +377,7 @@ const CreatePost = () => {
     const [loadingTags, setLoadingTags] = useState(false);
     const [categorySearch, setCategorySearch] = useState("");
     const [emotionSearch, setEmotionSearch] = useState("");
+    const [pendingSubmit, setPendingSubmit] = useState(false);
 
     // Fetch tags/emotions từ API
     const fetchTags = async () => {
@@ -415,6 +416,19 @@ const CreatePost = () => {
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
         if (!content.trim() || isPosting) return;
+
+        // Require category and emotion before posting
+        if (!categoryTagId || !emotionId) {
+            setPendingSubmit(true);
+            if (!categoryTagId) {
+                if (!loadingTags) fetchTags();
+                setShowCategoryModal(true);
+            } else if (!emotionId) {
+                if (!loadingTags) fetchTags();
+                setShowEmotionModal(true);
+            }
+            return;
+        }
         setIsPosting(true);
         try {
             const sanitizedContent = sanitizeInput(content) || '';
@@ -468,6 +482,26 @@ const CreatePost = () => {
             setIsPosting(false);
         }
     };
+
+    // When user was prompted to choose and has selected both, auto-submit
+    useEffect(() => {
+        if (pendingSubmit) {
+            if (!categoryTagId) {
+                if (!loadingTags) fetchTags();
+                setShowCategoryModal(true);
+                return;
+            }
+            if (!emotionId) {
+                if (!loadingTags) fetchTags();
+                setShowEmotionModal(true);
+                return;
+            }
+            if (categoryTagId && emotionId && !isPosting && content.trim()) {
+                setPendingSubmit(false);
+                handleSubmit(null);
+            }
+        }
+    }, [pendingSubmit, categoryTagId, emotionId]);
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) handleSubmit(e);

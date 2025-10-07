@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Button from "../atoms/Button";
 import { Heart, MessageCircle, Eye, Hash } from "lucide-react";
 import { postsService } from "../../services/apiService";
-import { getCategoryTagsByIds, getUnicodeEmoji } from "../../utils/tagHelpers";
+import { getCategoryTagsByIds, getUnicodeEmoji, getCategoryColorClasses } from "../../utils/tagHelpers";
 
 const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
   const [liked, setLiked] = useState(post.liked || post.isReactedByCurrentUser || false);
@@ -102,27 +102,30 @@ const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
       {/* Category Tags - Cuối hàng, bên phải */}
       {categoryTags.length > 0 && (
         <div className="flex items-center space-x-2">
-          {categoryTags.map((category) => (
-            <button
-              key={category.id}
-              type="button"
-              className="flex items-center space-x-1 px-2 py-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/40 transition"
-              title={`Lọc theo chủ đề: ${category.displayName}`}
-              onClick={(e) => {
-                try {
-                  window.dispatchEvent(
-                    new CustomEvent("app:selectCategory", { detail: { categoryId: category.id } })
-                  );
-                } catch { }
-              }}
-            >
-              <Hash className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-              <span className="text-xs text-blue-700 dark:text-blue-300 font-medium">
-                {category.displayName}
-              </span>
-              <span className="text-sm">{getUnicodeEmoji(category.unicodeCodepoint)}</span>
-            </button>
-          ))}
+          {categoryTags.map((category) => {
+            const colors = getCategoryColorClasses(category);
+            return (
+              <button
+                key={category.id}
+                type="button"
+                className={`flex items-center space-x-1 px-2 py-1 rounded-full transition ${colors.container}`}
+                title={`Lọc theo chủ đề: ${category.displayName}`}
+                onClick={(e) => {
+                  try {
+                    window.dispatchEvent(
+                      new CustomEvent("app:selectCategory", { detail: { categoryId: category.id } })
+                    );
+                  } catch { }
+                }}
+              >
+                <Hash className={`w-3 h-3 ${colors.icon}`} />
+                <span className={`text-xs font-medium ${colors.text}`}>
+                  {category.displayName}
+                </span>
+                <span className="text-sm">{getUnicodeEmoji(category.unicodeCodepoint)}</span>
+              </button>
+            );
+          })}
         </div>
       )}
 
