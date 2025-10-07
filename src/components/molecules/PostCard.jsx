@@ -40,16 +40,7 @@ const PostCard = ({
 
   const bgColors = [
     "bg-white dark:bg-[#1C1C1E]",
-    "bg-gray-50 dark:bg-gray-900",
-    "bg-blue-50 dark:bg-blue-900/20",
-    "bg-green-50 dark:bg-green-900/20",
-    "bg-purple-50 dark:bg-purple-900/20",
-    "bg-pink-50 dark:bg-pink-900/20",
-    "bg-yellow-50 dark:bg-yellow-900/20",
-    "bg-orange-50 dark:bg-orange-900/20",
-    "bg-teal-50 dark:bg-teal-900/20",
-    "bg-indigo-50 dark:bg-indigo-900/20",
-    "bg-red-50 dark:bg-red-900/20",
+
   ];
 
 
