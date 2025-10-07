@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import DesktopProfile from "../components/organisms/DesktopProfile";
 import MobileProfilePage from "./MobileProfilePage";
+import { useOutletContext } from "react-router-dom";
 
 const ProfilePage = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const { handleNavigateToChat } = useOutletContext();
 
     useEffect(() => {
         const handleResize = () => {
@@ -21,7 +23,7 @@ const ProfilePage = () => {
             transition={{ duration: 0.5 }}
             className="p-8"
         >
-            {isMobile ? <MobileProfilePage /> : <DesktopProfile />}
+            {isMobile ? <MobileProfilePage /> : <DesktopProfile onNavigateToChat={handleNavigateToChat} />}
         </motion.div>
     );
 };

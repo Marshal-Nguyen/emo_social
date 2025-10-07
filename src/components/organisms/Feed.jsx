@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, batch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import PostCard from "../molecules/PostCard";
 import { useNavigate } from "react-router-dom";
@@ -166,13 +166,7 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
         apiPosts = mineResponse.posts?.data || [];
         hasMorePosts = mineResponse.posts?.hasNextPage || false;
         totalPostsCount = mineResponse.posts?.totalCount || 0;
-        dispatch(fetchFeedSuccess({
-          feedItems: [],
-          nextCursor: null,
-          hasMore: hasMorePosts,
-          totalCount: totalPostsCount,
-          reset: false,
-        }));
+        // fallthrough to transform and batch dispatch below
       } else if (selectedCategory) {
         // Load posts by category
         const categoryResponse = await postService.getPostsByCategory(selectedCategory.id, 1, 20);
@@ -180,14 +174,7 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
         hasMorePosts = categoryResponse.posts?.hasNextPage || false;
         totalPostsCount = categoryResponse.posts?.totalCount || 0;
 
-        // Reset loading state for category posts
-        dispatch(fetchFeedSuccess({
-          feedItems: [],
-          nextCursor: null,
-          hasMore: hasMorePosts,
-          totalCount: totalPostsCount,
-          reset: false,
-        }));
+        // fallthrough to transform and batch dispatch below
       } else {
         // Get next batch of feed items using cursor
         const feedResponse = await postService.getFeed(20, nextCursor);
@@ -205,21 +192,53 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
           return;
         }
 
-        // Update feed items in state
-        dispatch(fetchFeedSuccess({
-          feedItems: newFeedItems,
-          nextCursor: feedResponse.nextCursor,
-          hasMore: feedResponse.hasMore,
-          totalCount: feedResponse.totalCount,
-          reset: false,
-        }));
-
         // Get post details for the new batch
         const postIds = newFeedItems.map(item => item.postId);
         const postsResponse = await postService.getPostsByIds(postIds, 1, 20);
         apiPosts = postsResponse.posts?.data || [];
         hasMorePosts = feedResponse.hasMore;
         totalPostsCount = feedResponse.totalCount;
+        // Now batch both feed meta and posts update
+        const transformedPosts = apiPosts.map(post => ({
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          author: {
+            id: post.author.aliasId,
+            username: post.author.displayName,
+            avatar: post.author.avatarUrl,
+            isOnline: false,
+          },
+          createdAt: post.publishedAt,
+          editedAt: post.editedAt,
+          likesCount: post.reactionCount,
+          commentCount: post.commentCount,
+          commentsCount: post.commentCount,
+          liked: post.isReactedByCurrentUser,
+          comments: [],
+          images: post.medias || [],
+          hasMedia: post.hasMedia,
+          viewCount: post.viewCount,
+          visibility: post.visibility,
+          categoryTagIds: post.categoryTagIds || [],
+          emotionTagIds: post.emotionTagIds || [],
+        }));
+        batch(() => {
+          dispatch(fetchFeedSuccess({
+            feedItems: newFeedItems,
+            nextCursor: feedResponse.nextCursor,
+            hasMore: feedResponse.hasMore,
+            totalCount: feedResponse.totalCount,
+            reset: false,
+          }));
+          dispatch(fetchPostsFromFeedSuccess({
+            posts: transformedPosts,
+            reset: false,
+            hasMore: hasMorePosts,
+            totalCount: totalPostsCount,
+          }));
+        });
+        return; // already dispatched in batch
       }
 
       // Transform API data to match our component structure
@@ -248,12 +267,21 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
         emotionTagIds: post.emotionTagIds || [],
       }));
 
-      dispatch(fetchPostsFromFeedSuccess({
-        posts: transformedPosts,
-        reset: false,
-        hasMore: hasMorePosts,
-        totalCount: totalPostsCount,
-      }));
+      batch(() => {
+        dispatch(fetchFeedSuccess({
+          feedItems: [],
+          nextCursor: selectedTab === 'mine' || selectedCategory ? null : nextCursor,
+          hasMore: hasMorePosts,
+          totalCount: totalPostsCount,
+          reset: false,
+        }));
+        dispatch(fetchPostsFromFeedSuccess({
+          posts: transformedPosts,
+          reset: false,
+          hasMore: hasMorePosts,
+          totalCount: totalPostsCount,
+        }));
+      });
     } catch (error) {
       console.error("Error loading more posts:", error);
       dispatch(fetchFeedFailure(error.message));
@@ -279,13 +307,6 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
           apiPosts = mineResponse.posts?.data || [];
           hasMorePosts = mineResponse.posts?.hasNextPage || false;
           totalPostsCount = mineResponse.posts?.totalCount || 0;
-          dispatch(fetchFeedSuccess({
-            feedItems: [],
-            nextCursor: null,
-            hasMore: hasMorePosts,
-            totalCount: totalPostsCount,
-            reset: true,
-          }));
         } else if (selectedCategory) {
           // Load posts by category
           const categoryResponse = await postService.getPostsByCategory(selectedCategory.id, 1, 20);
@@ -293,26 +314,11 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
           hasMorePosts = categoryResponse.posts?.hasNextPage || false;
           totalPostsCount = categoryResponse.posts?.totalCount || 0;
 
-          // Reset loading state for category posts
-          dispatch(fetchFeedSuccess({
-            feedItems: [],
-            nextCursor: null,
-            hasMore: hasMorePosts,
-            totalCount: totalPostsCount,
-            reset: true,
-          }));
+          // keep batching below
         } else {
           // Get initial feed items
           const feedResponse = await postService.getFeed(20);
           const feedItems = feedResponse.items || [];
-
-          dispatch(fetchFeedSuccess({
-            feedItems,
-            nextCursor: feedResponse.nextCursor,
-            hasMore: feedResponse.hasMore,
-            totalCount: feedResponse.totalCount,
-            reset: true,
-          }));
 
           // Get post details for the first batch
           if (feedItems.length > 0) {
@@ -321,6 +327,46 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
             apiPosts = postsResponse.posts?.data || [];
             hasMorePosts = feedResponse.hasMore;
             totalPostsCount = feedResponse.totalCount;
+            const transformedPostsInitial = apiPosts.map(post => ({
+              id: post.id,
+              title: post.title,
+              content: post.content,
+              author: {
+                id: post.author.aliasId,
+                username: post.author.displayName,
+                avatar: post.author.avatarUrl,
+                isOnline: false,
+              },
+              createdAt: post.publishedAt,
+              editedAt: post.editedAt,
+              likesCount: post.reactionCount,
+              commentCount: post.commentCount,
+              commentsCount: post.commentCount,
+              liked: post.isReactedByCurrentUser,
+              comments: [],
+              images: post.medias || [],
+              hasMedia: post.hasMedia,
+              viewCount: post.viewCount,
+              visibility: post.visibility,
+              categoryTagIds: post.categoryTagIds || [],
+              emotionTagIds: post.emotionTagIds || [],
+            }));
+            batch(() => {
+              dispatch(fetchFeedSuccess({
+                feedItems,
+                nextCursor: feedResponse.nextCursor,
+                hasMore: feedResponse.hasMore,
+                totalCount: feedResponse.totalCount,
+                reset: true,
+              }));
+              dispatch(fetchPostsFromFeedSuccess({
+                posts: transformedPostsInitial,
+                reset: true,
+                hasMore: hasMorePosts,
+                totalCount: totalPostsCount,
+              }));
+            });
+            return; // already dispatched
           }
         }
 
@@ -350,12 +396,21 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
           emotionTagIds: post.emotionTagIds || [],
         }));
 
-        dispatch(fetchPostsFromFeedSuccess({
-          posts: transformedPosts,
-          reset: true,
-          hasMore: hasMorePosts,
-          totalCount: totalPostsCount,
-        }));
+        batch(() => {
+          dispatch(fetchFeedSuccess({
+            feedItems: [],
+            nextCursor: selectedTab === 'mine' || selectedCategory ? null : undefined,
+            hasMore: hasMorePosts,
+            totalCount: totalPostsCount,
+            reset: true,
+          }));
+          dispatch(fetchPostsFromFeedSuccess({
+            posts: transformedPosts,
+            reset: true,
+            hasMore: hasMorePosts,
+            totalCount: totalPostsCount,
+          }));
+        });
       } catch (error) {
         console.error("Error loading initial feed:", error);
         dispatch(fetchFeedFailure(error.message));

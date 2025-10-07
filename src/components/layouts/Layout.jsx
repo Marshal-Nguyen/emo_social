@@ -49,18 +49,21 @@ const Layout = () => {
         const path = location.pathname;
         if (path === "/home") {
             setActiveTab("home");
+        } else if (path === "/profile") {
+            setActiveTab("profile");
         } else if (path === "/community-rules") {
             setActiveTab("community-rules");
         }
     }, [location.pathname]);
 
     const handleTabChange = (tab) => {
-        // Allow navigation to home page and community rules
-        if (tab === "home" || tab === "community-rules") {
+        // Allow navigation to supported pages
+        if (tab === "home" || tab === "community-rules" || tab === "profile") {
             setActiveTab(tab);
             navigate(`/${tab}`);
+            return;
         }
-        // For other tabs, do nothing (they are disabled with "soon" status)
+        // For other tabs, do nothing (they may be disabled)
     };
 
     const handleCollapseChange = (isCollapsed) => {

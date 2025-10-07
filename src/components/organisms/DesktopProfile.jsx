@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   User,
@@ -13,64 +13,52 @@ import {
 } from "lucide-react";
 import Button from "../atoms/Button";
 import Avatar from "../atoms/Avatar";
+import { useSelector } from "react-redux";
+import Feed from "./Feed";
 
-const DesktopProfile = () => {
+const DesktopProfile = ({ onNavigateToChat }) => {
   const [activeTab, setActiveTab] = useState("posts");
+  const authUser = useSelector((state) => state.auth.user);
+  const allPosts = useSelector((state) => state.posts.posts);
+  const totalPostsCount = useSelector((state) => state.posts.totalCount);
 
-  const user = {
-    id: 1,
-    name: "Anonymous Soul",
-    username: "@anonymous_soul",
-    bio: "🌟 Living life one emotion at a time ✨\n💭 Sharing thoughts anonymously\n🎭 Real feelings, authentic connections",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    coverImage:
-      "https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=300&q=80",
-    location: "Digital Space",
-    website: "anonymous-feels.com",
-    joinDate: "October 2023",
-    stats: {
-      posts: 127,
-      followers: 892,
-      following: 456,
-      likes: 2134,
-    },
-  };
+  const user = useMemo(() => {
+    const displayName = authUser?.aliasLabel || authUser?.fullName || authUser?.username || "Anonymous";
+    const joinedAt = authUser?.createdAt ? new Date(authUser.createdAt).toLocaleDateString() : "";
+    return {
+      id: authUser?.id,
+      name: displayName,
+      username: authUser?.email ? `@${(authUser.email.split("@")[0] || "user").slice(0, 20)}` : "",
+      bio: authUser?.bio || "",
+      avatar: authUser?.avatarUrl || authUser?.avatar || undefined,
+      coverImage: authUser?.coverImageUrl || undefined,
+      location: authUser?.location || "",
+      website: authUser?.website || "",
+      joinDate: joinedAt,
+      stats: {
+        posts: typeof totalPostsCount === "number" && totalPostsCount > 0
+          ? totalPostsCount
+          : (allPosts || []).filter(p => p?.author?.id === authUser?.id).length,
+        followers: authUser?.followersCount || 0,
+        following: authUser?.followingCount || 0,
+        likes: authUser?.totalLikes || 0,
+      },
+    };
+  }, [authUser, allPosts, totalPostsCount]);
 
-  const posts = [
-    {
-      id: 1,
-      content:
-        "Sometimes the best conversations happen with strangers who understand your soul without knowing your name. 💫 #AnonymousConnections",
-      timestamp: "2 hours ago",
-      likes: 42,
-      comments: 8,
-      shares: 3,
-      mood: "thoughtful",
-    },
-    {
-      id: 2,
-      content:
-        "Today's mood: Coffee in one hand, dreams in the other ☕️✨ What's fueling your Monday motivation?",
-      timestamp: "5 hours ago",
-      likes: 76,
-      comments: 15,
-      shares: 5,
-      mood: "energetic",
-      image:
-        "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&h=300&q=80",
-    },
-    {
-      id: 3,
-      content:
-        "Gentle reminder: Your feelings are valid, even if they don't make sense to others. 💙 #MentalHealth #SelfCare",
-      timestamp: "1 day ago",
-      likes: 158,
-      comments: 23,
-      shares: 12,
-      mood: "caring",
-    },
-  ];
+  const posts = useMemo(() => {
+    const mine = (allPosts || []).filter(p => p?.author?.id === authUser?.id);
+    return mine.map(p => ({
+      id: p.id,
+      content: p.content || p.body || "",
+      timestamp: p.createdAt ? new Date(p.createdAt).toLocaleString() : "",
+      likes: p.reactionCount || p.likesCount || 0,
+      comments: p.commentCount || p.commentsCount || 0,
+      shares: p.shareCount || 0,
+      mood: p.emotionCode || p.mood || undefined,
+      image: p.imageUrl || p.mediaUrl || undefined,
+    }));
+  }, [allPosts, authUser]);
 
   const tabs = [
     { id: "posts", label: "Posts", icon: MessageCircle },
@@ -111,6 +99,7 @@ const DesktopProfile = () => {
             <div className="relative">
               <Avatar
                 src={user.avatar}
+                username={user.name}
                 size="xl"
                 className="border-4 border-white dark:border-gray-800"
               />
@@ -151,14 +140,18 @@ const DesktopProfile = () => {
                 <MapPin className="w-4 h-4" />
                 <span>{user.location}</span>
               </div>
-              <div className="flex items-center space-x-1">
-                <LinkIcon className="w-4 h-4" />
-                <a
-                  href={`https://${user.website}`}
-                  className="text-blue-600 hover:underline">
-                  {user.website}
-                </a>
-              </div>
+              {user.website && (
+                <div className="flex items-center space-x-1">
+                  <LinkIcon className="w-4 h-4" />
+                  <a
+                    href={`https://${user.website}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 hover:underline">
+                    {user.website}
+                  </a>
+                </div>
+              )}
               <div className="flex items-center space-x-1">
                 <Calendar className="w-4 h-4" />
                 <span>Joined {user.joinDate}</span>
@@ -202,8 +195,8 @@ const DesktopProfile = () => {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === tab.id
-                      ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                      : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                    ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                    : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                     }`}>
                   <tab.icon className="w-4 h-4" />
                   <span>{tab.label}</span>
@@ -216,51 +209,7 @@ const DesktopProfile = () => {
           <div>
             {activeTab === "posts" && (
               <div className="space-y-6">
-                {posts.map((post, index) => (
-                  <motion.div
-                    key={post.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-                    <div className="flex items-start space-x-3">
-                      <Avatar src={user.avatar} size="sm" />
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <span className="font-medium text-gray-900 dark:text-white">
-                            {user.name}
-                          </span>
-                          <span className="text-gray-500 dark:text-gray-400 text-sm">
-                            {post.timestamp}
-                          </span>
-                          <span className="text-lg">
-                            {getMoodEmoji(post.mood)}
-                          </span>
-                        </div>
-                        <p className="text-gray-700 dark:text-gray-300 mb-3">
-                          {post.content}
-                        </p>
-                        {post.image && (
-                          <img
-                            src={post.image}
-                            alt="Post content"
-                            className="w-full h-48 object-cover rounded-lg mb-3"
-                          />
-                        )}
-                        <div className="flex items-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
-                          <div className="flex items-center space-x-1">
-                            <Heart className="w-4 h-4" />
-                            <span>{post.likes}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <MessageCircle className="w-4 h-4" />
-                            <span>{post.comments}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+                <Feed onNavigateToChat={onNavigateToChat} selectedTab="mine" />
               </div>
             )}
 
