@@ -182,7 +182,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
 
           {/* Credentials */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-white/70 dark:bg-gray-800/70 rounded-xl border border-purple-200/30 dark:border-purple-700/30">
+            <div className="flex items-center justify-between p-3 bg-white/70 dark:bg-[#1C1C1E]/70 rounded-xl border border-purple-200/30 dark:border-purple-700/30">
               <div className="flex items-center space-x-3">
                 <Mail className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 <div>
@@ -208,7 +208,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
               </motion.button>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-white/70 dark:bg-gray-800/70 rounded-xl border border-purple-200/30 dark:border-purple-700/30">
+            <div className="flex items-center justify-between p-3 bg-white/70 dark:bg-[#1C1C1E]/70 rounded-xl border border-purple-200/30 dark:border-purple-700/30">
               <div className="flex items-center space-x-3">
                 <Lock className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 <div>
@@ -285,7 +285,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
               value={formData.email}
               onChange={handleInputChange}
               error={formErrors.email}
-              className="pl-12 pr-4 py-4 text-base rounded-2xl border-2 border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-all duration-300"
+              className="pl-12 pr-4 py-4 text-base rounded-2xl border-2 border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 bg-white/70 dark:bg-[#1C1C1E]/70 backdrop-blur-sm transition-all duration-300"
               required
             />
           </div>
@@ -302,7 +302,7 @@ const LoginForm = ({ onSwitchToRegister }) => {
               value={formData.password}
               onChange={handleInputChange}
               error={formErrors.password}
-              className="pl-12 pr-12 py-4 text-base rounded-2xl border-2 border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-all duration-300"
+              className="pl-12 pr-12 py-4 text-base rounded-2xl border-2 border-gray-200 dark:border-gray-600 focus:border-purple-500 dark:focus:border-purple-400 bg-white/70 dark:bg-[#1C1C1E]/70 backdrop-blur-sm transition-all duration-300"
               required
             />
             <motion.button

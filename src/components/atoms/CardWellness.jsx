@@ -25,7 +25,7 @@ const Card = memo(
                             className={`w-8 h-8 rounded-full border-2 border-white ${idx === 0 ? "-ml-0" : "-ml-2"}`}
                         />
                     ))}
-                    <div className="w-8 h-8 rounded-full bg-gray-800 text-white text-xs flex items-center justify-center -ml-2">
+                    <div className="w-8 h-8 rounded-full bg-[#1C1C1E] text-white text-xs flex items-center justify-center -ml-2">
                         +{item.more}
                     </div>
                 </div>

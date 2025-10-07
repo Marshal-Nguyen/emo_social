@@ -163,7 +163,7 @@ const DesktopChat = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto h-[600px] bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="max-w-6xl mx-auto h-[600px] bg-white dark:bg-[#1C1C1E] rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
       <div className="flex h-full">
         {/* Conversations List */}
         <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 flex flex-col">
@@ -198,11 +198,10 @@ const DesktopChat = () => {
                 key={conversation.id}
                 whileHover={{ backgroundColor: "rgba(0, 0, 0, 0.02)" }}
                 onClick={() => setSelectedChat(conversation)}
-                className={`p-4 cursor-pointer border-b border-gray-100 dark:border-gray-700 ${
-                  selectedChat?.id === conversation.id
+                className={`p-4 cursor-pointer border-b border-gray-100 dark:border-gray-700 ${selectedChat?.id === conversation.id
                     ? "bg-blue-50 dark:bg-blue-900/20"
                     : ""
-                }`}>
+                  }`}>
                 <div className="flex items-center space-x-3">
                   <div className="relative">
                     <Avatar src={conversation.user.avatar} size="md" />
@@ -282,13 +281,11 @@ const DesktopChat = () => {
                 {selectedChat.messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex ${
-                      msg.isMine ? "justify-end" : "justify-start"
-                    }`}>
-                    <div
-                      className={`max-w-xs lg:max-w-md ${
-                        msg.isMine ? "order-2" : "order-1"
+                    className={`flex ${msg.isMine ? "justify-end" : "justify-start"
                       }`}>
+                    <div
+                      className={`max-w-xs lg:max-w-md ${msg.isMine ? "order-2" : "order-1"
+                        }`}>
                       {!msg.isMine && (
                         <Avatar
                           src={selectedChat.user.avatar}
@@ -297,17 +294,15 @@ const DesktopChat = () => {
                         />
                       )}
                       <div
-                        className={`px-4 py-2 rounded-2xl ${
-                          msg.isMine
+                        className={`px-4 py-2 rounded-2xl ${msg.isMine
                             ? "bg-blue-600 text-white"
                             : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white"
-                        }`}>
+                          }`}>
                         <p className="text-sm">{msg.content}</p>
                       </div>
                       <p
-                        className={`text-xs text-gray-500 dark:text-gray-400 mt-1 ${
-                          msg.isMine ? "text-right" : "text-left"
-                        }`}>
+                        className={`text-xs text-gray-500 dark:text-gray-400 mt-1 ${msg.isMine ? "text-right" : "text-left"
+                          }`}>
                         {msg.timestamp}
                       </p>
                     </div>
@@ -329,7 +324,7 @@ const DesktopChat = () => {
                       onChange={(e) => setMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="Type a message..."
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg resize-none text-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+                      className="w-full px-3 py-2 bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-gray-600 rounded-lg resize-none text-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                       rows="1"
                       style={{ minHeight: "2.5rem", maxHeight: "6rem" }}
                     />

@@ -68,7 +68,7 @@ const Layout = () => {
     };
 
     return (
-        <div className="min-h-screen dark:bg-gray-900 pb-16 md:pb-0 relative overflow-hidden z-10">
+        <div className="min-h-screen dark:bg-black pb-16 md:pb-0 relative overflow-hidden z-10">
             <div className="fixed inset-0 pointer-events-none">
                 <motion.div
                     className="absolute -top-32 -left-32 w-64 h-64 sm:w-96 sm:h-96 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full filter blur-3xl opacity-30"

@@ -115,7 +115,7 @@ const DesktopNotificationsNew = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-[#1C1C1E] rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -174,11 +174,10 @@ const DesktopNotificationsNew = () => {
             filteredNotifications.map((notification) => (
               <motion.div
                 key={notification.id}
-                className={`p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${
-                  !notification.read
+                className={`p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${!notification.read
                     ? "bg-purple-50/50 dark:bg-purple-900/10"
                     : ""
-                }`}
+                  }`}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}>
                 <div className="flex items-start space-x-4">
@@ -189,7 +188,7 @@ const DesktopNotificationsNew = () => {
                       className="w-12 h-12"
                       online={notification.user.isOnline}
                     />
-                    <div className="absolute -bottom-1 -right-1 bg-white dark:bg-gray-800 rounded-full p-1 border-2 border-white dark:border-gray-800">
+                    <div className="absolute -bottom-1 -right-1 bg-white dark:bg-[#1C1C1E] rounded-full p-1 border-2 border-white dark:border-gray-800">
                       {getNotificationIcon(notification.type)}
                     </div>
                   </div>
@@ -217,9 +216,9 @@ const DesktopNotificationsNew = () => {
                             <p className="text-sm text-gray-600 dark:text-gray-300">
                               {notification.postPreview.length > 80
                                 ? `"${notification.postPreview.substring(
-                                    0,
-                                    80
-                                  )}..."`
+                                  0,
+                                  80
+                                )}..."`
                                 : `"${notification.postPreview}"`}
                             </p>
                           </div>

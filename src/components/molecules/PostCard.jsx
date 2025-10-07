@@ -39,7 +39,7 @@ const PostCard = ({
   const postCommentsRef = useRef(null);
 
   const bgColors = [
-    "bg-white dark:bg-gray-800",
+    "bg-white dark:bg-[#1C1C1E]",
     "bg-gray-50 dark:bg-gray-900",
     "bg-blue-50 dark:bg-blue-900/20",
     "bg-green-50 dark:bg-green-900/20",

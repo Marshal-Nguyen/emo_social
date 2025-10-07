@@ -16,7 +16,7 @@ const MobileNavBar = ({
 
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-40 md:hidden pb-safe-area-inset-bottom">
+    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#1C1C1E] border-t border-gray-200 dark:border-gray-700 z-40 md:hidden pb-safe-area-inset-bottom">
       {/* Gạch ngang phân cách */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent"></div>
 

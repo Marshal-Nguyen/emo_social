@@ -69,7 +69,7 @@ function EmojiGiftPage() {
                     </button>
                 </div>
                 {/* Tab Content */}
-                <div className="tab-content bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg rounded-2xl p-6 shadow-xl transition-all duration-300">
+                <div className="tab-content bg-white/60 dark:bg-[#1C1C1E]/60 backdrop-blur-lg rounded-2xl p-6 shadow-xl transition-all duration-300">
                     {activeTab === 'emoji' && (
                         <div className="animate-fadeIn">
                             <EmojiList />

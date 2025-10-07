@@ -166,7 +166,7 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-[#1C1C1E] rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="flex h-[600px]">
           {/* Conversations List */}
           <div className="w-80 border-r border-gray-200 dark:border-gray-700 flex flex-col">
@@ -195,8 +195,8 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
                   whileHover={{ backgroundColor: "rgba(139, 92, 246, 0.05)" }}
                   onClick={() => setSelectedChat(conversation)}
                   className={`p-4 cursor-pointer border-b border-gray-100 dark:border-gray-800 transition-colors ${selectedChat?.id === conversation.id
-                      ? "bg-purple-50 dark:bg-purple-900/20"
-                      : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                    ? "bg-purple-50 dark:bg-purple-900/20"
+                    : "hover:bg-gray-50 dark:hover:bg-[#1C1C1E]"
                     }`}>
                   <div className="flex items-center space-x-3">
                     <div className="relative">
@@ -264,7 +264,7 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
             {selectedChat ? (
               <>
                 {/* Chat Header */}
-                <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1C1C1E]">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       {selectedChat.type === "group" ? (
@@ -319,14 +319,14 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
                           }`}>
                         <div
                           className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${msg.isMine
-                              ? "bg-purple-500 text-white"
-                              : "bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700"
+                            ? "bg-purple-500 text-white"
+                            : "bg-white dark:bg-[#1C1C1E] text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700"
                             }`}>
                           <p className="text-sm">{msg.content}</p>
                           <p
                             className={`text-xs mt-1 ${msg.isMine
-                                ? "text-purple-100"
-                                : "text-gray-500 dark:text-gray-400"
+                              ? "text-purple-100"
+                              : "text-gray-500 dark:text-gray-400"
                               }`}>
                             {msg.timestamp}
                           </p>
@@ -337,7 +337,7 @@ const DesktopChatSimple = ({ selectedConversationId }) => {
                 </div>
 
                 {/* Message Input */}
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1C1C1E]">
                   <div className="flex items-center space-x-3">
                     <div className="flex-1">
                       <input

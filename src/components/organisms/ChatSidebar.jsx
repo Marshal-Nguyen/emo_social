@@ -118,11 +118,10 @@ const ChatSidebar = ({ isOpen, onClose }) => {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => handleConversationClick(conversation)}
-        className={`p-3 rounded-xl cursor-pointer transition-all duration-200 ${
-          isActive
+        className={`p-3 rounded-xl cursor-pointer transition-all duration-200 ${isActive
             ? "bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800"
             : "hover:bg-gray-100 dark:hover:bg-gray-700"
-        }`}>
+          }`}>
         <div className="flex items-center space-x-3">
           <div className="relative">
             <Avatar
@@ -143,11 +142,10 @@ const ChatSidebar = ({ isOpen, onClose }) => {
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
               <p
-                className={`font-medium truncate ${
-                  isActive
+                className={`font-medium truncate ${isActive
                     ? "text-purple-900 dark:text-purple-100"
                     : "text-gray-900 dark:text-white"
-                }`}>
+                  }`}>
                 {conversation.participant.username}
               </p>
               {conversation.lastMessage && (
@@ -159,11 +157,10 @@ const ChatSidebar = ({ isOpen, onClose }) => {
 
             {conversation.lastMessage && (
               <p
-                className={`text-sm truncate mt-1 ${
-                  conversation.unreadCount > 0
+                className={`text-sm truncate mt-1 ${conversation.unreadCount > 0
                     ? "text-gray-900 dark:text-white font-medium"
                     : "text-gray-500 dark:text-gray-400"
-                }`}>
+                  }`}>
                 {conversation.lastMessage.senderId === "current_user"
                   ? "Bạn: "
                   : ""}
@@ -184,11 +181,10 @@ const ChatSidebar = ({ isOpen, onClose }) => {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => handleConversationClick(group)}
-        className={`p-3 rounded-xl cursor-pointer transition-all duration-200 ${
-          isActive
+        className={`p-3 rounded-xl cursor-pointer transition-all duration-200 ${isActive
             ? "bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800"
             : "hover:bg-gray-100 dark:hover:bg-gray-700"
-        }`}>
+          }`}>
         <div className="flex items-center space-x-3">
           <div className="relative">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
@@ -209,11 +205,10 @@ const ChatSidebar = ({ isOpen, onClose }) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <p
-                  className={`font-medium truncate ${
-                    isActive
+                  className={`font-medium truncate ${isActive
                       ? "text-purple-900 dark:text-purple-100"
                       : "text-gray-900 dark:text-white"
-                  }`}>
+                    }`}>
                   {group.name}
                 </p>
                 <Badge
@@ -232,11 +227,10 @@ const ChatSidebar = ({ isOpen, onClose }) => {
 
             {group.lastMessage ? (
               <p
-                className={`text-sm truncate mt-1 ${
-                  group.unreadCount > 0
+                className={`text-sm truncate mt-1 ${group.unreadCount > 0
                     ? "text-gray-900 dark:text-white font-medium"
                     : "text-gray-500 dark:text-gray-400"
-                }`}>
+                  }`}>
                 {group.lastMessage.senderName}: {group.lastMessage.content}
               </p>
             ) : (
@@ -269,7 +263,7 @@ const ChatSidebar = ({ isOpen, onClose }) => {
             animate={{ x: 0 }}
             exit={{ x: -320 }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed left-0 top-0 h-full w-80 sm:w-96 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 z-50 flex flex-col">
+            className="fixed left-0 top-0 h-full w-80 sm:w-96 bg-white dark:bg-[#1C1C1E] border-r border-gray-200 dark:border-gray-700 z-50 flex flex-col">
             {/* Header */}
             <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -302,11 +296,10 @@ const ChatSidebar = ({ isOpen, onClose }) => {
             <div className="flex border-b border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => setActiveTab("dms")}
-                className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "dms"
+                className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${activeTab === "dms"
                     ? "border-purple-500 text-purple-600 dark:text-purple-400"
                     : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                }`}>
+                  }`}>
                 <div className="flex items-center justify-center space-x-2">
                   <MessageCircle className="w-4 h-4" />
                   <span>Tin nhắn</span>
@@ -320,11 +313,10 @@ const ChatSidebar = ({ isOpen, onClose }) => {
 
               <button
                 onClick={() => setActiveTab("groups")}
-                className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "groups"
+                className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${activeTab === "groups"
                     ? "border-purple-500 text-purple-600 dark:text-purple-400"
                     : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                }`}>
+                  }`}>
                 <div className="flex items-center justify-center space-x-2">
                   <Users className="w-4 h-4" />
                   <span>Nhóm</span>

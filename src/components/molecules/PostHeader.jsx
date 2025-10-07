@@ -138,7 +138,7 @@ const PostHeader = ({
           </span>
           {canDeletePost && showDelete && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setShowDelete(false)}>
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-80 p-5" onClick={(e) => e.stopPropagation()}>
+              <div className="bg-white dark:bg-[#1C1C1E] rounded-xl shadow-xl w-80 p-5" onClick={(e) => e.stopPropagation()}>
                 <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Xác nhận xóa bài viết</h4>
                 <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">Bạn có chắc muốn xóa bài viết này?</p>
                 <div className="flex justify-end gap-2 mt-4">

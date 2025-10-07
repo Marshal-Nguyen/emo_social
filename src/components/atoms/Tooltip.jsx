@@ -41,7 +41,7 @@ const Tooltip = ({ children, content, position = "top" }) => {
       {children}
       {isVisible && (
         <div
-          className={`absolute ${getPositionClasses()} z-50 px-2 py-1 text-xs font-medium text-white bg-gray-800 rounded shadow-lg whitespace-nowrap`}>
+          className={`absolute ${getPositionClasses()} z-50 px-2 py-1 text-xs font-medium text-white bg-[#1C1C1E] rounded shadow-lg whitespace-nowrap`}>
           {content}
           <div className={`absolute ${getArrowClasses()} w-0 h-0`}></div>
         </div>

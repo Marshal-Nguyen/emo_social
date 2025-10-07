@@ -25,7 +25,7 @@ const EmojiList = () => {
                 {data.map((pkg) => (
                     <div
                         key={pkg.id}
-                        className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6"
+                        className="bg-white dark:bg-[#1C1C1E] shadow rounded-lg p-4 sm:p-6"
                     >
                         <h2 className="text-xl sm:text-2xl font-semibold text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2 mb-4">
                             {pkg.name}

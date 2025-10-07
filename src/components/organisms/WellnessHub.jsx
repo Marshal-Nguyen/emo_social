@@ -24,7 +24,7 @@ const WellnessHub = () => {
                 {data.map((category) => (
                     <div
                         key={category.id}
-                        className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6"
+                        className="bg-white dark:bg-[#1C1C1E] shadow rounded-lg p-4 sm:p-6"
                     >
                         <h2 className="text-xl sm:text-2xl font-semibold text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2 mb-4">
                             {category.name}
@@ -77,7 +77,7 @@ const WellnessHub = () => {
 
             {selectedModule && createPortal(
                 <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-60">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-2xl w-full p-6 relative animate-fadeIn">
+                    <div className="bg-white dark:bg-[#1C1C1E] rounded-lg shadow-lg max-w-2xl w-full p-6 relative animate-fadeIn">
                         {/* Nút đóng */}
                         <button
                             className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 text-2xl font-bold"

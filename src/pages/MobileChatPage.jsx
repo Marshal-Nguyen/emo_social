@@ -165,7 +165,7 @@ const MobileChatPage = ({ onBack, selectedConversationId }) => {
     return (
       <div className="flex flex-col h-full bg-white dark:bg-gray-900">
         {/* Chat Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1C1C1E]">
           <div className="flex items-center space-x-3">
             <Button
               variant="ghost"
@@ -234,7 +234,7 @@ const MobileChatPage = ({ onBack, selectedConversationId }) => {
         </div>
 
         {/* Message Input - Fixed at bottom like navigation bar */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 z-50 safe-area-pb">
+        <div className="fixed bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1C1C1E] z-50 safe-area-pb">
           <div className="flex items-center space-x-3 max-w-full">
             <input
               type="text"
@@ -261,7 +261,7 @@ const MobileChatPage = ({ onBack, selectedConversationId }) => {
       exit={{ x: 300, opacity: 0 }}
       className="flex flex-col h-full bg-white dark:bg-gray-900">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1C1C1E]">
         <div className="flex items-center justify-between mb-4">
           <Button variant="ghost" size="sm" onClick={onBack} className="p-2">
             <ArrowLeft className="w-5 h-5" />
@@ -291,11 +291,10 @@ const MobileChatPage = ({ onBack, selectedConversationId }) => {
           <div key={conversation.id} className="relative overflow-hidden">
             {/* Swipe Actions Background */}
             <div
-              className={`absolute right-0 top-0 bottom-0 flex items-center transition-all duration-300 ${
-                swipedConversationId === conversation.id
+              className={`absolute right-0 top-0 bottom-0 flex items-center transition-all duration-300 ${swipedConversationId === conversation.id
                   ? "translate-x-0"
                   : "translate-x-full"
-              }`}>
+                }`}>
               <Button
                 variant="secondary"
                 size="sm"
@@ -336,7 +335,7 @@ const MobileChatPage = ({ onBack, selectedConversationId }) => {
                   setActiveConversation(conversation);
                 }
               }}
-              className="flex items-center p-4 border-b border-gray-100 dark:border-gray-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 bg-white dark:bg-gray-900 relative z-10">
+              className="flex items-center p-4 border-b border-gray-100 dark:border-gray-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-[#1C1C1E]/50 bg-white dark:bg-gray-900 relative z-10">
               <div className="relative">
                 <Avatar
                   username={
@@ -363,11 +362,10 @@ const MobileChatPage = ({ onBack, selectedConversationId }) => {
               <div className="flex-1 min-w-0 ml-3">
                 <div className="flex items-center justify-between">
                   <p
-                    className={`font-medium truncate ${
-                      conversation.unreadCount > 0
+                    className={`font-medium truncate ${conversation.unreadCount > 0
                         ? "text-gray-900 dark:text-white"
                         : "text-gray-700 dark:text-gray-300"
-                    }`}>
+                      }`}>
                     {conversation.type === "dm"
                       ? conversation.participant.username
                       : conversation.name}
@@ -379,11 +377,10 @@ const MobileChatPage = ({ onBack, selectedConversationId }) => {
                   </span>
                 </div>
                 <p
-                  className={`text-sm truncate ${
-                    conversation.unreadCount > 0
+                  className={`text-sm truncate ${conversation.unreadCount > 0
                       ? "text-gray-600 dark:text-gray-400 font-medium"
                       : "text-gray-500 dark:text-gray-500"
-                  }`}>
+                    }`}>
                   {conversation.lastMessage ? (
                     <>
                       {conversation.type === "group" &&

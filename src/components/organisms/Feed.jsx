@@ -419,7 +419,7 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
   if (!loading && (posts.length === 0 || totalCount === 0)) {
     return (
       <div className="text-center py-12">
-        <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-8 max-w-md mx-auto">
+        <div className="bg-gray-50 dark:bg-[#1C1C1E] border border-gray-200 dark:border-gray-700 rounded-2xl p-8 max-w-md mx-auto">
           <div className="text-6xl mb-4">📝</div>
           <p className="text-gray-600 dark:text-gray-400 font-medium text-lg">
             {selectedCategory ? `Chưa có bài viết nào trong chủ đề "${selectedCategory.displayName}"` : "Chưa có bài viết nào"}
@@ -481,7 +481,7 @@ const Feed = ({ onNavigateToChat, selectedCategory, selectedTab }) => {
         <div className="text-center py-8">
           <div className="inline-flex items-center space-x-2 text-gray-500 dark:text-gray-400">
             <div className="w-8 h-px bg-gray-300 dark:bg-gray-600"></div>
-            <span className="text-sm">Bạn đã xem hết tất cả bài viết rồi, bạn muốn chia sẻ cảm xúc và câu chuyện của bạn với cộng đồng?</span>
+            <span className="text-sm">Bạn đã xem hết bài feed. Hãy chia sẻ câu chuyện của mình nhé!</span>
             <div className="w-8 h-px bg-gray-300 dark:bg-gray-600"></div>
           </div>
         </div>

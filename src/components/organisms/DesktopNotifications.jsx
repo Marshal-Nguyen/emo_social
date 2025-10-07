@@ -85,7 +85,7 @@ const DesktopNotifications = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-[#1C1C1E] rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         {/* Header */}
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
@@ -117,9 +117,8 @@ const DesktopNotifications = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200 ${
-                !notification.read ? "bg-blue-50 dark:bg-blue-900/20" : ""
-              }`}>
+              className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200 ${!notification.read ? "bg-blue-50 dark:bg-blue-900/20" : ""
+                }`}>
               <div className="flex items-start space-x-3">
                 <Avatar src={notification.avatar} size="sm" />
 

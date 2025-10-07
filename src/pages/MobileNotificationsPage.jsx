@@ -117,7 +117,7 @@ const MobileNotificationsPage = ({ onBack }) => {
       exit={{ x: 300, opacity: 0 }}
       className="flex flex-col h-full bg-white dark:bg-gray-900">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1C1C1E]">
         <div className="flex items-center justify-between mb-4">
           <Button variant="ghost" size="sm" onClick={onBack} className="p-2">
             <ArrowLeft className="w-5 h-5" />
@@ -166,16 +166,15 @@ const MobileNotificationsPage = ({ onBack }) => {
             <motion.div
               key={notification.id}
               whileTap={{ scale: 0.98 }}
-              className={`flex items-start p-4 border-b border-gray-100 dark:border-gray-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
-                !notification.read ? "bg-purple-50 dark:bg-purple-900/10" : ""
-              }`}>
+              className={`flex items-start p-4 border-b border-gray-100 dark:border-gray-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-[#1C1C1E]/50 ${!notification.read ? "bg-purple-50 dark:bg-purple-900/10" : ""
+                }`}>
               <div className="relative mr-3">
                 <Avatar
                   username={notification.user.username}
                   size="md"
                   online={notification.user.isOnline}
                 />
-                <div className="absolute -bottom-1 -right-1 bg-white dark:bg-gray-800 rounded-full p-1">
+                <div className="absolute -bottom-1 -right-1 bg-white dark:bg-[#1C1C1E] rounded-full p-1">
                   {getNotificationIcon(notification.type)}
                 </div>
               </div>

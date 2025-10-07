@@ -61,8 +61,8 @@ const CreatePostForm = ({
             <Avatar username={user?.aliasLabel || user?.displayName || user?.username || "Bạn"} size="md" className="w-10 h-10 flex-shrink-0" />
             <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2">
-                    <span className="text-gray-800 dark:text-gray-200 text-sm font-medium">Công khai</span>
-                    <div className="w-1 h-1 bg-gray-400 dark:bg-gray-500 rounded-full"></div>
+                    <span className="text-gray-800 dark:text-gray-200 text-sm font-medium">ẨN danh</span>
+                    <div className="w-1 h-1 bg-green-400 dark:bg-green-500 rounded-full"></div>
                     <span className="text-gray-500 dark:text-gray-400 text-xs">Chia sẻ với cộng đồng</span>
                 </div>
             </div>
@@ -184,7 +184,7 @@ const CreatePostForm = ({
                                 placeholder="Tìm danh mục..."
                                 value={categorySearch}
                                 onChange={(e) => setCategorySearch(e.target.value)}
-                                className="w-full pl-10 pr-10 py-3 text-sm border border-purple-200 dark:border-purple-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                                className="w-full pl-10 pr-10 py-3 text-sm border border-purple-200 dark:border-purple-600 rounded-xl bg-white dark:bg-[#1C1C1E] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                             />
                             {categorySearch && (
                                 <button
@@ -263,7 +263,7 @@ const CreatePostForm = ({
                                 placeholder="Tìm cảm xúc..."
                                 value={emotionSearch}
                                 onChange={(e) => setEmotionSearch(e.target.value)}
-                                className="w-full pl-10 pr-10 py-3 text-sm border border-purple-200 dark:border-purple-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                                className="w-full pl-10 pr-10 py-3 text-sm border border-purple-200 dark:border-purple-600 rounded-xl bg-white dark:bg-[#1C1C1E] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                             />
                             {emotionSearch && (
                                 <button
@@ -482,7 +482,7 @@ const CreatePost = () => {
         <CreatePostErrorBoundary>
             <div
                 onClick={handleContainerClick}
-                className="bg-white dark:bg-gray-800 border border-purple-200 dark:border-purple-600 
+                className="bg-white dark:bg-[#1C1C1E] border border-purple-200 dark:border-purple-600 
              rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer"
             >
                 <div className="flex items-start p-4 space-x-3">
@@ -537,7 +537,7 @@ const CreatePost = () => {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="fixed inset-0 z-[9999] bg-black bg-opacity-50 flex items-center justify-center p-4"
                 >
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg max-h-[80vh] overflow-hidden shadow-2xl">
+                    <div className="bg-white dark:bg-[#1C1C1E] rounded-2xl w-full max-w-lg max-h-[80vh] overflow-hidden shadow-2xl">
                         <div className="flex items-center justify-between p-4 border-b border-purple-200 dark:border-purple-600">
                             <h2 className="text-gray-800 dark:text-gray-200 text-lg font-semibold">Tạo bài viết</h2>
                             <button

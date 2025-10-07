@@ -12,7 +12,7 @@ const GiftList = () => {
                 {data.map((item) => (
                     <div
                         key={item.id}
-                        className="relative bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out"
+                        className="relative bg-white dark:bg-[#1C1C1E] shadow-md rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out"
                     >
                         {/* Hình ảnh */}
                         <div className="relative w-full h-40 bg-gray-100 dark:bg-gray-700">

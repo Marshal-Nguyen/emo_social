@@ -158,7 +158,7 @@ const CommunityRulesPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-center mb-6"
                     >
-                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-4">
+                        <div className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-lg p-6 mb-4">
                             <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl mb-4">
                                 <Shield className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                             </div>
@@ -179,7 +179,7 @@ const CommunityRulesPage = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4"
+                                className="bg-white dark:bg-[#1C1C1E] rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4"
                             >
                                 <div className="flex items-start space-x-3">
                                     <div className="text-2xl">{rule.icon}</div>
@@ -243,7 +243,7 @@ const CommunityRulesPage = () => {
                         transition={{ delay: 0.8 }}
                         className="text-center mt-6"
                     >
-                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+                        <div className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-lg p-6">
                             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">Cảm ơn bạn đã đọc và tuân thủ quy tắc!</h3>
                             <p className="text-sm text-gray-600 dark:text-gray-300">
                                 Cùng nhau xây dựng một cộng đồng EmoEase tích cực và hỗ trợ lẫn nhau.
@@ -267,7 +267,7 @@ const CommunityRulesPage = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                            className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Modal Header */}

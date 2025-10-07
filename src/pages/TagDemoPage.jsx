@@ -17,7 +17,7 @@ const TagDemoPage = () => {
                     <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
                         Cách hoạt động:
                     </h2>
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                    <div className="bg-white dark:bg-[#1C1C1E] p-4 rounded-lg shadow-md">
                         <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                             <li>• <strong>Emotion Tags:</strong> Hiển thị bên cạnh tên tác giả với format "đang cảm thấy 😊 Happy"</li>
                             <li>• <strong>Category Tags:</strong> Hiển thị bên trái của PostActions với format "#CategoryName 🏷️"</li>

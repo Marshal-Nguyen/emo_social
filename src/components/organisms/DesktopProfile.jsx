@@ -92,7 +92,7 @@ const DesktopProfile = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-[#1C1C1E] rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         {/* Cover Image */}
         <div className="h-48 bg-gradient-to-br from-purple-400 via-pink-500 to-orange-400 relative">
           <div className="absolute inset-0 bg-black/20"></div>
@@ -117,7 +117,7 @@ const DesktopProfile = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-white dark:bg-[#1C1C1E] border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
                 <Edit2 className="w-3 h-3" />
               </Button>
             </div>
@@ -201,11 +201,10 @@ const DesktopProfile = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
-                    activeTab === tab.id
+                  className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === tab.id
                       ? "border-blue-500 text-blue-600 dark:text-blue-400"
                       : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                  }`}>
+                    }`}>
                   <tab.icon className="w-4 h-4" />
                   <span>{tab.label}</span>
                 </button>

@@ -62,7 +62,7 @@ const MobileSettingsPage = ({ onBack }) => {
     return (
       <motion.div
         whileTap={{ scale: 0.98 }}
-        className="flex items-center p-4 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50"
+        className="flex items-center p-4 bg-white dark:bg-[#1C1C1E] border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50"
         onClick={action}>
         <div className="flex items-center justify-center w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full mr-3">
           <Icon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -80,13 +80,11 @@ const MobileSettingsPage = ({ onBack }) => {
         <div className="flex items-center">
           {actionType === "toggle" && (
             <div
-              className={`w-12 h-6 rounded-full p-1 transition-colors ${
-                value ? "bg-purple-500" : "bg-gray-300 dark:bg-gray-600"
-              }`}>
+              className={`w-12 h-6 rounded-full p-1 transition-colors ${value ? "bg-purple-500" : "bg-gray-300 dark:bg-gray-600"
+                }`}>
               <div
-                className={`w-4 h-4 bg-white rounded-full transition-transform ${
-                  value ? "translate-x-6" : "translate-x-0"
-                }`}></div>
+                className={`w-4 h-4 bg-white rounded-full transition-transform ${value ? "translate-x-6" : "translate-x-0"
+                  }`}></div>
             </div>
           )}
           {actionType === "navigate" && (
@@ -107,7 +105,7 @@ const MobileSettingsPage = ({ onBack }) => {
       <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-4 mb-2">
         {title}
       </h2>
-      <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
+      <div className="bg-white dark:bg-[#1C1C1E] rounded-lg overflow-hidden">
         {children}
       </div>
     </div>
@@ -120,7 +118,7 @@ const MobileSettingsPage = ({ onBack }) => {
       exit={{ x: 300, opacity: 0 }}
       className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4">
+      <div className="bg-white dark:bg-[#1C1C1E] border-b border-gray-200 dark:border-gray-700 p-4">
         <div className="flex items-center justify-between">
           <Button variant="ghost" size="sm" onClick={onBack} className="p-2">
             <ArrowLeft className="w-5 h-5" />
@@ -169,7 +167,7 @@ const MobileSettingsPage = ({ onBack }) => {
             value={isSafeMode}
             action={() => dispatch(toggleSafeMode())}
           />
-          <div className="flex items-center p-4 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+          <div className="flex items-center p-4 bg-white dark:bg-[#1C1C1E] border-b border-gray-100 dark:border-gray-700">
             <div className="flex items-center justify-center w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full mr-3">
               <Languages className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             </div>

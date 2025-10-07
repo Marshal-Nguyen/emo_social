@@ -66,7 +66,7 @@ const Sidebar = ({ activeTab, onTabChange, unreadMessages, unreadNotifications, 
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="h-screen fixed left-0 top-0 z-20 "
         >
-            <div className="h-full backdrop-blur-xl dark:bg-gray-900 flex flex-col">
+            <div className="h-full backdrop-blur-xl dark:bg-black flex flex-col">
                 <div className="p-2 flex-shrink-0 relative">
                     {isCollapsed ? (
                         <motion.div

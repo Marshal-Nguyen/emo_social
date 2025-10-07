@@ -26,7 +26,7 @@ const CategoriList = () => {
                 {data.map((category) => (
                     <div
                         key={category.id}
-                        className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6"
+                        className="bg-white dark:bg-[#1C1C1E] shadow rounded-lg p-4 sm:p-6"
                     >
                         <div className="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors">
                             <span className="text-xl sm:text-2xl">

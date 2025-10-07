@@ -170,14 +170,14 @@ const HomePage = () => {
       {!isMobile && (
         <div className="w-80 flex flex-col h-full p-4 dark:from-neutral-800 dark:to-neutral-900 overflow-y-auto scrollbar-none">
           {selectedTab === "mine" ? (
-            <div className="flex-1 bg-white dark:bg-gray-800 rounded-2xl" />
+            <div className="flex-1 bg-white dark:bg-[#1C1C1E] rounded-2xl" />
           ) : (
             <>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4 text-center"
+                className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-lg p-4 mb-4 text-center"
               >
                 <div className="flex items-center gap-2 mb-2 justify-center">
                   <span className="text-2xl">🌟</span>
@@ -193,7 +193,7 @@ const HomePage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4"
+                className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-lg p-4 mb-4"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-2xl">🌿</span>
@@ -209,7 +209,7 @@ const HomePage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 mb-4"
+                className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-lg p-4 mb-4"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-2xl">📌</span>
@@ -223,8 +223,8 @@ const HomePage = () => {
                       key={category.id}
                       onClick={() => toggleFilter(category)}
                       className={`flex items-center gap-2 p-2 rounded-xl dark:text-white text-sm ${selectedCategory && selectedCategory.id === category.id
-                        ? "bg-purple-100 dark:text-black"
-                        : "bg-gray-50 dark:bg-gray-600 hover:bg-gray-100 dark:hover:bg-neutral-500"
+                        ? "bg-purple-100 dark:bg-purple-500 dark:text-black"
+                        : "bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-500"
                         } transition-colors`}
                     >
                       <span>{getUnicodeEmoji(category.unicodeCodepoint)}</span>

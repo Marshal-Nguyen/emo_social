@@ -19,7 +19,7 @@ const TagDisplayDemo = () => {
     const emotionTags = getEmotionTagsByIds(mockPost.emotionTagIds);
 
     return (
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md max-w-md">
+        <div className="p-4 bg-white dark:bg-[#1C1C1E] rounded-lg shadow-md max-w-md">
             <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
                 Tag Display Demo
             </h3>

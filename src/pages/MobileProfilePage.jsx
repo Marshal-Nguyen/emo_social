@@ -105,7 +105,7 @@ const MobileProfilePage = ({ onBack }) => {
         <motion.div
           key={post.id}
           whileTap={{ scale: 0.98 }}
-          className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+          className="bg-white dark:bg-[#1C1C1E] rounded-xl p-4 border border-gray-200 dark:border-gray-700">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center space-x-2">
               {showAuthor && (
@@ -185,7 +185,7 @@ const MobileProfilePage = ({ onBack }) => {
       </div>
 
       {/* Activity Info */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-[#1C1C1E] rounded-xl p-4 border border-gray-200 dark:border-gray-700">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
           Hoạt động
         </h3>
@@ -218,7 +218,7 @@ const MobileProfilePage = ({ onBack }) => {
       exit={{ x: 300, opacity: 0 }}
       className="flex flex-col h-full bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-[#1C1C1E] border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between p-4">
           <Button variant="ghost" size="sm" onClick={onBack} className="p-2">
             <ArrowLeft className="w-5 h-5" />
@@ -284,11 +284,10 @@ const MobileProfilePage = ({ onBack }) => {
               variant="ghost"
               size="sm"
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-3 rounded-none ${
-                activeTab === tab.id
-                  ? "bg-white dark:bg-gray-800 border-b-2 border-purple-500 text-purple-600 dark:text-purple-400"
+              className={`flex-1 py-3 rounded-none ${activeTab === tab.id
+                  ? "bg-white dark:bg-[#1C1C1E] border-b-2 border-purple-500 text-purple-600 dark:text-purple-400"
                   : "text-gray-600 dark:text-gray-400"
-              }`}>
+                }`}>
               {tab.label}
               {tab.count && (
                 <span className="ml-1 text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">

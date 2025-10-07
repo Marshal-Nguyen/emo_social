@@ -9,7 +9,7 @@ const AvtBlooket = () => {
                 {blooksData.blooks.map((blook, index) => (
                     <div
                         key={index}
-                        className=" rounded-lg shadow-lg p-4 flex flex-col items-center transform transition duration-300 hover:scale-105 dark:bg-gray-800 dark:shadow-gray-600"
+                        className=" rounded-lg shadow-lg p-4 flex flex-col items-center transform transition duration-300 hover:scale-105 dark:bg-[#1C1C1E] dark:shadow-gray-600"
                     >
                         <img
                             src={blook.url}

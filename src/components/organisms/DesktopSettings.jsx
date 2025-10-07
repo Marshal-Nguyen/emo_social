@@ -151,9 +151,8 @@ const DesktopSettings = () => {
         <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-3">
             <Shield
-              className={`w-5 h-5 ${
-                user?.safeMode ? "text-green-500" : "text-red-500"
-              }`}
+              className={`w-5 h-5 ${user?.safeMode ? "text-green-500" : "text-red-500"
+                }`}
             />
             <div>
               <div className="font-medium text-gray-900 dark:text-white">
@@ -549,7 +548,7 @@ const DesktopSettings = () => {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-[#1C1C1E] rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div className="flex">
           {/* Sidebar */}
           <div className="w-64 bg-gray-50 dark:bg-gray-700/50 border-r border-gray-200 dark:border-gray-700">
@@ -567,11 +566,10 @@ const DesktopSettings = () => {
                 <button
                   key={section.id}
                   onClick={() => setActiveSection(section.id)}
-                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                    activeSection === section.id
+                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${activeSection === section.id
                       ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
                       : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600/50"
-                  }`}>
+                    }`}>
                   <section.icon className="w-5 h-5" />
                   <span>{section.label}</span>
                 </button>

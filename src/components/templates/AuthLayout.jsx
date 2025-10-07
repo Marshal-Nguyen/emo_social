@@ -45,7 +45,7 @@ const AuthLayout = ({
         )}
 
         {/* Main Content */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8">
+        <div className="bg-white dark:bg-[#1C1C1E] rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8">
           {children}
         </div>
       </motion.div>
