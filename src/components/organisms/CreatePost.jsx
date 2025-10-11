@@ -617,12 +617,13 @@
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Send, Smile, Hash, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Send, Smile, Hash, X, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import Button from "../atoms/Button";
 import Avatar from "../atoms/Avatar";
 import { addPost } from "../../store/postsSlice";
 import { generateAnonymousName, sanitizeInput } from "../../utils/helpers";
 import { motion, AnimatePresence } from "framer-motion";
+import categoryTagsData from "../../data/tagCategory.json";
 import { v4 as uuidv4 } from "uuid";
 import { postService } from "../../services/postService";
 import { tagService } from "../../services/apiService";
@@ -811,7 +812,7 @@ const CreatePostForm = ({
                                 className={`text-sm font-medium ${categoryTagId ? "text-purple-800 dark:text-purple-200" : "text-gray-800 dark:text-gray-200"
                                     }`}
                             >
-                                {selectedCategory ? selectedCategory.displayName : "Danh mục"}
+                                {selectedCategory ? (selectedCategory.displayNameVi || selectedCategory.displayName) : "Danh mục"}
                             </div>
                             <div
                                 className={`text-xs ${categoryTagId ? "text-purple-600 dark:text-purple-300" : "text-gray-500 dark:text-gray-400"
@@ -939,7 +940,7 @@ const CreatePostForm = ({
                                 {categoryTags
                                     ?.filter(
                                         (tag) =>
-                                            !categorySearch || tag.displayName.toLowerCase().includes(categorySearch.toLowerCase())
+                                            !categorySearch || (tag.displayNameVi || tag.displayName).toLowerCase().includes(categorySearch.toLowerCase())
                                     )
                                     .map((tag) => {
                                         if (!tag || !tag.id || !tag.displayName) return null;
@@ -965,7 +966,7 @@ const CreatePostForm = ({
                                                 >
                                                     {getUnicodeEmoji(tag.unicodeCodepoint)}
                                                 </motion.span>
-                                                <span className="text-center leading-tight text-xs">{tag.displayName}</span>
+                                                <span className="text-center leading-tight text-xs">{tag.displayNameVi || tag.displayName}</span>
                                             </motion.button>
                                         );
                                     })}
@@ -1150,16 +1151,26 @@ const CreatePost = () => {
     const [pendingSubmit, setPendingSubmit] = useState(false);
     const [currentEmotionCategoryIndex, setCurrentEmotionCategoryIndex] = useState(0); // Theo dõi nhóm cảm xúc hiện tại
 
-    // Fetch category tags từ API
+    // Fetch category tags từ API và merge với JSON local
     const fetchTags = async () => {
         console.log("🔄 Fetching category tags...");
         setLoadingTags(true);
         try {
             const categoryData = await tagService.getCategoryTags();
             console.log("📦 Category API Response:", categoryData);
-            const categories = Array.isArray(categoryData?.categoryTags) ? categoryData.categoryTags : [];
-            console.log("✅ Setting category tags:", { categories: categories.length });
-            setCategoryTags(categories);
+            const apiCategories = Array.isArray(categoryData?.categoryTags) ? categoryData.categoryTags : [];
+
+            // Merge API data với local JSON để có displayNameVi
+            const mergedCategories = apiCategories.map(apiCategory => {
+                const localCategory = categoryTagsData.categoryTags.find(local => local.id === apiCategory.id);
+                return {
+                    ...apiCategory,
+                    displayNameVi: localCategory?.displayNameVi || apiCategory.displayName
+                };
+            });
+
+            console.log("✅ Setting merged category tags:", { categories: mergedCategories.length });
+            setCategoryTags(mergedCategories);
         } catch (error) {
             console.error("❌ Failed to fetch category tags:", error);
             setCategoryTags([]);

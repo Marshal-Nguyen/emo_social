@@ -56,9 +56,43 @@ const HomePage = () => {
       try {
         const { categoryId } = e.detail || {};
         if (!categoryId) return;
+
+        // Mapping ID mới từ API với ID cũ trong JSON (theo thứ tự)
+        const API_ID_MAPPING = {
+          "772eec7e-55f7-4729-b6d1-c99d9d21fe2b": 0, // relationships
+          "f2ad307c-d771-4c09-98f3-13691c51d6da": 1, // family
+          "8bc81ddd-66e6-4dfc-bfc4-7fd87ca10b5c": 2, // habits
+          "7f6569b0-b1fe-4c0b-b8bc-fed8aabb10d4": 3, // friends
+          "3ab22d69-183d-4f21-b866-c81b7433f6d1": 4, // hopes
+          "69a318c3-6a0c-41a2-941b-56b8e4d65e31": 5, // bullying
+          "de70373a-5070-4556-afa5-611689b52d8a": 6, // health
+          "0cc7adc5-b40b-433c-8513-642b5289eff0": 7, // work
+          "e7b0476a-714a-4d41-892c-e83d8f819263": 8, // music
+          "7bfc4693-ec77-4e05-9d21-79d7ae000e69": 9, // helpful tips
+          "294bff61-5f42-48de-b514-96988e25fe84": 10, // parenting
+          "dbe2fe15-bc5e-4a7d-ac87-23692aa1fc80": 11, // education
+          "79e84978-886f-47ef-a724-ee5d990cb4dd": 12, // religion
+          "b7b48afe-4300-43a4-8748-530a8b493565": 13, // lgbtq
+          "e8dcb402-e04f-4a84-882f-883b6c05bdc1": 14, // pregnancy
+          "357a2878-c0a6-4f65-be7d-8bc23cf391af": 15, // positive
+          "a12a2d6d-5984-4858-a055-aec62c6e3550": 16, // wellbeing
+          "e88d107a-86b1-495c-869c-d1e2d1c28831": 17, // my story
+        };
+
         const allCategories = Array.isArray(tagCategoryData?.categoryTags) ? tagCategoryData.categoryTags : [];
-        const found = allCategories.find((c) => c.id === categoryId) || null;
-        setSelectedCategory(found);
+
+        // Thử tìm trực tiếp trước
+        let found = allCategories.find((c) => c.id === categoryId);
+
+        // Nếu không tìm thấy, thử mapping với ID mới
+        if (!found) {
+          const mappedIndex = API_ID_MAPPING[categoryId];
+          if (mappedIndex !== undefined && allCategories[mappedIndex]) {
+            found = allCategories[mappedIndex];
+          }
+        }
+
+        setSelectedCategory(found || null);
         setSelectedTab("feed");
         try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { }
       } catch { }
@@ -78,9 +112,59 @@ const HomePage = () => {
     }
   };
 
+  // Helper function để so sánh category (xử lý ID khác nhau)
+  const isSameCategory = (cat1, cat2) => {
+    if (!cat1 || !cat2) return false;
+
+    // So sánh trực tiếp ID trước
+    if (cat1.id === cat2.id) return true;
+
+    // Mapping ID mới từ API với ID cũ trong JSON
+    const API_ID_MAPPING = {
+      "772eec7e-55f7-4729-b6d1-c99d9d21fe2b": 0, // relationships
+      "f2ad307c-d771-4c09-98f3-13691c51d6da": 1, // family
+      "8bc81ddd-66e6-4dfc-bfc4-7fd87ca10b5c": 2, // habits
+      "7f6569b0-b1fe-4c0b-b8bc-fed8aabb10d4": 3, // friends
+      "3ab22d69-183d-4f21-b866-c81b7433f6d1": 4, // hopes
+      "69a318c3-6a0c-41a2-941b-56b8e4d65e31": 5, // bullying
+      "de70373a-5070-4556-afa5-611689b52d8a": 6, // health
+      "0cc7adc5-b40b-433c-8513-642b5289eff0": 7, // work
+      "e7b0476a-714a-4d41-892c-e83d8f819263": 8, // music
+      "7bfc4693-ec77-4e05-9d21-79d7ae000e69": 9, // helpful tips
+      "294bff61-5f42-48de-b514-96988e25fe84": 10, // parenting
+      "dbe2fe15-bc5e-4a7d-ac87-23692aa1fc80": 11, // education
+      "79e84978-886f-47ef-a724-ee5d990cb4dd": 12, // religion
+      "b7b48afe-4300-43a4-8748-530a8b493565": 13, // lgbtq
+      "e8dcb402-e04f-4a84-882f-883b6c05bdc1": 14, // pregnancy
+      "357a2878-c0a6-4f65-be7d-8bc23cf391af": 15, // positive
+      "a12a2d6d-5984-4858-a055-aec62c6e3550": 16, // wellbeing
+      "e88d107a-86b1-495c-869c-d1e2d1c28831": 17, // my story
+    };
+
+    // Kiểm tra xem có phải cùng một category không dựa trên mapping
+    const allCategories = Array.isArray(tagCategoryData?.categoryTags) ? tagCategoryData.categoryTags : [];
+    const cat1Index = allCategories.findIndex(c => c.id === cat1.id);
+    const cat2Index = allCategories.findIndex(c => c.id === cat2.id);
+
+    // Nếu cả hai đều có trong JSON và cùng index
+    if (cat1Index !== -1 && cat2Index !== -1 && cat1Index === cat2Index) return true;
+
+    // Kiểm tra mapping với API ID
+    const cat1MappedIndex = API_ID_MAPPING[cat1.id];
+    const cat2MappedIndex = API_ID_MAPPING[cat2.id];
+
+    if (cat1MappedIndex !== undefined && cat2MappedIndex !== undefined && cat1MappedIndex === cat2MappedIndex) return true;
+
+    // Kiểm tra nếu một là API ID và một là JSON ID
+    if (cat1MappedIndex !== undefined && cat2Index !== -1 && cat1MappedIndex === cat2Index) return true;
+    if (cat2MappedIndex !== undefined && cat1Index !== -1 && cat2MappedIndex === cat1Index) return true;
+
+    return false;
+  };
+
   const toggleFilter = (category) => {
     // Single category selection - toggle on/off
-    if (selectedCategory && selectedCategory.id === category.id) {
+    if (selectedCategory && isSameCategory(selectedCategory, category)) {
       setSelectedCategory(null); // Deselect if same category clicked
     } else {
       setSelectedCategory(category); // Select new category
@@ -222,13 +306,13 @@ const HomePage = () => {
                     <button
                       key={category.id}
                       onClick={() => toggleFilter(category)}
-                      className={`flex items-center gap-2 p-2 rounded-xl dark:text-white text-sm ${selectedCategory && selectedCategory.id === category.id
+                      className={`flex items-center gap-2 p-2 rounded-xl dark:text-white text-sm ${selectedCategory && isSameCategory(selectedCategory, category)
                         ? "bg-purple-100 dark:bg-purple-500 dark:text-black"
                         : "bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-500"
                         } transition-colors`}
                     >
                       <span>{getUnicodeEmoji(category.unicodeCodepoint)}</span>
-                      <span>{category.displayName}</span>
+                      <span>{category.displayNameVi || category.displayName}</span>
                     </button>
                   ))}
                 </div>

@@ -100,7 +100,7 @@ const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
       </div>
 
       {/* Category Tags - Cuối hàng, bên phải */}
-      {categoryTags.length > 0 && (
+      {categoryTags.length > 0 ? (
         <div className="flex items-center space-x-2">
           {categoryTags.map((category) => {
             const colors = getCategoryColorClasses(category);
@@ -108,26 +108,39 @@ const PostActions = ({ post, onComment, isLiking = false, className = "" }) => {
               <button
                 key={category.id}
                 type="button"
-                className={`flex items-center space-x-1 px-2 py-1 rounded-full transition ${colors.container}`}
-                title={`Lọc theo chủ đề: ${category.displayName}`}
+                className={`flex items-center space-x-1 px-2 py-1 rounded-full transition cursor-pointer hover:scale-105 ${colors.container}`}
+                title={`Lọc theo chủ đề: ${category.displayNameVi || category.displayName}`}
                 onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   try {
                     window.dispatchEvent(
                       new CustomEvent("app:selectCategory", { detail: { categoryId: category.id } })
                     );
-                  } catch { }
+                  } catch (error) {
+                    console.error("❌ Error dispatching event:", error);
+                  }
                 }}
               >
                 <Hash className={`w-3 h-3 ${colors.icon}`} />
                 <span className={`text-xs font-medium ${colors.text}`}>
-                  {category.displayName}
+                  {category.displayNameVi || category.displayName || "Unknown"}
                 </span>
-                <span className="text-sm">{getUnicodeEmoji(category.unicodeCodepoint)}</span>
+                <span className="text-sm">{getUnicodeEmoji(category.unicodeCodepoint) || "🏷️"}</span>
               </button>
             );
           })}
         </div>
-      )}
+      ) : categoryTagIds.length > 0 ? (
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700">
+            <Hash className="w-3 h-3 text-gray-600 dark:text-gray-400" />
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+              Loading...
+            </span>
+          </div>
+        </div>
+      ) : null}
 
       {error && (
         <div className="text-red-500 text-xs sm:text-sm mt-2">

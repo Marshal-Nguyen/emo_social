@@ -23,6 +23,28 @@ export const getUnicodeEmoji = (unicodeCodepoint) => {
     }
 };
 
+// Mapping ID mới từ API với ID cũ trong JSON (theo thứ tự)
+const API_ID_MAPPING = {
+    "772eec7e-55f7-4729-b6d1-c99d9d21fe2b": 0, // relationships
+    "f2ad307c-d771-4c09-98f3-13691c51d6da": 1, // family
+    "8bc81ddd-66e6-4dfc-bfc4-7fd87ca10b5c": 2, // habits
+    "7f6569b0-b1fe-4c0b-b8bc-fed8aabb10d4": 3, // friends
+    "3ab22d69-183d-4f21-b866-c81b7433f6d1": 4, // hopes
+    "69a318c3-6a0c-41a2-941b-56b8e4d65e31": 5, // bullying
+    "de70373a-5070-4556-afa5-611689b52d8a": 6, // health
+    "0cc7adc5-b40b-433c-8513-642b5289eff0": 7, // work
+    "e7b0476a-714a-4d41-892c-e83d8f819263": 8, // music
+    "7bfc4693-ec77-4e05-9d21-79d7ae000e69": 9, // helpful tips
+    "294bff61-5f42-48de-b514-96988e25fe84": 10, // parenting
+    "dbe2fe15-bc5e-4a7d-ac87-23692aa1fc80": 11, // education
+    "79e84978-886f-47ef-a724-ee5d990cb4dd": 12, // religion
+    "b7b48afe-4300-43a4-8748-530a8b493565": 13, // lgbtq
+    "e8dcb402-e04f-4a84-882f-883b6c05bdc1": 14, // pregnancy
+    "357a2878-c0a6-4f65-be7d-8bc23cf391af": 15, // positive
+    "a12a2d6d-5984-4858-a055-aec62c6e3550": 16, // wellbeing
+    "e88d107a-86b1-495c-869c-d1e2d1c28831": 17, // my story
+};
+
 // Lấy thông tin category tag từ ID (chỉ dùng JSON data)
 export const getCategoryTagById = async (categoryTagId) => {
     if (!categoryTagId) return null;
@@ -33,6 +55,15 @@ export const getCategoryTagById = async (categoryTagId) => {
         return jsonResult;
     }
 
+    // Thử mapping với ID mới từ API
+    const mappedIndex = API_ID_MAPPING[categoryTagId];
+    if (mappedIndex !== undefined && categoryTagsData.categoryTags[mappedIndex]) {
+        const mappedCategory = categoryTagsData.categoryTags[mappedIndex];
+        return {
+            ...mappedCategory,
+            id: categoryTagId // Giữ ID mới từ API
+        };
+    }
     // Fallback: tạo object với ID nếu không tìm thấy
     return {
         id: categoryTagId,

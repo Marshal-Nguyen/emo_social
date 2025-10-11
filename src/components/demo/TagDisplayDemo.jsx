@@ -73,7 +73,7 @@ const TagDisplayDemo = () => {
                                 className="flex items-center space-x-1 px-2 py-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-full"
                             >
                                 <span className="text-xs text-blue-700 dark:text-blue-300 font-medium">
-                                    #{category.displayName}
+                                    #{category.displayNameVi || category.displayName}
                                 </span>
                                 <span className="text-sm">{getUnicodeEmoji(category.unicodeCodepoint)}</span>
                             </div>
