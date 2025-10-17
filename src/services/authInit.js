@@ -1,6 +1,7 @@
 // Service để khởi tạo authentication state từ localStorage
 import { store } from '../store';
 import { loginSuccess, logout } from '../store/authSlice';
+import { aliasPreferencesService } from './apiService';
 
 // Decode JWT token
 const decodeJwt = (token) => {
@@ -92,6 +93,9 @@ export const initializeAuth = () => {
             token: token
         }));
 
+        // Prefetch alias preferences to localStorage (non-blocking)
+        try { aliasPreferencesService.getPreferences().catch(() => { }); } catch { }
+
 
         return true;
     } catch (error) {
@@ -105,9 +109,7 @@ export const initializeAuth = () => {
 // Clear authentication data
 export const clearAuth = () => {
     try {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        localStorage.removeItem("auth_user");
+        localStorage.clear();
         store.dispatch(logout());
     } catch (error) {
         console.error("Error clearing auth:", error);
@@ -117,9 +119,7 @@ export const clearAuth = () => {
 // Clear corrupted auth data
 export const clearCorruptedAuth = () => {
     try {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        localStorage.removeItem("auth_user");
+        localStorage.clear();
         store.dispatch(logout());
     } catch (error) {
         console.error("Error clearing corrupted auth:", error);

@@ -46,6 +46,8 @@ const authSlice = createSlice({
       state.isFirstMount = true; // Reset isFirstMount khi đăng xuất
       state.aliasStatus = null;
       state.isCheckingAlias = false;
+      // Xóa sạch toàn bộ localStorage khi logout
+      localStorage.clear();
     },
     clearError: (state) => {
       state.error = null;

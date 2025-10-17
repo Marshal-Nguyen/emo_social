@@ -624,3 +624,48 @@ export const aliasService = {
         return data;
     },
 };
+
+// Alias Preferences Service
+export const aliasPreferencesService = {
+    baseUrl: "https://api.emoease.vn/alias-service",
+
+    getPreferences: async () => {
+        const token = getCurrentToken();
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+        const response = await fetch(`${aliasPreferencesService.baseUrl}/v1/me/alias/preferences`, {
+            method: 'GET',
+            headers: createApiHeaders()
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        try { localStorage.setItem('alias_preferences', JSON.stringify(data.preferences || {})); } catch { }
+        return data.preferences;
+    },
+
+    updatePreferences: async (preferences) => {
+        const token = getCurrentToken();
+        if (!token) {
+            throw new Error("No authentication token found. Please login first.");
+        }
+        const response = await fetch(`${aliasPreferencesService.baseUrl}/v1/me/alias/preferences`, {
+            method: 'PUT',
+            headers: createApiHeaders(),
+            body: JSON.stringify(preferences)
+        });
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to update preferences: ${errorText}`);
+        }
+        const data = await response.json();
+        try { localStorage.setItem('alias_preferences', JSON.stringify(data.preferences || preferences || {})); } catch { }
+        return data.preferences || preferences;
+    },
+
+    clearLocal: () => {
+        try { localStorage.removeItem('alias_preferences'); } catch { }
+    }
+};

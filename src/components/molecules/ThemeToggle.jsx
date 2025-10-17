@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Sun, Moon, Shield, ShieldOff } from "lucide-react";
 import { toggleTheme, toggleSafeMode } from "../../store/themeSlice";
+import { aliasPreferencesService } from "../../services/apiService";
 import Button from "../atoms/Button";
 import Badge from "../atoms/Badge";
 
@@ -9,8 +10,18 @@ const ThemeToggle = ({ showSafeToggle = true }) => {
   const dispatch = useDispatch();
   const { isDarkMode, isSafeMode } = useSelector((state) => state.theme);
 
-  const handleThemeToggle = () => {
+  const handleThemeToggle = async () => {
     dispatch(toggleTheme());
+    try {
+      const raw = localStorage.getItem('alias_preferences');
+      const prefs = raw ? JSON.parse(raw) : {};
+      const next = {
+        theme: !isDarkMode ? 'Dark' : 'Light',
+        language: prefs?.language || 'VI',
+        notificationsEnabled: typeof prefs?.notificationsEnabled === 'boolean' ? prefs.notificationsEnabled : true,
+      };
+      await aliasPreferencesService.updatePreferences(next);
+    } catch { }
   };
 
   const handleSafeModeToggle = () => {
