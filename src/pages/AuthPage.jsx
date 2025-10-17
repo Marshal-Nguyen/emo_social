@@ -413,7 +413,9 @@ const LogIn = () => {
           avatarUrl: aliasInfo.avatarUrl,
           followers: aliasInfo.followers,
           followings: aliasInfo.followings,
-          posts: aliasInfo.posts,
+          reactionGivenCount: aliasInfo.reactionGivenCount,
+          reactionReceivedCount: aliasInfo.reactionReceivedCount,
+          postsCount: aliasInfo.postsCount,
           aliasCreatedAt: aliasInfo.createdAt
         };
 

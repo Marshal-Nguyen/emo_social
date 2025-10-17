@@ -24,11 +24,11 @@ const DesktopProfile = ({ onNavigateToChat }) => {
 
   const user = useMemo(() => {
     const displayName = authUser?.aliasLabel || authUser?.fullName || authUser?.username || "Anonymous";
-    const joinedAt = authUser?.createdAt ? new Date(authUser.createdAt).toLocaleDateString() : "";
+    const joinedAt = authUser?.aliasCreatedAt ? new Date(authUser.aliasCreatedAt).toLocaleDateString() : "";
     return {
       id: authUser?.id,
       name: displayName,
-      username: authUser?.email ? `@${(authUser.email.split("@")[0] || "user").slice(0, 20)}` : "",
+      username: authUser?.aliasLabel ? `@${authUser.aliasLabel}` : (authUser?.email ? `@${(authUser.email.split("@")[0] || "user").slice(0, 20)}` : ""),
       bio: authUser?.bio || "",
       avatar: authUser?.avatarUrl || authUser?.avatar || undefined,
       coverImage: authUser?.coverImageUrl || undefined,
@@ -36,12 +36,11 @@ const DesktopProfile = ({ onNavigateToChat }) => {
       website: authUser?.website || "",
       joinDate: joinedAt,
       stats: {
-        posts: typeof totalPostsCount === "number" && totalPostsCount > 0
-          ? totalPostsCount
-          : (allPosts || []).filter(p => p?.author?.id === authUser?.id).length,
-        followers: authUser?.followersCount || 0,
-        following: authUser?.followingCount || 0,
-        likes: authUser?.totalLikes || 0,
+        posts: authUser?.postsCount || 0,
+        followers: authUser?.followers || 0,
+        following: authUser?.followings || 0,
+        likes: authUser?.reactionReceivedCount || 0,
+        likesGiven: authUser?.reactionGivenCount || 0,
       },
     };
   }, [authUser, allPosts, totalPostsCount]);
@@ -183,7 +182,13 @@ const DesktopProfile = ({ onNavigateToChat }) => {
               <div className="font-bold text-gray-900 dark:text-white">
                 {user.stats.likes}
               </div>
-              <div className="text-gray-500 dark:text-gray-400">Likes</div>
+              <div className="text-gray-500 dark:text-gray-400">Likes Received</div>
+            </div>
+            <div className="text-center">
+              <div className="font-bold text-gray-900 dark:text-white">
+                {user.stats.likesGiven}
+              </div>
+              <div className="text-gray-500 dark:text-gray-400">Likes Given</div>
             </div>
           </div>
 

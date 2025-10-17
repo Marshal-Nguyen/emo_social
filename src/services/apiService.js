@@ -572,7 +572,8 @@ export const aliasService = {
         }
 
         const data = await response.json();
-        return data;
+        // console.log('Current Alias Data:', data.profile);
+        return data.profile;
     },
 
     // Lấy danh sách alias gợi ý
