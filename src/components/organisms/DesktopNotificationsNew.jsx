@@ -1,12 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { Bell, Heart, MessageCircle, Users, Check, Filter } from "lucide-react";
 import Button from "../atoms/Button";
 import Avatar from "../atoms/Avatar";
+import { NotificationService } from "../../services/notificationService";
+import { useSelector as useReduxSelector } from "react-redux";
 
 const DesktopNotificationsNew = () => {
-  const notifications = useSelector((state) => state.chat?.notifications || []);
+  // Avoid returning a new reference from selector to prevent unnecessary rerenders
+  const notificationsFromStore = useSelector((state) => state.chat?.notifications);
+  const authUser = useReduxSelector((s) => s.auth.user);
+  const aliasId = useMemo(() => authUser?.aliasId || authUser?.id, [authUser]);
+  const [realtimeService, setRealtimeService] = useState(null);
+  const [realtimeNotifications, setRealtimeNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (!aliasId) return;
+    const service = new NotificationService(aliasId);
+    setRealtimeService(service);
+
+    let mounted = true;
+    (async () => {
+      try {
+        await service.connect((n) => {
+          if (!mounted) return;
+          setRealtimeNotifications((prev) => [n, ...prev]);
+          setUnreadCount((c) => {
+            const next = (c || 0) + 1;
+            try {
+              window.dispatchEvent(new CustomEvent('app:noti:unread', { detail: { count: next } }));
+              window.dispatchEvent(new CustomEvent('app:toast', { detail: { type: 'info', title: n.actorDisplayName || 'Thông báo', message: n.snippet || '', duration: 2000 } }));
+            } catch { }
+            return next;
+          });
+        });
+      } catch { }
+
+      // Always load REST data regardless of realtime success
+      try {
+        const list = await service.getNotifications(20);
+        if (mounted) {
+          setRealtimeNotifications(list.items || []);
+        }
+        const count = await service.getUnreadCount();
+        if (mounted) {
+          setUnreadCount(count || 0);
+          try { window.dispatchEvent(new CustomEvent('app:noti:unread', { detail: { count: count || 0 } })); } catch { }
+        }
+      } catch { }
+    })();
+
+    return () => {
+      mounted = false;
+      service.disconnect();
+    };
+  }, [aliasId]);
   const [filter, setFilter] = useState("all");
 
   // Filter options for notifications
@@ -62,8 +112,12 @@ const DesktopNotificationsNew = () => {
     ];
 
     // If we have notifications from Redux, use them, otherwise use mock data
-    const notificationsToFilter =
-      notifications.length > 0 ? notifications : mockNotifications;
+    const base = realtimeNotifications.length > 0
+      ? realtimeNotifications
+      : (Array.isArray(notificationsFromStore) && notificationsFromStore.length > 0
+        ? notificationsFromStore
+        : mockNotifications);
+    const notificationsToFilter = base;
 
     switch (filter) {
       case "like":
@@ -111,7 +165,6 @@ const DesktopNotificationsNew = () => {
   };
 
   const filteredNotifications = getFilteredNotifications();
-  const unreadCount = filteredNotifications.filter((n) => !n.read).length;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -131,7 +184,15 @@ const DesktopNotificationsNew = () => {
             </div>
             <div className="flex items-center space-x-2">
               {unreadCount > 0 && (
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" onClick={async () => {
+                  try {
+                    if (realtimeService) {
+                      await realtimeService.markAllAsRead();
+                      setUnreadCount(0);
+                      setRealtimeNotifications((prev) => prev.map(n => ({ ...n, read: true })));
+                    }
+                  } catch { }
+                }}>
                   <Check className="w-4 h-4 mr-2" />
                   Đánh dấu tất cả đã đọc
                 </Button>
@@ -171,78 +232,82 @@ const DesktopNotificationsNew = () => {
               </p>
             </div>
           ) : (
-            filteredNotifications.map((notification) => (
-              <motion.div
-                key={notification.id}
-                className={`p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${!notification.read
+            filteredNotifications.map((notification) => {
+              const displayName = notification.actorDisplayName || notification.user?.username || "Người dùng";
+              const isRead = typeof notification.isRead === 'boolean' ? notification.isRead : !!notification.read;
+              const createdAt = notification.createdAt || notification.timestamp;
+              const snippet = notification.snippet || notification.content || "";
+              return (
+                <motion.div
+                  key={notification.id}
+                  className={`p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${!isRead
                     ? "bg-purple-50/50 dark:bg-purple-900/10"
                     : ""
-                  }`}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}>
-                <div className="flex items-start space-x-4">
-                  <div className="relative flex-shrink-0">
-                    <Avatar
-                      username={notification.user.username}
-                      size="md"
-                      className="w-12 h-12"
-                      online={notification.user.isOnline}
-                    />
-                    <div className="absolute -bottom-1 -right-1 bg-white dark:bg-[#1C1C1E] rounded-full p-1 border-2 border-white dark:border-gray-800">
-                      {getNotificationIcon(notification.type)}
-                    </div>
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 pr-2">
-                        <p className="text-sm text-gray-900 dark:text-white">
-                          <span className="font-semibold">
-                            {notification.user.username}
-                          </span>
-                          <span className="ml-1">{notification.content}</span>
-                        </p>
-
-                        {notification.comment && (
-                          <div className="mt-2 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                            <p className="text-sm text-gray-600 dark:text-gray-300">
-                              "{notification.comment}"
-                            </p>
-                          </div>
-                        )}
-
-                        {notification.postPreview && (
-                          <div className="mt-2 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                            <p className="text-sm text-gray-600 dark:text-gray-300">
-                              {notification.postPreview.length > 80
-                                ? `"${notification.postPreview.substring(
-                                  0,
-                                  80
-                                )}..."`
-                                : `"${notification.postPreview}"`}
-                            </p>
-                          </div>
-                        )}
-
-                        {notification.groupName && (
-                          <p className="text-sm text-purple-600 dark:text-purple-400 mt-2 font-medium">
-                            {notification.groupName}
-                          </p>
-                        )}
-
-                        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                          {formatTime(notification.timestamp)}
-                        </p>
+                    }`}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}>
+                  <div className="flex items-start space-x-4">
+                    <div className="relative flex-shrink-0">
+                      <Avatar
+                        username={displayName}
+                        size="md"
+                        className="w-12 h-12"
+                        online={notification.user?.isOnline || false}
+                      />
+                      <div className="absolute -bottom-1 -right-1 bg-white dark:bg-[#1C1C1E] rounded-full p-1 border-2 border-white dark:border-gray-800">
+                        {getNotificationIcon(notification.type)}
                       </div>
+                    </div>
 
-                      {!notification.read && (
-                        <div className="ml-2 w-2 h-2 bg-purple-500 rounded-full mt-1 flex-shrink-0"></div>
-                      )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1 pr-2">
+                          <p className="text-sm text-gray-900 dark:text-white">
+                            <span className="font-semibold">{displayName}</span>
+                            <span className="ml-1">{snippet}</span>
+                          </p>
+
+                          {notification.comment && (
+                            <div className="mt-2 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                              <p className="text-sm text-gray-600 dark:text-gray-300">
+                                "{notification.comment}"
+                              </p>
+                            </div>
+                          )}
+
+                          {notification.postPreview && (
+                            <div className="mt-2 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                              <p className="text-sm text-gray-600 dark:text-gray-300">
+                                {notification.postPreview.length > 80
+                                  ? `"${notification.postPreview.substring(
+                                    0,
+                                    80
+                                  )}..."`
+                                  : `"${notification.postPreview}"`}
+                              </p>
+                            </div>
+                          )}
+
+                          {notification.groupName && (
+                            <p className="text-sm text-purple-600 dark:text-purple-400 mt-2 font-medium">
+                              {notification.groupName}
+                            </p>
+                          )}
+
+                          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            {formatTime(createdAt)}
+                          </p>
+                        </div>
+
+                        {!isRead && (
+                          <div className="ml-2 w-2 h-2 bg-purple-500 rounded-full mt-1 flex-shrink-0"></div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))
+                </motion.div>
+              )
+            })
           )}
         </div>
       </div>

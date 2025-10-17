@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
@@ -7,12 +7,15 @@ import Sidebar from "../organisms/Sidebar";
 import MobileNavBar from "../molecules/MobileNavBar";
 import ChatSidebar from "../organisms/ChatSidebar";
 import { setFirstMountFalse } from "../../store/authSlice";
+import { NotificationService } from "../../services/notificationService";
 
 const Layout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
     const { isFirstMount } = useSelector((state) => state.auth);
+    const authUser = useSelector((state) => state.auth.user);
+    const aliasId = useMemo(() => authUser?.aliasId || authUser?.id, [authUser]);
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [activeTab, setActiveTab] = useState("home");
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -28,15 +31,59 @@ const Layout = () => {
         (total, conv) => total + conv.unreadCount,
         0
     );
-    const unreadNotificationsCount = 2;
+    const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
 
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 768);
         };
+        const handleUnread = (e) => {
+            const { count } = e.detail || {};
+            if (typeof count === 'number') setUnreadNotificationsCount(count);
+        };
         window.addEventListener("resize", handleResize);
+        window.addEventListener('app:noti:unread', handleUnread);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    // Global notifications listener (realtime + REST) mounted for whole app
+    useEffect(() => {
+        if (!aliasId) return;
+        const service = new NotificationService(aliasId);
+        let mounted = true;
+
+        (async () => {
+            // Try realtime; if fails, we still poll REST below
+            try {
+                await service.connect((n) => {
+                    if (!mounted) return;
+                    // Toast 2s
+                    try {
+                        window.dispatchEvent(new CustomEvent('app:toast', { detail: { type: 'info', title: n.actorDisplayName || 'Thông báo', message: n.snippet || '', duration: 2000 } }));
+                    } catch { }
+                    // Increase badge by 1
+                    setUnreadNotificationsCount((c) => {
+                        const next = (c || 0) + 1;
+                        try { window.dispatchEvent(new CustomEvent('app:noti:unread', { detail: { count: next } })); } catch { }
+                        return next;
+                    });
+                });
+            } catch { }
+
+            // Initial unread count via REST
+            try {
+                const count = await service.getUnreadCount();
+                if (mounted) {
+                    setUnreadNotificationsCount(count || 0);
+                }
+            } catch { }
+        })();
+
+        return () => {
+            mounted = false;
+            try { service.disconnect(); } catch { }
+        };
+    }, [aliasId]);
 
     useEffect(() => {
         if (isFirstMount) {
@@ -49,6 +96,8 @@ const Layout = () => {
         const path = location.pathname;
         if (path === "/home") {
             setActiveTab("home");
+        } else if (path === "/notifications") {
+            setActiveTab("notifications");
         } else if (path === "/profile") {
             setActiveTab("profile");
         } else if (path === "/community-rules") {
@@ -58,7 +107,7 @@ const Layout = () => {
 
     const handleTabChange = (tab) => {
         // Allow navigation to supported pages
-        if (tab === "home" || tab === "community-rules" || tab === "profile") {
+        if (tab === "home" || tab === "community-rules" || tab === "profile" || tab === "notifications") {
             setActiveTab(tab);
             navigate(`/${tab}`);
             return;
