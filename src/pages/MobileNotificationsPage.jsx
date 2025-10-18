@@ -1,99 +1,137 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Heart, MessageCircle, Users, Bell } from "lucide-react";
+import { ArrowLeft, Heart, MessageCircle, Users, Bell, Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Button from "../components/atoms/Button";
 import Avatar from "../components/atoms/Avatar";
+import { NotificationService } from "../services/notificationService";
 
 const MobileNotificationsPage = ({ onBack }) => {
-  const [filter, setFilter] = useState("all"); // all, likes, comments, mentions, groups
+  const navigate = useNavigate();
+  const authUser = useSelector((state) => state.auth.user);
+  const aliasId = useMemo(() => authUser?.aliasId || authUser?.id, [authUser]);
+  const [filter, setFilter] = useState("all");
+  const [realtimeService, setRealtimeService] = useState(null);
+  const [realtimeNotifications, setRealtimeNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  // Mock notifications data
-  const notifications = [
-    {
-      id: 1,
-      type: "like",
-      user: { username: "MysteriousFox42", isOnline: true },
-      content: "đã thích bài viết của bạn",
-      postPreview: "Hôm nay cảm thấy khá buồn vì công việc...",
-      timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-      read: false,
-    },
-    {
-      id: 2,
-      type: "comment",
-      user: { username: "GentleWolf89", isOnline: false },
-      content: "đã bình luận về bài viết của bạn",
-      comment: "Mình cũng vậy, cùng nhau vượt qua nhé! 💪",
-      postPreview: "Hôm nay cảm thấy khá buồn vì công việc...",
-      timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-      read: false,
-    },
-    {
-      id: 3,
-      type: "group_join",
-      user: { username: "CalmButterfly12", isOnline: true },
-      content: 'đã tham gia nhóm "Hỗ trợ tâm lý 💙"',
-      groupName: "Hỗ trợ tâm lý 💙",
-      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-      read: true,
-    },
-    {
-      id: 4,
-      type: "mention",
-      user: { username: "SoftRain23", isOnline: true },
-      content: "đã nhắc đến bạn trong một bình luận",
-      comment: "@you Bạn có thể chia sẻ kinh nghiệm không?",
-      postPreview: "Cách vượt qua căng thẳng công việc...",
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      read: true,
-    },
-    {
-      id: 5,
-      type: "like",
-      user: { username: "QuietMoon88", isOnline: false },
-      content: "và 5 người khác đã thích bài viết của bạn",
-      postPreview: "Cảm ơn mọi người đã lắng nghe...",
-      timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-      read: true,
-    },
-  ];
+  useEffect(() => {
+    if (!aliasId) return;
+    const service = new NotificationService(aliasId);
+    setRealtimeService(service);
+
+    let mounted = true;
+    (async () => {
+      try {
+        await service.connect((n) => {
+          if (!mounted) return;
+          setRealtimeNotifications((prev) => [n, ...prev]);
+          setUnreadCount((c) => {
+            const next = (c || 0) + 1;
+            try {
+              window.dispatchEvent(new CustomEvent('app:noti:unread', { detail: { count: next } }));
+              window.dispatchEvent(new CustomEvent('app:toast', { detail: { type: 'info', title: n.actorDisplayName || 'Thông báo', message: n.snippet || '', duration: 2000 } }));
+            } catch { }
+            return next;
+          });
+        });
+      } catch { }
+
+      // Always load REST data regardless of realtime success
+      try {
+        const list = await service.getNotifications(20);
+        if (mounted) {
+          setRealtimeNotifications(list.items || []);
+        }
+        const count = await service.getUnreadCount();
+        if (mounted) {
+          setUnreadCount(count || 0);
+          try { window.dispatchEvent(new CustomEvent('app:noti:unread', { detail: { count: count || 0 } })); } catch { }
+        }
+      } catch { }
+    })();
+
+    return () => {
+      mounted = false;
+      service.disconnect();
+    };
+  }, [aliasId]);
+
+  // Get notification type info based on numeric type
+  const getNotificationTypeInfo = (type) => {
+    switch (type) {
+      case 1: // Reaction
+        return {
+          icon: <Heart className="w-4 h-4 text-red-500" />,
+          message: "đã thích bài viết của bạn",
+          filterKey: "1"
+        };
+      case 2: // Comment
+        return {
+          icon: <MessageCircle className="w-4 h-4 text-blue-500" />,
+          message: "đã bình luận về bài viết của bạn",
+          filterKey: "2"
+        };
+      case 3: // Mention
+        return {
+          icon: <MessageCircle className="w-4 h-4 text-purple-500" />,
+          message: "đã nhắc đến bạn trong một bình luận",
+          filterKey: "3"
+        };
+      case 4: // Follow
+        return {
+          icon: <Users className="w-4 h-4 text-green-500" />,
+          message: "đã theo dõi bạn",
+          filterKey: "4"
+        };
+      case 5: // Moderation
+        return {
+          icon: <Bell className="w-4 h-4 text-orange-500" />,
+          message: "thông báo kiểm duyệt",
+          filterKey: "all"
+        };
+      case 6: // BotReply
+        return {
+          icon: <MessageCircle className="w-4 h-4 text-cyan-500" />,
+          message: "đã trả lời tự động",
+          filterKey: "all"
+        };
+      case 7: // System
+        return {
+          icon: <Bell className="w-4 h-4 text-gray-500" />,
+          message: "thông báo hệ thống",
+          filterKey: "all"
+        };
+      default:
+        return {
+          icon: <Bell className="w-4 h-4 text-gray-500" />,
+          message: "thông báo mới",
+          filterKey: "all"
+        };
+    }
+  };
 
   const filters = [
     { id: "all", label: "Tất cả", icon: Bell },
-    { id: "likes", label: "Lượt thích", icon: Heart },
-    { id: "comments", label: "Bình luận", icon: MessageCircle },
-    { id: "groups", label: "Nhóm", icon: Users },
+    { id: "1", label: "Lượt thích", icon: Heart },
+    { id: "2", label: "Bình luận", icon: MessageCircle },
   ];
 
   const getFilteredNotifications = () => {
-    if (filter === "all") return notifications;
-    return notifications.filter((notif) => {
-      switch (filter) {
-        case "likes":
-          return notif.type === "like";
-        case "comments":
-          return notif.type === "comment" || notif.type === "mention";
-        case "groups":
-          return notif.type === "group_join";
-        default:
-          return true;
-      }
-    });
-  };
+    // Use real notifications from API
+    const notificationsToFilter = realtimeNotifications.length > 0
+      ? realtimeNotifications
+      : [];
 
-  const getNotificationIcon = (type) => {
-    switch (type) {
-      case "like":
-        return <Heart className="w-4 h-4 text-red-500" />;
-      case "comment":
-        return <MessageCircle className="w-4 h-4 text-blue-500" />;
-      case "mention":
-        return <MessageCircle className="w-4 h-4 text-purple-500" />;
-      case "group_join":
-        return <Users className="w-4 h-4 text-green-500" />;
-      default:
-        return <Bell className="w-4 h-4 text-gray-500" />;
+    if (filter === "all") {
+      return notificationsToFilter;
     }
+
+    return notificationsToFilter.filter((n) => {
+      const typeInfo = getNotificationTypeInfo(n.type);
+      return typeInfo.filterKey === filter;
+    });
   };
 
   const formatTime = (timestamp) => {
@@ -119,20 +157,42 @@ const MobileNotificationsPage = ({ onBack }) => {
       {/* Header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1C1C1E]">
         <div className="flex items-center justify-between mb-4">
-          <Button variant="ghost" size="sm" onClick={onBack} className="p-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/')}
+            className="p-2"
+          >
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
             Thông báo
           </h1>
-          <Button variant="ghost" size="sm" className="text-sm text-purple-600">
-            Đánh dấu đã đọc
-          </Button>
+          {unreadCount > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-sm text-purple-600"
+              onClick={async () => {
+                try {
+                  if (realtimeService) {
+                    await realtimeService.markAllAsRead();
+                    setUnreadCount(0);
+                    setRealtimeNotifications((prev) => prev.map(n => ({ ...n, isRead: true })));
+                    window.dispatchEvent(new CustomEvent('app:noti:unread', { detail: { count: 0 } }));
+                  }
+                } catch { }
+              }}
+            >
+              <Check className="w-4 h-4 mr-1" />
+              Đánh dấu đã đọc
+            </Button>
+          )}
         </div>
 
-        {/* Filters */}
-        <div className="flex space-x-2 overflow-x-auto pb-2">
-          {filters.map((filterItem) => {
+        {/* Filters - Show only 3 main filters */}
+        <div className="flex space-x-2 pb-2">
+          {filters.slice(0, 3).map((filterItem) => {
             const Icon = filterItem.icon;
             return (
               <Button
@@ -140,9 +200,9 @@ const MobileNotificationsPage = ({ onBack }) => {
                 variant={filter === filterItem.id ? "primary" : "secondary"}
                 size="sm"
                 onClick={() => setFilter(filterItem.id)}
-                className="flex items-center space-x-2 whitespace-nowrap px-3 py-2">
-                <Icon className="w-4 h-4" />
-                <span>{filterItem.label}</span>
+                className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 min-w-0">
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                <span className="text-xs truncate">{filterItem.label}</span>
               </Button>
             );
           })}
@@ -162,68 +222,89 @@ const MobileNotificationsPage = ({ onBack }) => {
             </p>
           </div>
         ) : (
-          getFilteredNotifications().map((notification) => (
-            <motion.div
-              key={notification.id}
-              whileTap={{ scale: 0.98 }}
-              className={`flex items-start p-4 border-b border-gray-100 dark:border-gray-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-[#1C1C1E]/50 ${!notification.read ? "bg-purple-50 dark:bg-purple-900/10" : ""
-                }`}>
-              <div className="relative mr-3">
-                <Avatar
-                  username={notification.user.username}
-                  size="md"
-                  online={notification.user.isOnline}
-                />
-                <div className="absolute -bottom-1 -right-1 bg-white dark:bg-[#1C1C1E] rounded-full p-1">
-                  {getNotificationIcon(notification.type)}
-                </div>
-              </div>
+          getFilteredNotifications().map((notification) => {
+            const displayName = notification.actorDisplayName || notification.user?.username || "Người dùng";
+            const isRead = typeof notification.isRead === 'boolean' ? notification.isRead : !!notification.read;
+            const createdAt = notification.createdAt || notification.timestamp;
+            const snippet = notification.snippet || notification.content || "";
+            const typeInfo = getNotificationTypeInfo(notification.type);
 
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-900 dark:text-white">
-                      <span className="font-semibold">
-                        {notification.user.username}
-                      </span>{" "}
-                      {notification.content}
-                    </p>
+            const handleNotificationClick = async () => {
+              // Mark as read if not already read
+              if (!isRead && realtimeService) {
+                try {
+                  await realtimeService.markSingleAsRead(notification.id);
+                  setRealtimeNotifications(prev =>
+                    prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n)
+                  );
+                  setUnreadCount(prev => Math.max(0, prev - 1));
+                  // Update global unread count
+                  window.dispatchEvent(new CustomEvent('app:noti:unread', {
+                    detail: { count: Math.max(0, unreadCount - 1) }
+                  }));
+                } catch (error) {
+                  console.error('Failed to mark notification as read:', error);
+                }
+              }
 
-                    {notification.comment && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2">
-                        "{notification.comment}"
-                      </p>
-                    )}
+              // Navigate to post if available
+              if (notification.postId) {
+                navigate(`/post/${notification.postId}`);
+              }
+            };
 
-                    {notification.postPreview && (
-                      <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
-                        {notification.postPreview.length > 50
-                          ? `${notification.postPreview.substring(0, 50)}...`
-                          : notification.postPreview}
-                      </p>
-                    )}
-
-                    {notification.groupName && (
-                      <p className="text-sm text-purple-600 dark:text-purple-400 mt-1 font-medium">
-                        {notification.groupName}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col items-end ml-2">
-                    <span className="text-xs text-gray-500">
-                      {formatTime(notification.timestamp)}
-                    </span>
-                    {!notification.read && (
-                      <div className="w-2 h-2 bg-purple-500 rounded-full mt-1"></div>
-                    )}
+            return (
+              <motion.div
+                key={notification.id}
+                whileTap={{ scale: 0.98 }}
+                className={`flex items-start p-4 border-b border-gray-100 dark:border-gray-800 cursor-pointer hover:bg-gray-50 dark:hover:bg-[#1C1C1E]/50 ${!isRead ? "bg-purple-50 dark:bg-purple-900/10" : ""
+                  }`}
+                onClick={handleNotificationClick}>
+                <div className="relative mr-3">
+                  <Avatar
+                    username={displayName}
+                    size="md"
+                    online={notification.user?.isOnline || false}
+                  />
+                  <div className="absolute -bottom-1 -right-1 bg-white dark:bg-[#1C1C1E] rounded-full p-1">
+                    {typeInfo.icon}
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-900 dark:text-white">
+                        <span className="font-semibold">{displayName}</span>
+                        <span className="ml-1">{typeInfo.message}</span>
+                      </p>
+
+                      {/* Show snippet below the main message */}
+                      {snippet && (
+                        <div className="mt-2 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                          <p className="text-sm text-gray-600 dark:text-gray-300">
+                            {snippet}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col items-end ml-2">
+                      <span className="text-xs text-gray-500">
+                        {formatTime(createdAt)}
+                      </span>
+                      {!isRead && (
+                        <div className="w-2 h-2 bg-purple-500 rounded-full mt-1"></div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })
         )}
       </div>
+
     </motion.div>
   );
 };

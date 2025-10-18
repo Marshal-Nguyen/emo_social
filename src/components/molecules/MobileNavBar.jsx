@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Home, Shield } from "lucide-react";
+import { Home, Shield, Bell, User } from "lucide-react";
 import Button from "../atoms/Button";
 import ThemeToggle from "./ThemeToggle";
 
@@ -12,6 +12,8 @@ const MobileNavBar = ({
 }) => {
   const navItems = [
     { id: "home", icon: Home, label: "Trang chủ", enabled: true },
+    { id: "profile", icon: User, label: "Hồ sơ", enabled: true },
+    { id: "notifications", icon: Bell, label: "Thông báo", enabled: true },
   ];
 
 
@@ -44,6 +46,12 @@ const MobileNavBar = ({
                   }`}>
                 <div className="relative">
                   <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  {/* Notification badge */}
+                  {item.id === "notifications" && unreadNotifications > 0 && (
+                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                      {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                    </div>
+                  )}
                 </div>
                 <span className="text-[10px] sm:text-xs font-medium hidden sm:block">{item.label}</span>
               </Button>

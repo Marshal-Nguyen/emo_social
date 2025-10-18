@@ -94,7 +94,7 @@ const Layout = () => {
     // Update activeTab based on current location
     useEffect(() => {
         const path = location.pathname;
-        if (path === "/home") {
+        if (path === "/" || path === "/home") {
             setActiveTab("home");
         } else if (path === "/notifications") {
             setActiveTab("notifications");
@@ -107,7 +107,11 @@ const Layout = () => {
 
     const handleTabChange = (tab) => {
         // Allow navigation to supported pages
-        if (tab === "home" || tab === "community-rules" || tab === "profile" || tab === "notifications") {
+        if (tab === "home") {
+            setActiveTab(tab);
+            navigate("/");
+            return;
+        } else if (tab === "community-rules" || tab === "profile" || tab === "notifications") {
             setActiveTab(tab);
             navigate(`/${tab}`);
             return;
