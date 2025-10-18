@@ -68,6 +68,19 @@ export class NotificationService {
         });
     }
 
+    async markSingleAsRead(notificationId) {
+        const token = getCurrentToken();
+        if (!token) throw new Error('Missing token');
+        await fetch(`${NOTIFICATION_API}/mark-read`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ notificationIds: [notificationId] }),
+        });
+    }
+
     async markAllAsRead() {
         const token = getCurrentToken();
         if (!token) throw new Error('Missing token');

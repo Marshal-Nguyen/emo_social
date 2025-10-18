@@ -2,12 +2,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { Bell, Heart, MessageCircle, Users, Check, Filter } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Button from "../atoms/Button";
 import Avatar from "../atoms/Avatar";
 import { NotificationService } from "../../services/notificationService";
 import { useSelector as useReduxSelector } from "react-redux";
 
 const DesktopNotificationsNew = () => {
+  const navigate = useNavigate();
   // Avoid returning a new reference from selector to prevent unnecessary rerenders
   const notificationsFromStore = useSelector((state) => state.chat?.notifications);
   const authUser = useReduxSelector((s) => s.auth.user);
@@ -232,6 +234,30 @@ const DesktopNotificationsNew = () => {
               const snippet = notification.snippet || notification.content || "";
               const typeInfo = getNotificationTypeInfo(notification.type);
 
+              const handleNotificationClick = async () => {
+                // Mark as read if not already read
+                if (!isRead && realtimeService) {
+                  try {
+                    await realtimeService.markSingleAsRead(notification.id);
+                    setRealtimeNotifications(prev =>
+                      prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n)
+                    );
+                    setUnreadCount(prev => Math.max(0, prev - 1));
+                    // Update global unread count
+                    window.dispatchEvent(new CustomEvent('app:noti:unread', {
+                      detail: { count: Math.max(0, unreadCount - 1) }
+                    }));
+                  } catch (error) {
+                    console.error('Failed to mark notification as read:', error);
+                  }
+                }
+
+                // Navigate to post if available
+                if (notification.postId) {
+                  navigate(`/post/${notification.postId}`);
+                }
+              };
+
               return (
                 <motion.div
                   key={notification.id}
@@ -240,7 +266,8 @@ const DesktopNotificationsNew = () => {
                     : ""
                     }`}
                   whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}>
+                  whileTap={{ scale: 0.99 }}
+                  onClick={handleNotificationClick}>
                   <div className="flex items-start space-x-4">
                     <div className="relative flex-shrink-0">
                       <Avatar
