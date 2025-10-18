@@ -62,92 +62,85 @@ const DesktopNotificationsNew = () => {
   // Filter options for notifications
   const filters = [
     { id: "all", label: "Tất cả", icon: Bell },
-    { id: "like", label: "Lượt thích", icon: Heart },
-    { id: "comment", label: "Bình luận", icon: MessageCircle },
-    { id: "group", label: "Nhóm", icon: Users },
+    { id: "1", label: "Lượt thích", icon: Heart },
+    { id: "2", label: "Bình luận", icon: MessageCircle },
+    { id: "3", label: "Nhắc đến", icon: MessageCircle },
+    { id: "4", label: "Theo dõi", icon: Users },
   ];
+
+  // Get notification type info based on numeric type
+  const getNotificationTypeInfo = (type) => {
+    switch (type) {
+      case 1: // Reaction
+        return {
+          icon: <Heart className="w-4 h-4 text-red-500" />,
+          message: "đã thích bài viết của bạn",
+          filterKey: "1"
+        };
+      case 2: // Comment
+        return {
+          icon: <MessageCircle className="w-4 h-4 text-blue-500" />,
+          message: "đã bình luận về bài viết của bạn",
+          filterKey: "2"
+        };
+      case 3: // Mention
+        return {
+          icon: <MessageCircle className="w-4 h-4 text-purple-500" />,
+          message: "đã nhắc đến bạn trong một bình luận",
+          filterKey: "3"
+        };
+      case 4: // Follow
+        return {
+          icon: <Users className="w-4 h-4 text-green-500" />,
+          message: "đã theo dõi bạn",
+          filterKey: "4"
+        };
+      case 5: // Moderation
+        return {
+          icon: <Bell className="w-4 h-4 text-orange-500" />,
+          message: "thông báo kiểm duyệt",
+          filterKey: "all"
+        };
+      case 6: // BotReply
+        return {
+          icon: <MessageCircle className="w-4 h-4 text-cyan-500" />,
+          message: "đã trả lời tự động",
+          filterKey: "all"
+        };
+      case 7: // System
+        return {
+          icon: <Bell className="w-4 h-4 text-gray-500" />,
+          message: "thông báo hệ thống",
+          filterKey: "all"
+        };
+      default:
+        return {
+          icon: <Bell className="w-4 h-4 text-gray-500" />,
+          message: "thông báo mới",
+          filterKey: "all"
+        };
+    }
+  };
 
   // Filter notifications based on selected filter
   const getFilteredNotifications = () => {
-    // Use mock data for demonstration since notifications aren't implemented in Redux yet
-    const mockNotifications = [
-      {
-        id: 1,
-        type: "like",
-        user: { username: "MysteriousFox42", isOnline: true },
-        content: "đã thích bài viết của bạn",
-        postPreview: "Hôm nay cảm thấy khá buồn vì công việc...",
-        timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-        read: false,
-      },
-      {
-        id: 2,
-        type: "comment",
-        user: { username: "GentleWolf89", isOnline: false },
-        content: "đã bình luận về bài viết của bạn",
-        comment: "Mình cũng vậy, cùng nhau vượt qua nhé! 💪",
-        postPreview: "Hôm nay cảm thấy khá buồn vì công việc...",
-        timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-        read: false,
-      },
-      {
-        id: 3,
-        type: "group_join",
-        user: { username: "CalmButterfly12", isOnline: true },
-        content: 'đã tham gia nhóm "Hỗ trợ tâm lý 💙"',
-        groupName: "Hỗ trợ tâm lý 💙",
-        timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-        read: true,
-      },
-      {
-        id: 4,
-        type: "mention",
-        user: { username: "QuietOwl77", isOnline: true },
-        content: "đã nhắc đến bạn trong một bình luận",
-        comment: "@user Bạn có thể chia sẻ thêm không?",
-        postPreview: "Làm thế nào để vượt qua stress...",
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        read: false,
-      },
-    ];
-
-    // If we have notifications from Redux, use them, otherwise use mock data
-    const base = realtimeNotifications.length > 0
+    // Use real notifications from API
+    const notificationsToFilter = realtimeNotifications.length > 0
       ? realtimeNotifications
       : (Array.isArray(notificationsFromStore) && notificationsFromStore.length > 0
         ? notificationsFromStore
-        : mockNotifications);
-    const notificationsToFilter = base;
+        : []);
 
-    switch (filter) {
-      case "like":
-        return notificationsToFilter.filter((n) => n.type === "like");
-      case "comment":
-        return notificationsToFilter.filter(
-          (n) => n.type === "comment" || n.type === "mention"
-        );
-      case "group":
-        return notificationsToFilter.filter((n) => n.type === "group_join");
-      default:
-        return notificationsToFilter;
+    if (filter === "all") {
+      return notificationsToFilter;
     }
+
+    return notificationsToFilter.filter((n) => {
+      const typeInfo = getNotificationTypeInfo(n.type);
+      return typeInfo.filterKey === filter;
+    });
   };
 
-  // Get notification icon based on type
-  const getNotificationIcon = (type) => {
-    switch (type) {
-      case "like":
-        return <Heart className="w-4 h-4 text-red-500" />;
-      case "comment":
-        return <MessageCircle className="w-4 h-4 text-blue-500" />;
-      case "mention":
-        return <MessageCircle className="w-4 h-4 text-purple-500" />;
-      case "group_join":
-        return <Users className="w-4 h-4 text-green-500" />;
-      default:
-        return <Bell className="w-4 h-4 text-gray-500" />;
-    }
-  };
 
   // Format timestamp
   const formatTime = (timestamp) => {
@@ -237,6 +230,8 @@ const DesktopNotificationsNew = () => {
               const isRead = typeof notification.isRead === 'boolean' ? notification.isRead : !!notification.read;
               const createdAt = notification.createdAt || notification.timestamp;
               const snippet = notification.snippet || notification.content || "";
+              const typeInfo = getNotificationTypeInfo(notification.type);
+
               return (
                 <motion.div
                   key={notification.id}
@@ -255,7 +250,7 @@ const DesktopNotificationsNew = () => {
                         online={notification.user?.isOnline || false}
                       />
                       <div className="absolute -bottom-1 -right-1 bg-white dark:bg-[#1C1C1E] rounded-full p-1 border-2 border-white dark:border-gray-800">
-                        {getNotificationIcon(notification.type)}
+                        {typeInfo.icon}
                       </div>
                     </div>
 
@@ -264,34 +259,16 @@ const DesktopNotificationsNew = () => {
                         <div className="flex-1 pr-2">
                           <p className="text-sm text-gray-900 dark:text-white">
                             <span className="font-semibold">{displayName}</span>
-                            <span className="ml-1">{snippet}</span>
+                            <span className="ml-1">{typeInfo.message}</span>
                           </p>
 
-                          {notification.comment && (
+                          {/* Show snippet below the main message */}
+                          {snippet && (
                             <div className="mt-2 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
                               <p className="text-sm text-gray-600 dark:text-gray-300">
-                                "{notification.comment}"
+                                {snippet}
                               </p>
                             </div>
-                          )}
-
-                          {notification.postPreview && (
-                            <div className="mt-2 p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                              <p className="text-sm text-gray-600 dark:text-gray-300">
-                                {notification.postPreview.length > 80
-                                  ? `"${notification.postPreview.substring(
-                                    0,
-                                    80
-                                  )}..."`
-                                  : `"${notification.postPreview}"`}
-                              </p>
-                            </div>
-                          )}
-
-                          {notification.groupName && (
-                            <p className="text-sm text-purple-600 dark:text-purple-400 mt-2 font-medium">
-                              {notification.groupName}
-                            </p>
                           )}
 
                           <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
